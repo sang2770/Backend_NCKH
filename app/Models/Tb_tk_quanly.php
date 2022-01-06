@@ -3,17 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
-class Tb_tk_quanly extends Model
+class Tb_tk_quanly extends Authenticatable
 {
+    use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'tb_tk_quanly';
+    protected $primaryKey = 'MaTK';
+
+
     protected $fillable = [
-        'MaTK', 
-        'TenDangNhap', 
+        'MaTK',
+        'TenDangNhap',
         'MatKhau',
     ];
-    protected $primaryKey = 'MaTK';
-    public $timestamps = true;
+    protected $hidden = [
+        'MatKhau',
+        'remember_token',
+    ];
+    public function getAuthPassword()
+    {
+        return $this->MatKhau;
+    }
 }
-

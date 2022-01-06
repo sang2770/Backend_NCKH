@@ -17,7 +17,7 @@ class CreateTbSinhvienTable extends Migration
             $table->string('MaSinhVien', 20);
             $table->string('HoTen', 50);
             $table->dateTime('NgaySinh');
-            $table->string('NoiSinh', 50);
+            $table->string('NoiSinh', 100);
             $table->string('GioiTinh', 20);
             $table->string('DanToc', 20);
             $table->string('TonGiao', 20);

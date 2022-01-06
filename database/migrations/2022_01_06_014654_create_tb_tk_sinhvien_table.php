@@ -15,8 +15,8 @@ class CreateTbTkSinhvienTable extends Migration
     {
         Schema::create('tb_tk_sinhvien', function (Blueprint $table) {
             $table->string('MaTKSV', 20);
-            $table->string('TenDangNhap', 20);
-            $table->string('MatKhau', 20);
+            $table->string('TenDangNhap', 60);
+            $table->string('MatKhau', 60);
             $table->string('MaSinhVien', 20);
             $table->primary('MaTKSV');
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');

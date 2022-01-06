@@ -66,7 +66,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\TaiKhoanQuanLy::class,
+            'model' => App\Models\Tb_tk_quanly::class,
         ],
 
         // 'users' => [

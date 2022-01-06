@@ -15,7 +15,7 @@ class CreateTbThongbaoTable extends Migration
     {
         Schema::create('tb_thongbao', function (Blueprint $table) {
             $table->string('MaThongBao', 20);
-            $table->string('NoiDung', 100);
+            $table->string('NoiDung', 200);
             $table->dateTime('ThoiGianTB');
             $table->string('MaTKSV', 20);
             $table->primary('MaThongBao');

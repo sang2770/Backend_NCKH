@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\TaiKhoanQuanLy;
+use App\Models\Tb_tk_quanly;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,9 +15,9 @@ class TaiKhoanSeeder extends Seeder
      */
     public function run()
     {
-        TaiKhoanQuanLy::insert([
-            'Id' => 1,
-            'TenDangNhap' => 'NguyenSang',
+        Tb_tk_quanly::insert([
+            'MaTK' => '2',
+            'TenDangNhap' => 'QLNVQS@st.em.utc.edu.vn',
             'MatKhau' => Hash::make('1234')
         ]);
     }
