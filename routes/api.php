@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// Login
 Route::group([
     'prefix' => 'auth/admin'
 ], function () {
