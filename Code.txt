@@ -1,0 +1,8 @@
+1.Migrate
+php artisan make:migration create_flights_table
+php artisan migrate
+php artisan migrate:rollback --step=1
+php artisan migrate:fresh
+2. Seed
+php artisan make:seeder UserSeeder
+php artisan db:seed --class=UserSeeder
