@@ -9,11 +9,12 @@ class Tb_tk_sinhvien extends Model
 {
     protected $table = 'tb_tk_sinhvien';
     protected $fillable = [
-        'MaTKSV', 
-        'TenDangNhap', 
+        'MaTKSV',
+        'TenDangNhap',
         'MatKhau',
         'MaSinhVien',
     ];
     protected $primaryKey = 'MaTKSV';
+    protected $keyType = 'string';
     public $timestamps = true;
 }

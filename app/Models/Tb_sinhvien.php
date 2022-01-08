@@ -9,8 +9,8 @@ class Tb_sinhvien extends Model
 {
     protected $table = 'tb_sinhvien';
     protected $fillable = [
-        'MaSinhVien', 
-        'HoTen', 
+        'MaSinhVien',
+        'HoTen',
         'NgaySinh',
         'NoiSinh',
         'GioiTinh',
@@ -26,7 +26,6 @@ class Tb_sinhvien extends Model
         'TinhTrangSinhVien',
         'HeDaoTao',
         'MaLop',
-        'SoDangKy',
     ];
     protected $primaryKey = 'MaSinhVien';
     public $timestamps = true;
