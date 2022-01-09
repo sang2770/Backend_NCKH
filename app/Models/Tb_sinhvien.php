@@ -26,7 +26,6 @@ class Tb_sinhvien extends Model
         'TinhTrangSinhVien',
         'HeDaoTao',
         'MaLop',
-        'SoDangKy',
     ];
     protected $primaryKey = 'MaSinhVien';
     public $timestamps = true;

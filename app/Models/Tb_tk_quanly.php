@@ -13,7 +13,6 @@ class Tb_tk_quanly extends Authenticatable
     protected $table = 'tb_tk_quanly';
     protected $primaryKey = 'MaTK';
 
-
     protected $fillable = [
         'MaTK',
         'TenDangNhap',

@@ -14,7 +14,7 @@ class Tb_giay_cn_dangky extends Model
         'NoiDangKy',
         'DiaChiThuongTru',
         'NgayNop',
-        'MaGiayDC_Truong',
+        'MaSinhVien',
     ];
     protected $primaryKey = 'SoDangKy';
     public $timestamps = true;

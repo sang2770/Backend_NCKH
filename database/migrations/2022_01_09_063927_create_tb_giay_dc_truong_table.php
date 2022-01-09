@@ -16,11 +16,13 @@ class CreateTbGiayDcTruongTable extends Migration
         Schema::create('tb_giay_dc_truong', function (Blueprint $table) {
             $table->string('MaGiayDC_Truong', 20);
             $table->dateTime('NgayCap');
-            $table->string('LyDo', 100);
             $table->dateTime('NgayHH');
             $table->string('NoiChuyenVe', 150);
             $table->string('NoiOHienTai', 150);
+            $table->string('LyDo', 100);
+            $table->string('SoDangKy', 20);
             $table->primary('MaGiayDC_Truong');
+            $table->foreign('SoDangKy')->references('SoDangKy')->on('tb_giay_cn_dangky');
             $table->timestamps();
         });
     }

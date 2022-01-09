@@ -14,10 +14,9 @@ class CreateTbTkQuanlyTable extends Migration
     public function up()
     {
         Schema::create('tb_tk_quanly', function (Blueprint $table) {
-            $table->string('MaTK', 20);
+            $table->increments('MaTK');
             $table->string('TenDangNhap', 60);
-            $table->string('MatKhau', 60);
-            $table->primary('MaTK');
+            $table->string('Password', 60);
             $table->timestamps();
         });
     }

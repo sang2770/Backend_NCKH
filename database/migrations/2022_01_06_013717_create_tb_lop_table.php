@@ -14,11 +14,10 @@ class CreateTbLopTable extends Migration
     public function up()
     {
         Schema::create('tb_lop', function (Blueprint $table) {
-            $table->string('MaLop', 20);
-            $table->string('TenLop', 50);
-            $table->string('Khoa', 20);
-            $table->string('MaKhoa', 20);
-            $table->primary('Malop');
+            $table->increments('MaLop');
+            $table->string('TenLop', 60);
+            $table->string('Khoas', 20);
+            $table->unsignedInteger('MaKhoa');
             $table->foreign('MaKhoa')->references('MaKhoa')->on('tb_khoa');
         });
     }

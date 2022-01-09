@@ -11,7 +11,7 @@ class Tb_lop extends Model
     protected $fillable = [
         'MaLop', 
         'TenLop', 
-        'Khoa',
+        'Khoas',
         'MaKhoa',
     ];
     protected $primaryKey = 'MaLop';

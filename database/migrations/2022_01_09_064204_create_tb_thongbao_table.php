@@ -14,11 +14,10 @@ class CreateTbThongbaoTable extends Migration
     public function up()
     {
         Schema::create('tb_thongbao', function (Blueprint $table) {
-            $table->string('MaThongBao', 20);
+            $table->Increments('MaThongBao');
             $table->string('NoiDung', 200);
             $table->dateTime('ThoiGianTB');
-            $table->string('MaTKSV', 20);
-            $table->primary('MaThongBao');
+            $table->unsignedInteger('MaTKSV');
             $table->foreign('MaTKSV')->references('MaTKSV')->on('tb_tk_sinhvien');
             $table->timestamps();
         });

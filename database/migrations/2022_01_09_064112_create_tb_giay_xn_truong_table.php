@@ -14,10 +14,9 @@ class CreateTbGiayXnTruongTable extends Migration
     public function up()
     {
         Schema::create('tb_giay_xn_truong', function (Blueprint $table) {
-            $table->string('MaGiayXN_Truong', 20);
+            $table->Increments('MaGiayXN_Truong');
             $table->dateTime('NgayCap');
             $table->string('NamHoc', 20);
-            $table->primary('MaGiayXN_Truong');
             $table->timestamps();
         });
     }

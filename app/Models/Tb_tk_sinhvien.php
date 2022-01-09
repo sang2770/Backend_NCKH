@@ -11,7 +11,7 @@ class Tb_tk_sinhvien extends Model
     protected $fillable = [
         'MaTKSV', 
         'TenDangNhap', 
-        'MatKhau',
+        'Password',
         'MaSinhVien',
     ];
     protected $primaryKey = 'MaTKSV';

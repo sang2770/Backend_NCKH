@@ -19,9 +19,9 @@ class CreateTbGiayCnDangkyTable extends Migration
             $table->string('NoiDangKy', 150);
             $table->string('DiaChiThuongTru', 150);
             $table->dateTime('NgayNop');
-            $table->string('MaGiayDC_Truong', 20);
+            $table->string('MaSinhVien', 20);
             $table->primary('SoDangKy');
-            $table->foreign('MaGiayDC_Truong')->references('MaGiayDC_Truong')->on('tb_giay_dc_truong');
+            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTbYeucauTable extends Migration
+class CreateTbTkSinhvienTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateTbYeucauTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_yeucau', function (Blueprint $table) {
-            $table->string('MaGiayXN_Truong', 20);
+        Schema::create('tb_tk_sinhvien', function (Blueprint $table) {
+            $table->increments('MaTKSV');
+            $table->string('TenDangNhap', 60);
+            $table->string('Password', 60);
             $table->string('MaSinhVien', 20);
-            $table->dateTime('NgayYeuCau');
-            $table->dateTime('NgayXuLy');
-            $table->foreign('MaGiayXN_Truong')->references('MaGiayXN_Truong')->on('tb_giay_xn_truong');
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
             $table->timestamps();
         });
@@ -31,6 +30,6 @@ class CreateTbYeucauTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_yeucau');
+        Schema::dropIfExists('tb_tk_sinhvien');
     }
 }

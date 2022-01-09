@@ -15,7 +15,7 @@ class CreateTbSinhvienTable extends Migration
     {
         Schema::create('tb_sinhvien', function (Blueprint $table) {
             $table->string('MaSinhVien', 20);
-            $table->string('HoTen', 50);
+            $table->string('HoTen', 100);
             $table->dateTime('NgaySinh');
             $table->string('NoiSinh', 100);
             $table->string('GioiTinh', 20);
@@ -23,18 +23,16 @@ class CreateTbSinhvienTable extends Migration
             $table->string('TonGiao', 20);
             $table->string('QuocTich', 20);
             $table->string('DiaChiBaoTin', 100);
-            $table->string('SDT', 10);
-            $table->string('Email', 20);
-            $table->string('HoKhauTinh', 20);
-            $table->string('HoKhauHuyen', 20);
-            $table->string('HoKhauXaPhuong', 20);
-            $table->string('TinhTrangSinhVien', 20);
-            $table->string('HeDaoTao', 20);
-            $table->string('MaLop', 20);
-            $table->string('SoDangKy', 20);
+            $table->string('SDT', 11);
+            $table->string('Email', 50);
+            $table->string('HoKhauTinh', 50);
+            $table->string('HoKhauHuyen', 50);
+            $table->string('HoKhauXaPhuong', 50);
+            $table->string('TinhTrangSinhVien', 50);
+            $table->string('HeDaoTao', 50);
+            $table->unsignedInteger('MaLop');
             $table->primary('MaSinhVien');
             $table->foreign('MaLop')->references('MaLop')->on('tb_lop');
-            $table->foreign('SoDangKy')->references('SoDangKy')->on('tb_giay_cn_dangky');
             $table->timestamps();
         });
     }
