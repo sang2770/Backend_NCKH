@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tb_tk_sinhvien;
 use Illuminate\Database\Seeder;
 
 class TKSVSeeder extends Seeder
@@ -13,6 +14,10 @@ class TKSVSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Tb_tk_sinhvien::insert([
+            'TenDangNhap' => "1",
+            'MatKhau' => "1",
+            'MaSinhVien' => "1",
+        ]);
     }
 }

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddStudentRequest;
+use App\Imports\UsersImport;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_tk_sinhvien;
 use Exception;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentManagementController extends Controller
 {
@@ -53,7 +54,12 @@ class StudentManagementController extends Controller
     //Thêm bằng Import File 
     public function storeImport(Request $request)
     {
-        //
+        try {
+            Excel::import(new UsersImport, $request->file);
+            return response()->json(['status' => "Success"]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'err' => $e->getMessage()]);
+        }
     }
     /**
      * Lấy 1 sinh viên

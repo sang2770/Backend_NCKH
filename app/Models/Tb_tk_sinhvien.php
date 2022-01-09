@@ -16,5 +16,6 @@ class Tb_tk_sinhvien extends Model
     ];
     protected $primaryKey = 'MaTKSV';
     protected $keyType = 'string';
+    public $incrementing = true;
     public $timestamps = true;
 }
