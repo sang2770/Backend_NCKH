@@ -41,7 +41,7 @@ Route::prefix('student-management')->middleware('auth:api')->group(
     function () {
         Route::post('user', [StudentManagementController::class, 'store'])->name('Add');
         Route::post('users', [StudentManagementController::class, 'storeImport'])->name('AddList');
-        Route::put('user', [StudentManagementController::class, 'update'])->name('UpdateOne');
+        Route::put('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
         Route::put('users', [StudentManagementController::class, 'updateImport'])->name('UpdateList');
         Route::get('users', [StudentManagementController::class, 'index'])->name('GetList');
         Route::get('user', [StudentManagementController::class, 'show'])->name('GetOne');

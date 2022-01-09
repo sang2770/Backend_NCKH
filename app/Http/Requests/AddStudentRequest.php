@@ -46,7 +46,7 @@ class AddStudentRequest extends FormRequest
             "HoKhauTinh" => "required",
             "HoKhauHuyen" => "required",
             "HoKhauXaPhuong" => "required",
-            "MaLop" => "required"
+            "TenLop" => "required"
         ];
     }
     public function messages()

@@ -6,4 +6,5 @@ php artisan migrate:fresh
 2. Seed
 php artisan make:seeder UserSeeder
 php artisan db:seed --class=UserSeeder
+php artisan passport:install
 a
