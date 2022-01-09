@@ -20,6 +20,9 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading
      */
     public function model(array $row)
     {
+        if (!isset($row[0])) {
+            return null;
+        }
         $TenLop = $row['lop'];
         $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
         // Create Tài Khoản
