@@ -11,10 +11,11 @@ class Tb_giay_dc_truong extends Model
     protected $fillable = [
         'MaGiayDC_Truong', 
         'NgayCap', 
-        'LyDo',
         'NgayHH',
         'NoiChuyenVe',
         'NoiOHienTai',
+        'LyDo',
+        'SoDangKy'
     ];
     protected $primaryKey = 'MaGiayDC_Truong';
     public $timestamps = true;
