@@ -17,7 +17,7 @@ class TKSVSeeder extends Seeder
         Tb_tk_sinhvien::insert([
             'TenDangNhap' => "1",
             'MatKhau' => "1",
-            'MaSinhVien' => "1",
+            'MaSinhVien' => "191204228",
         ]);
     }
 }
