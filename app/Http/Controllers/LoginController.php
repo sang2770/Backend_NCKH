@@ -32,7 +32,7 @@ class LoginController extends Controller
     // Đăng xuất
     public function Logout(Request $request)
     {
-        $request->user()->token();
+        $request->user()->token()->revoke();
         return response()->json(['status' => 'Success']);
     }
     // Get User

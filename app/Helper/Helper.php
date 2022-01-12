@@ -6,6 +6,7 @@ class Helper
 {
     public static function CreateUsers($Input)
     {
+        // var_dump($Input);
         try {
             $name = explode(" ", $Input['HoTen']);
             $name = $name[count($name) - 1];

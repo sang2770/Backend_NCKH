@@ -10,8 +10,10 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Helper\Helper;
 use App\Models\Tb_tk_sinhvien;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class UsersImport implements ToModel, WithHeadingRow, WithChunkReading
+class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
 {
     /**
      * @param array $row
@@ -20,14 +22,14 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading
      */
     public function model(array $row)
     {
-        if (!isset($row[0])) {
+        // var_dump($row);
+        if (empty($row['tt'])) {
             return null;
         }
-        $TenLop = $row['lop'];
+        $TenLop = $row['ten_lop'];
         $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
         // Create Tài Khoản
-        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => $row["ma_sinh_vien"], "NgaySinh" => $row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
-        // var_dump($row);
+        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
         // var_dump($TaiKhoan);
         return [
             new Tb_sinhvien([
@@ -62,7 +64,28 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading
             )
         ];
     }
-
+    public function  rules(): array
+    {
+        return [
+            "*.ma_sinh_vien" => "required|unique:Tb_sinhvien,MaSinhVien",
+            '*.ho_ten' => "required",
+            "*.ngay_sinh" => "required",
+            "*.noi_sinh" => "required",
+            "*.email" => "required|email",
+            "*.gioi_tinh" => "required",
+            "*.ton_giao" => "required",
+            "*.quoc_tich" => "required",
+            "*.dan_toc" => "required",
+            "*.so_dien_thoai" => "required|digits:10",
+            "*.dia_chi_khi_bao_tin" => "required",
+            "*.he_dao_tao" => "required",
+            "*.tinh_trang_sinh_vien" => "required",
+            "*.ho_khau_tinhtp" => "required",
+            "*.ho_khau_quanhuyen" => "required",
+            "*.ho_khau_xaphuong" => "required",
+            "*.ten_lop" => "required"
+        ];
+    }
     public function chunkSize(): int
     {
         return 500;
