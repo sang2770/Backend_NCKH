@@ -9,6 +9,7 @@ class Tb_giay_cn_dangky extends Model
 {
     protected $table = 'tb_giay_cn_dangky';
     protected $fillable = [
+        'MaGiayDK',
         'SoDangKy', 
         'NgayDangKy', 
         'NoiDangKy',
@@ -16,6 +17,6 @@ class Tb_giay_cn_dangky extends Model
         'NgayNop',
         'MaSinhVien',
     ];
-    protected $primaryKey = 'SoDangKy';
+    protected $primaryKey = 'MaGiayDK';
     public $timestamps = true;
 }

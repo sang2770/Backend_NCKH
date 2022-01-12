@@ -20,9 +20,9 @@ class CreateTbGiayDcTruongTable extends Migration
             $table->string('NoiChuyenVe', 150);
             $table->string('NoiOHienTai', 150);
             $table->string('LyDo', 100);
-            $table->string('SoDangKy', 20);
+            $table->unsignedInteger('MaGiayDK');
             $table->primary('MaGiayDC_Truong');
-            $table->foreign('SoDangKy')->references('SoDangKy')->on('tb_giay_cn_dangky');
+            $table->foreign('MaGiayDK')->references('MaGiayDK')->on('tb_giay_cn_dangky');
             $table->timestamps();
         });
     }

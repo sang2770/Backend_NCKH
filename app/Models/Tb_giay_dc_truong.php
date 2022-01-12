@@ -15,7 +15,7 @@ class Tb_giay_dc_truong extends Model
         'NoiChuyenVe',
         'NoiOHienTai',
         'LyDo',
-        'SoDangKy'
+        'MaGiayDK'
     ];
     protected $primaryKey = 'MaGiayDC_Truong';
     public $timestamps = true;

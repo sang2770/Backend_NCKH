@@ -14,13 +14,13 @@ class CreateTbGiayCnDangkyTable extends Migration
     public function up()
     {
         Schema::create('tb_giay_cn_dangky', function (Blueprint $table) {
+            $table->increments('MaGiayDK');
             $table->string('SoDangKy', 20);
             $table->dateTime('NgayDangKy');
             $table->string('NoiDangKy', 150);
             $table->string('DiaChiThuongTru', 150);
             $table->dateTime('NgayNop');
             $table->string('MaSinhVien', 20);
-            $table->primary('SoDangKy');
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
             $table->timestamps();
         });

@@ -22,6 +22,9 @@ class CreateTbSinhvienTable extends Migration
             $table->string('DanToc', 20);
             $table->string('TonGiao', 20);
             $table->string('QuocTich', 20);
+            $table->string('SoCMTND', 20);
+            $table->string('NgayCapCMTND', 20);
+            $table->string('NoiCapCMTND', 20);
             $table->string('DiaChiBaoTin', 100);
             $table->string('SDT', 11);
             $table->string('Email', 50);

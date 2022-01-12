@@ -9,14 +9,15 @@ class Tb_giay_dc_diaphuong extends Model
 {
     protected $table = 'tb_giay_dc_diaphuong';
     protected $fillable = [
+        'MaGiayDC_DP',
         'SoGioiThieu', 
         'NgayCap', 
         'NgayHH',
         'NoiOHienTai',
         'NoiChuyenDen',
         'LyDo',
-        'SoDangKy',
+        'MaGiayDK',
     ];
-    protected $primaryKey = 'SoGioiThieu';
+    protected $primaryKey = 'MaGiayDC_DP';
     public $timestamps = true;
 }
