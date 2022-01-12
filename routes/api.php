@@ -44,8 +44,9 @@ Route::prefix('student-management')->middleware('auth:api')->group(
         Route::put('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
         Route::put('users', [StudentManagementController::class, 'updateImport'])->name('UpdateList');
         Route::get('users', [StudentManagementController::class, 'index'])->name('GetList');
-        Route::get('user', [StudentManagementController::class, 'show'])->name('GetOne');
-        Route::post('majors', [StudentManagementController::class, 'indexMajors-'])->name('GetMajors');
+        Route::get('users-export', [StudentManagementController::class, 'exportIndex'])->name('Export');
+        Route::get('user/{id}', [StudentManagementController::class, 'show'])->name('GetOne');
+        Route::get('majors', [StudentManagementController::class, 'indexMajors'])->name('GetMajors');
         Route::get('majors-key', [StudentManagementController::class, 'indexMajorsKey'])->name('GetMajorsKey');
     }
 );

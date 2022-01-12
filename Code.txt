@@ -7,4 +7,8 @@ php artisan migrate:fresh
 php artisan make:seeder UserSeeder
 php artisan db:seed --class=UserSeeder
 php artisan passport:install
+
+php artisan make:import UsersImport --model=User
+
+composer dump-autoload
 a

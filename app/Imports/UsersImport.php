@@ -67,7 +67,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
     public function  rules(): array
     {
         return [
-            "*.ma_sinh_vien" => "required|unique:Tb_sinhvien",
+            "*.ma_sinh_vien" => "required|unique:Tb_sinhvien,MaSinhVien",
             '*.ho_ten' => "required",
             "*.ngay_sinh" => "required",
             "*.noi_sinh" => "required",
