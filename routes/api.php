@@ -62,8 +62,7 @@ Quản lý yêu cầu sinh viên
 */
 Route::prefix('request-management')->middleware('auth:api')->group(
     function () {
-        Route::get('confirmed', [RequestManagementController::class, 'index'])->name('GetListconfirmed');
-        Route::get('confirm', [RequestManagementController::class, 'indexConfirm'])->name('GetListConfirm');
+        Route::get('confirm', [RequestManagementController::class, 'index'])->name('GetListConfirm');
         Route::post('confirm', [RequestManagementController::class, 'confirm'])->name('Confirm');
     }
 );
@@ -75,6 +74,7 @@ Quản lý danh sách file mẫu
 Route::prefix('file-management')->middleware('auth:api')->group(
     function () {
         Route::get('files', [FileManagementController::class, 'index'])->name('GetAllFile');
+        Route::get('file/{id}', [FileManagementController::class, 'DowloadFile'])->name('DowloadFile');
         Route::post('file', [FileManagementController::class, 'store'])->name('CreateFile');
     }
 );
@@ -83,7 +83,7 @@ Route::prefix('file-management')->middleware('auth:api')->group(
 // 1. giay chung nhan dang ky nvqs
 Route::group([
     'prefix' => 'register-military-management'
-], function(){
+], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']);
     Route::get('filter-info', [RegisterMilitaryController::class, 'Filter']);
@@ -91,14 +91,14 @@ Route::group([
 // 2. giay xac nhan tu truong
 Route::group([
     'prefix' => 'confirm-military-management'
-], function(){
+], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirms']); //cap giay xac nhan cho nhieu sinh vien
     Route::get('confirm-military/{id}', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
 });
 // 3. giay di chuyen tu truong
 Route::group([
     'prefix' => 'move-military-management'
-], function(){
+], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Moves']); //cap giay di chuyen cho nhieu sinh vien
     Route::get('move-military/{id}', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
 });
@@ -106,7 +106,7 @@ Route::group([
 // thong bao
 Route::group([
     'prefix' => 'notification-management'
-], function(){
+], function () {
     Route::get('index-header-notification', [NotificationController::class, 'IndexHeader']); //lay ra danh sach tieu de thong bao
     Route::get('show-notification/{id}', [NotificationController::class, 'show']); //lay ra tieu de va noi dung thong bao voi $id
     Route::post('store-notification', [NotificationController::class, 'StoreNotification']);  //luu thong bao moi

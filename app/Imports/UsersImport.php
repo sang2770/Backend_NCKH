@@ -50,15 +50,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
                 'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
                 'HeDaoTao' => $row['he_dao_tao'],
                 'MaLop' => $MaLop,
+                'SoCMTND' => $row['chung_minh_nhan_dan'],
+                'NgayCapCMTND' => $row['ngay_cap_cmnd'],
+                'NoiCapCMTND' => $row['noi_cap_cmnd'],
             ]),
-            new Tb_cmtnd(
-                [
-                    'SoCMTND' => $row['chung_minh_nhan_dan'],
-                    'NoiCap_CMTND' => $row['noi_cap_cmnd'],
-                    'NgayCap_CMTND' => $row['ngay_cap_cmnd'],
-                    'MaSinhVien' => $row['ma_sinh_vien']
-                ]
-            ),
             new Tb_tk_sinhvien(
                 $TaiKhoan
             )
@@ -83,7 +78,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             "*.ho_khau_tinhtp" => "required",
             "*.ho_khau_quanhuyen" => "required",
             "*.ho_khau_xaphuong" => "required",
-            "*.ten_lop" => "required"
+            "*.ten_lop" => "required",
+            "*.chung_minh_nhan_dan" => "required",
+            "*.ngay_cap_cmnd" => "required",
+            "*.noi_cap_cmnd" => "required",
         ];
     }
     public function chunkSize(): int

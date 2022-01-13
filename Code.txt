@@ -11,4 +11,6 @@ php artisan passport:install
 php artisan make:import UsersImport --model=User
 
 composer dump-autoload
-a
+
+Composer tự động phiên bản
+--ignore-platform-reqs

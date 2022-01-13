@@ -19,12 +19,7 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'MaSinhVien',
-            'HoTen',
-            'NgaySinh',
-            'NoiSinh',
-            'GioiTinh',
-            'DanToc',
+            'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
             'TonGiao',
             'QuocTich',
             'DiaChiBaoTin',
@@ -36,7 +31,10 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
             'TinhTrangSinhVien',
             'HeDaoTao',
             'TenKhoa',
-            'TenLop'
+            'TenLop',
+            'SoCMTND',
+            'NgayCapCMTND',
+            'NoiCapCMTND'
         ];
     }
     /**
@@ -52,7 +50,7 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
             ->paginate($limit, [
                 'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                 'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
-                'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop'
+                'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
             ], 'page', $page);
         return $user;
     }
