@@ -14,11 +14,10 @@ class CreateTbYeucauTable extends Migration
     public function up()
     {
         Schema::create('tb_yeucau', function (Blueprint $table) {
-            $table->unsignedInteger('MaGiayXN_Truong');
+            $table->Increments('MaYeuCau');
             $table->string('MaSinhVien', 20);
             $table->dateTime('NgayYeuCau');
             $table->dateTime('NgayXuLy');
-            $table->foreign('MaGiayXN_Truong')->references('MaGiayXN_Truong')->on('tb_giay_xn_truong');
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
             $table->timestamps();
         });
