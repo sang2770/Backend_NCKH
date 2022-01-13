@@ -15,14 +15,17 @@ class StudentSeeder extends Seeder
     public function run()
     {
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204228',
-            'HoTen'             => 'Nguyễn Văn Sang',
+            'MaSinhVien'        => '191204227',
+            'HoTen'             => 'Nguyễn Văn Hoàng',
             'NgaySinh'          => '2001-10-09',
             'NoiSinh'           => 'Nam Định',
             'GioiTinh'          => 'Nam',
             'DanToc'            => 'Kinh',
             'TonGiao'           => 'Không',
             'QuocTich'          => 'Việt Nam',
+            'SoCMTND'           => '12345678',
+            'NgayCapCMTND'      => '10-10-2019',
+            'NoiCapCMTND'       => 'Thanh Hóa',
             'DiaChiBaoTin'      => 'Nam Định',
             'SDT'               => '0382963146',
             'Email'             => 'sangml@gmail.com',

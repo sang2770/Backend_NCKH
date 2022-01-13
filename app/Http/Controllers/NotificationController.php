@@ -10,11 +10,18 @@ use App\Http\Requests\NotificationRequest;
 
 class NotificationController extends Controller
 {
-    public function IndexHeader(){
+    public function IndexHeader(Request $request){
+        $limit = $request->query('limit');
+        $page = $request->query('page');
         $count = Tb_thongbaochinh::select('MaThongBaoChinh')->count();
         if($count > 0){
-            $notification = Tb_thongbaochinh::select('TieuDeTB')->get();
-            return response()->json(['status' => "Success", 'data' => $notification]);
+            $notification = Tb_thongbaochinh::orderBy('MaThongBaoChinh', 'DESC')->paginate($perPage = $limit, $columns = ['TieuDeTB'], $pageName = 'page', $page)->toArray();
+            return response()->json(['status' => "Success", 'data' => $notification["data"], 'pagination' => [
+                "page" => $notification['current_page'],
+                "first_page_url"    => $notification['first_page_url'],
+                "next_page_url"     => $notification['next_page_url'],
+                "TotalPage"         => $notification['last_page']
+            ]]);
         }
         else{
             return response()->json(['status' => "Failed"]);
@@ -22,8 +29,7 @@ class NotificationController extends Controller
     }
 
     public function show($id){
-        $count = Tb_thongbaochinh::select('MaThongBaoChinh')->where('MaThongBaoChinh', $id)->count();
-        if($count > 0){
+        if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
             $notification = Tb_thongbaochinh::select('TieuDeTB', 'NoiDungTB')->where('MaThongBaoChinh', $id)->get();
             return response()->json(['status' => "Success", 'data' => $notification]);
         }
@@ -38,7 +44,7 @@ class NotificationController extends Controller
             return [
                 'TieuDeTB'          => $Input['TieuDeTB'],
                 'NoiDungTB'         => $Input['NoiDungTB'],
-                'ThoiGianTB'        => $ThoiGianTB
+                'ThoiGianTao'        => $ThoiGianTB
             ];
         } catch (\Throwable $th) {
             throw $th;
@@ -62,26 +68,24 @@ class NotificationController extends Controller
     }
 
     public function UpdateNotification(NotificationRequest $request, $id){
-        $count = Tb_thongbaochinh::where('MaThongBaoChinh', $id)->count();
-        if($count > 0){
+        if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
             $task = $this->edit($id);
             $input = $request->all();
             $task->fill($input)->save();
             return response()->json(['status' => "Success updated"]);
         }
         else{
-            return response()->json(['status' => "Failed"]);
+            return response()->json(['status' => "Not Found!"]);
         }
     }
 
     public function DestroyNotification($id){
-        $count = Tb_thongbaochinh::where('MaThongBaoChinh', $id)->count();
-        if($count > 0){
+        if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
             Tb_thongbaochinh::where('MaThongBaoChinh', $id)->delete();
             return response()->json(['status' => "Success deleted"]);
         }
         else{
-            return response()->json(['status' => "Failed"]);
+            return response()->json(['status' => "Not Found!"]);
         }
     }
 

@@ -86,6 +86,7 @@ Route::group([
 ], function(){
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']);
+    Route::get('filter-info', [RegisterMilitaryController::class, 'Filter']);
 });
 // 2. giay xac nhan tu truong
 Route::group([

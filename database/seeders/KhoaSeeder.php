@@ -16,7 +16,7 @@ class KhoaSeeder extends Seeder
     {
         Tb_khoa::insert([
             'MaKhoa' => '1',
-            'TenKhoa' => 'CNTT1',
+            'TenKhoa' => 'CNTT',
             'DiaChi' => 'CauGiay-HaNoi',
             'SoDienThoai' => '0986871623'
         ]);

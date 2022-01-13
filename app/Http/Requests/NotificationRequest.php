@@ -28,10 +28,8 @@ class NotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'MaThongBaoChinh'   => 'required',
             'TieuDeTB'          => 'required',
             'NoiDungTB'         => 'required',
-            // 'ThoiGianTB'        => 'required'
         ];
     }
 
