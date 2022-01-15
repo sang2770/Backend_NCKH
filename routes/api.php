@@ -6,24 +6,17 @@ use App\Http\Controllers\RequestManagementController;
 use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\RegisterMilitaryController;
 use App\Http\Controllers\ConfirmMilitaryController;
+use App\Http\Controllers\LoginClientController;
 use App\Http\Controllers\MoveMilitaryController;
 use App\Http\Controllers\NotificationController;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Admin
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
+
 */
-
-
 // Login
 Route::group([
     'prefix' => 'auth/admin'
@@ -112,4 +105,24 @@ Route::group([
     Route::put('update-notification/{id}', [NotificationController::class, 'UpdateNotification']); //update thong bao
     Route::delete('delete-notification/{id}', [NotificationController::class, 'DestroyNotification']); //xoa 1 thong bao
     Route::post('sent-notification-students', [NotificationController::class, 'SentNotificationStudent']); //gui thong bao den sinh vien
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Client
+|--------------------------------------------------------------------------
+
+*/
+
+Route::group([
+    'prefix' => 'auth/client'
+], function () {
+    Route::post('login', [LoginClientController::class, 'Login']);
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::delete('logout', [LoginClientController::class, 'logout']);
+        Route::get('me', [LoginClientController::class, 'user']);
+    });
 });

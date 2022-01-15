@@ -15,7 +15,7 @@ class YeuCauSeeder extends Seeder
     public function run()
     {
         Tb_yeucau::insert([
-            'MaSinhVien' => '19123311',
+            'MaSinhVien' => '191204228',
             'NgayYeuCau' => '2022-1-1',
             'TrangThaiXuLy' => 'Chờ xử lý'
         ]);

@@ -32,6 +32,9 @@ class StudentSeeder extends Seeder
             'TinhTrangSinhVien' => 'Đang học',
             'HeDaoTao'          => 'Hệ đào tạo chính quy',
             'MaLop'             => '1',
+            'SoCMTND' => '191203368',
+            'NgayCapCMTND' => '2022-10-10',
+            'NoiCapCMTND' => "HaiHau",
         ]);
     }
 }
