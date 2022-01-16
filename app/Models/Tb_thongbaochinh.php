@@ -12,7 +12,7 @@ class Tb_thongbaochinh extends Model
         'MaThongBaoChinh', 
         'TieuDeTB',
         'NoiDungTB', 
-        'ThoiGianTB',
+        'ThoiGianTao',
     ];
     protected $primaryKey = 'MaThongBaoChinh';
     public $timestamps = true;

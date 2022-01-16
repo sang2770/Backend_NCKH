@@ -10,6 +10,7 @@ class Tb_giay_dc_truong extends Model
     protected $table = 'tb_giay_dc_truong';
     protected $fillable = [
         'MaGiayDC_Truong', 
+        'SoGioiThieuDC',
         'NgayCap', 
         'NgayHH',
         'NoiChuyenVe',

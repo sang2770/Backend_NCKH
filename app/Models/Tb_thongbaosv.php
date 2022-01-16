@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tb_thongbao extends Model
+class Tb_thongbaosv extends Model
 {
-    protected $table = 'tb_thongbao';
+    protected $table = 'tb_thongbaosv';
     protected $fillable = [
-        'MaThongBao', 
-        'NoiDung', 
         'ThoiGianTB',
         'MaTKSV',
+        'MaThongBaoChinh',
     ];
-    protected $primaryKey = 'MaThongBao';
     public $timestamps = true;
 }

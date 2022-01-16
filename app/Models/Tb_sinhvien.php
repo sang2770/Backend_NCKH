@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Helper\Traits\Filterable;
+use App\Helper\Traits\Filter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Filterable;
 
 class Tb_sinhvien extends Model
 {
-    use Filterable;
     protected $table = 'tb_sinhvien';
     protected $fillable = [
         'MaSinhVien',

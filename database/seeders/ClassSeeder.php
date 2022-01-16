@@ -17,8 +17,26 @@ class ClassSeeder extends Seeder
         Tb_lop::insert([
             'MaLop' => '1',
             'TenLop' => 'CNTT1',
-            'Khoas' => '60',
+            'Khoas' => 'K60',
             'MaKhoa' => '1'
+        ]);
+        Tb_lop::insert([
+            'MaLop' => '2',
+            'TenLop' => 'CNTT2',
+            'Khoas' => 'K60',
+            'MaKhoa' => '1'
+        ]);
+        Tb_lop::insert([
+            'MaLop' => '3',
+            'TenLop' => 'CNTT3',
+            'Khoas' => 'K60',
+            'MaKhoa' => '1'
+        ]);
+        Tb_lop::insert([
+            'MaLop' => '4',
+            'TenLop' => 'CK1',
+            'Khoas' => 'K62',
+            'MaKhoa' => '2'
         ]);
     }
 }

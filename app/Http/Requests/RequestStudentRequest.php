@@ -8,7 +8,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-class NotificationRequest extends FormRequest
+
+class RequestStudentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,13 +29,15 @@ class NotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'TieuDeTB'          => 'required',
-            'NoiDungTB'         => 'required',
+            'MaSinhVien'    => "required",  
+            // 'NgayYeuCau'    => "required",
+            // 'NgayXuLy'      => "required",
+            // 'TrangThaiXuLy' => "required",
         ];
     }
-
     protected function failedValidation(ValidationValidator $validator)
     {
+
         $errors = (new ValidationException($validator))->errors();
         throw new HttpResponseException(response()->json(
             [

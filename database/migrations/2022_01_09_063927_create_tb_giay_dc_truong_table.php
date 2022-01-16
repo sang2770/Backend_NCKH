@@ -14,14 +14,14 @@ class CreateTbGiayDcTruongTable extends Migration
     public function up()
     {
         Schema::create('tb_giay_dc_truong', function (Blueprint $table) {
-            $table->string('MaGiayDC_Truong', 20);
+            $table->increments('MaGiayDC_Truong');
+            $table->string('SoGioiThieuDC', 20);
             $table->dateTime('NgayCap');
             $table->dateTime('NgayHH');
             $table->string('NoiChuyenVe', 150);
             $table->string('NoiOHienTai', 150);
             $table->string('LyDo', 100);
             $table->unsignedInteger('MaGiayDK');
-            $table->primary('MaGiayDC_Truong');
             $table->foreign('MaGiayDK')->references('MaGiayDK')->on('tb_giay_cn_dangky');
             $table->timestamps();
         });
