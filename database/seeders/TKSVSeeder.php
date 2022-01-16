@@ -15,9 +15,19 @@ class TKSVSeeder extends Seeder
     public function run()
     {
         Tb_tk_sinhvien::insert([
-            'TenDangNhap' => "1",
-            'MatKhau' => "1",
+            'TenDangNhap' => "NguyenHoang",
+            'MatKhau' => "12223",
             'MaSinhVien' => "191204228",
+        ]);
+        Tb_tk_sinhvien::insert([
+            'TenDangNhap' => "NguyenSang",
+            'MatKhau' => "12345",
+            'MaSinhVien' => "191204227",
+        ]);
+        Tb_tk_sinhvien::insert([
+            'TenDangNhap' => "NguyenNam",
+            'MatKhau' => "12345",
+            'MaSinhVien' => "191204226",
         ]);
     }
 }

@@ -18,6 +18,7 @@ class CreateTbYeucauTable extends Migration
             $table->string('MaSinhVien', 20);
             $table->dateTime('NgayYeuCau');
             $table->dateTime('NgayXuLy');
+            $table->string('TrangThaiXuLy', 100);
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
             $table->timestamps();
         });

@@ -12,6 +12,7 @@ class Tb_giay_xn_truong extends Model
         'MaGiayXN_Truong', 
         'NgayCap', 
         'NamHoc',
+        'MaYeuCau'
     ];
     protected $primaryKey = 'MaGiayXN_Truong';
     public $timestamps = true;

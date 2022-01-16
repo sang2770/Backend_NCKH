@@ -8,7 +8,7 @@ use App\Http\Controllers\RegisterMilitaryController;
 use App\Http\Controllers\ConfirmMilitaryController;
 use App\Http\Controllers\MoveMilitaryController;
 use App\Http\Controllers\NotificationController;
-
+use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -85,22 +85,22 @@ Route::group([
     'prefix' => 'register-military-management'
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
-    Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']);
-    Route::get('filter-info', [RegisterMilitaryController::class, 'Filter']);
+    Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']); //them moi
+    Route::get('filter-info-register', [RegisterMilitaryController::class, 'FilterRegister']);  //loc thong tin sinhvien cung thong tin giay cn dky
+    Route::get('filter-info-confirm', [RegisterMilitaryController::class, 'FilterConfirm']); //loc thong tin giay xac nhan tu truong
+    Route::get('filter-info-move', [RegisterMilitaryController::class, 'FilterMove']); //loc thong tin giay di chuyen nvqs tu truong
 });
 // 2. giay xac nhan tu truong
 Route::group([
     'prefix' => 'confirm-military-management'
 ], function () {
-    Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirms']); //cap giay xac nhan cho nhieu sinh vien
-    Route::get('confirm-military/{id}', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
+    Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
 });
 // 3. giay di chuyen tu truong
 Route::group([
     'prefix' => 'move-military-management'
 ], function () {
-    Route::get('move-military', [MoveMilitaryController::class, 'Moves']); //cap giay di chuyen cho nhieu sinh vien
-    Route::get('move-military/{id}', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
+    Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
 });
 
 // thong bao
@@ -113,4 +113,15 @@ Route::group([
     Route::put('update-notification/{id}', [NotificationController::class, 'UpdateNotification']); //update thong bao
     Route::delete('delete-notification/{id}', [NotificationController::class, 'DestroyNotification']); //xoa 1 thong bao
     Route::post('sent-notification-students', [NotificationController::class, 'SentNotificationStudent']); //gui thong bao den sinh vien
+});
+
+//sinh vien
+Route::group([
+    'prefix' => 'student'
+], function () {
+    Route::get('info-student', [StudentController::class, 'show']); //sinh vien xem thong tin ca nhan
+    Route::post('request-student', [StudentController::class, 'store']); //sinh vien gui yeu cau xin giay xac nhan
+    Route::get('register-student', [StudentController::class, 'register']); //sinh vien xem thong tin ve giay cn dky nvqs cua minh
+    Route::get('notification-student', [StudentController::class, 'notification']); //danh sach thong bao cua ca nhan sinh vien
+
 });

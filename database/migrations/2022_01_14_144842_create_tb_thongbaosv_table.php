@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTbThongbaoTable extends Migration
+class CreateTbThongbaosvTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTbThongbaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_thongbao', function (Blueprint $table) {
-            $table->Increments('MaThongBao');
-            $table->string('NoiDung', 200);
+        Schema::create('Tb_thongbaosv', function (Blueprint $table) {
             $table->dateTime('ThoiGianTB');
             $table->unsignedInteger('MaTKSV');
+            $table->unsignedInteger('MaThongBaoChinh');
             $table->foreign('MaTKSV')->references('MaTKSV')->on('tb_tk_sinhvien');
+            $table->foreign('MaThongBaoChinh')->references('MaThongBaoChinh')->on('tb_thongbaochinh');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateTbThongbaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_thongbao');
+        Schema::dropIfExists('Tb_thongbaosv');
     }
 }

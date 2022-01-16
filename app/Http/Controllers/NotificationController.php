@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use App\Http\Requests\NotificationRequest;
+use App\Models\Tb_sinhvien;
+use App\Models\Tb_thongbaosv;
 
 class NotificationController extends Controller
 {
@@ -89,7 +91,42 @@ class NotificationController extends Controller
         }
     }
 
-    public function SentNotificationStudent(){
-        return "SentNotificationStudent";
+    public function SentNotificationStudent(Request $request){
+        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+                            ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
+                            ->join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+                            ->select('Tb_tk_sinhvien.MaTKSV', 'Tb_sinhvien.MaSinhVien');
+
+        if($request->MaSinhVien){
+            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+        }
+        if($request->TenLop){
+            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+        }
+        if($request->TenKhoa){
+            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+        }
+        if($request->Khoas){
+            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+        }
+
+        $count = $info->count();
+        $info = $info->get();
+
+        if($count!=0 && Tb_thongbaochinh::where('MaThongBaoChinh', '=', $request->MaThongBaoChinh)->exists()){
+            foreach($info as $i){
+                if(Tb_thongbaosv::where('MaTKSV', '=', $i["MaTKSV"])->where('MaThongBaoChinh', '=', $request->MaThongBaoChinh)->doesntExist()){
+                    Tb_thongbaosv::insert([
+                        'ThoiGianTB'        => Carbon::now()->toDateString(),
+                        'MaTKSV'            => $i["MaTKSV"],
+                        'MaThongBaoChinh'   => $request->MaThongBaoChinh,
+                    ]);
+                }
+            }
+            return response()->json(['status' => "Success!"]);
+        }
+        else{
+            return response()->json(['status' => "Not Found!"]);
+        }
     }
 }
