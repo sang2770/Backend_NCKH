@@ -14,3 +14,7 @@ composer dump-autoload
 
 Composer tự động phiên bản
 --ignore-platform-reqs
+
+
+Multi model
+https://stackoverflow.com/questions/52851208/laravel-passport-multiple-authentication-using-guards

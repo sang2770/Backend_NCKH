@@ -40,9 +40,23 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'api' => [
+        'user' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'user-api' => [
             'driver' => 'passport',
             'provider' => 'users',
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'admin-api' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
         ],
     ],
 
@@ -64,11 +78,14 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Tb_tk_quanly::class,
         ],
-
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Tb_tk_sinhvien::class,
+        ]
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

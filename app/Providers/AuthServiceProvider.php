@@ -28,6 +28,11 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
         // Tồn tại trong 1 ngày
         Passport::tokensExpireIn(now()->addDay(1));
+
+        Passport::tokensCan([
+            'user' => 'User Type',
+            'admin' => 'Admin User Type',
+        ]);
         //
     }
 }

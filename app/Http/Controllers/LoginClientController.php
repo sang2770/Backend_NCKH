@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TaiKhoanQuanLy;
-use App\Models\Tb_tk_quanly;
+use App\Models\Tb_tk_sinhvien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends Controller
+class LoginClientController extends Controller
 {
     public function Login(Request $request)
     {
@@ -22,11 +20,11 @@ class LoginController extends Controller
             return response()->json($validator->getMessageBag(), 400);
         }
         $input = $request->only('TenDangNhap', 'password');
-        if (auth()->guard('admin')->attempt($input)) {
-            config(['auth.guards.api.provider' => 'admin']);
-            $user = Tb_tk_quanly::select('*')->find(auth()->guard('admin')->user()->MaTK);
-            $token = $user->createToken('authToken', ['admin'])->accessToken;
-            $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => $user];
+        if (auth()->guard('user')->attempt($input)) {
+            config(['auth.guards.api.provider' => 'user']);
+            $user = Tb_tk_sinhvien::find(auth()->guard('user')->user()->MaTKSV);
+            $token = $user->createToken('authToken', ['user'])->accessToken;
+            $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => Auth::user()];
             return response()->json($result);
         } else {
             return response()->json(['status' => 'Failed', 'Err_Message' => "Tài khoản hoặc mật khẩu không đúng"]);
@@ -41,9 +39,7 @@ class LoginController extends Controller
     // Get User
     public function user(Request $request)
     {
-        // var_dump("Me");
-        $user = $request->user();
-        $result = ['status' => 'Success',  'user' => $user];
+        $result = ['status' => 'Success',  'user' => $request->user()];
         return response()->json($result);
     }
     // Override

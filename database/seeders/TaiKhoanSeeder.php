@@ -16,8 +16,7 @@ class TaiKhoanSeeder extends Seeder
     public function run()
     {
         Tb_tk_quanly::insert([
-            'MaTK' => '2',
-            'TenDangNhap' => 'QLNVQS@st.em.utc.edu.vn',
+            'TenDangNhap' => 'QLNVQS_1@st.em.utc.edu.vn',
             'MatKhau' => Hash::make('1234')
         ]);
     }

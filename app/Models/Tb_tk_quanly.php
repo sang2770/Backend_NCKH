@@ -24,6 +24,7 @@ class Tb_tk_quanly extends Authenticatable
     ];
     public function getAuthPassword()
     {
+        // var_dump("Admin");
         return $this->MatKhau;
     }
 }

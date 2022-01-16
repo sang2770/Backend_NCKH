@@ -24,7 +24,7 @@ Route::group([
     Route::post('login', [LoginController::class, 'Login']);
     // Route::post('signup', [LoginController::class, 'signup']);
     Route::group([
-        'middleware' => 'auth:api'
+        'middleware' => ['auth:admin-api', 'scopes:admin']
     ], function () {
         Route::delete('logout', [LoginController::class, 'logout']);
         Route::get('me', [LoginController::class, 'user']);
@@ -35,7 +35,7 @@ Route::group([
 Quản lý sinh viên
 -----------------
 */
-Route::prefix('student-management')->middleware('auth:api')->group(
+Route::prefix('student-management')->middleware(['auth:admin-api', 'scopes:admin'])->group(
     function () {
         Route::post('user', [StudentManagementController::class, 'store'])->name('Add');
         Route::post('users', [StudentManagementController::class, 'storeImport'])->name('AddList');
@@ -53,7 +53,7 @@ Route::prefix('student-management')->middleware('auth:api')->group(
 Quản lý yêu cầu sinh viên
 -----------------
 */
-Route::prefix('request-management')->middleware('auth:api')->group(
+Route::prefix('request-management')->middleware(['auth:admin-api', 'scopes:admin'])->group(
     function () {
         Route::get('confirm', [RequestManagementController::class, 'index'])->name('GetListConfirm');
         Route::post('confirm', [RequestManagementController::class, 'confirm'])->name('Confirm');
@@ -64,7 +64,7 @@ Route::prefix('request-management')->middleware('auth:api')->group(
 Quản lý danh sách file mẫu
 -----------------
 */
-Route::prefix('file-management')->middleware('auth:api')->group(
+Route::prefix('file-management')->middleware(['auth:admin-api', 'scopes:admin'])->group(
     function () {
         Route::get('files', [FileManagementController::class, 'index'])->name('GetAllFile');
         Route::get('file/{id}', [FileManagementController::class, 'DowloadFile'])->name('DowloadFile');
@@ -114,15 +114,3 @@ Route::group([
 |--------------------------------------------------------------------------
 
 */
-
-Route::group([
-    'prefix' => 'auth/client'
-], function () {
-    Route::post('login', [LoginClientController::class, 'Login']);
-    Route::group([
-        'middleware' => 'auth:api'
-    ], function () {
-        Route::delete('logout', [LoginClientController::class, 'logout']);
-        Route::get('me', [LoginClientController::class, 'user']);
-    });
-});
