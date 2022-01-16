@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tb_tk_sinhvien;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class LoginClientController extends Controller
@@ -41,6 +43,37 @@ class LoginClientController extends Controller
     {
         $result = ['status' => 'Success',  'user' => $request->user()];
         return response()->json($result);
+    }
+    // Get User
+    public function change(Request $request)
+    {
+        $validator = Validator::make($request->input(), [
+            'MaSinhVien' => 'required',
+            'Old' => 'required',
+            'New' => 'required',
+
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json($validator->getMessageBag(), 400);
+        }
+        try {
+            $Id = $request->MaSinhVien;
+            $Old = Hash::make($request->Old);
+            $New = Hash::make($request->New);
+            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id);
+            if (!$user) {
+                return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
+            } elseif (!$user = $user->where("MatKhau", $Old)) {
+                return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không chính xác!"]);
+            } else {
+                Tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);
+                $request->user()->token()->revoke();
+                return response()->json(['status' => 'Success']);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => 'Failed', 'Err_Message' => $e->getMessage()]);
+        }
     }
     // Override
     public function TenDangNhap()

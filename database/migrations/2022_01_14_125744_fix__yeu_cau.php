@@ -15,7 +15,6 @@ class FixYeuCau extends Migration
     {
         Schema::table('Tb_yeucau', function (Blueprint $table) {
             $table->dateTime('NgayXuLy')->nullable()->change();
-            $table->string('TrangThaiXuLy', 40);
         });
     }
 
@@ -28,7 +27,6 @@ class FixYeuCau extends Migration
     {
         Schema::table('Tb_yeucau', function (Blueprint $table) {
             $table->dateTime('NgayXuLy')->change();
-            $table->dropColumn('TrangThaiXuLy');
         });
     }
 }

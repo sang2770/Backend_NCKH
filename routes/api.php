@@ -9,8 +9,6 @@ use App\Http\Controllers\ConfirmMilitaryController;
 use App\Http\Controllers\LoginClientController;
 use App\Http\Controllers\MoveMilitaryController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\StudentController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,7 +75,8 @@ Route::prefix('file-management')->middleware(['auth:admin-api', 'scopes:admin'])
 // nghia vu quan su
 // 1. giay chung nhan dang ky nvqs
 Route::group([
-    'prefix' => 'register-military-management'
+    'prefix' => 'register-military-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']); //them moi
@@ -87,7 +86,8 @@ Route::group([
 });
 // 2. giay xac nhan tu truong
 Route::group([
-    'prefix' => 'confirm-military-management'
+    'prefix' => 'confirm-military-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
 });
@@ -100,7 +100,8 @@ Route::group([
 
 // thong bao
 Route::group([
-    'prefix' => 'notification-management'
+    'prefix' => 'notification-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('index-header-notification', [NotificationController::class, 'IndexHeader']); //lay ra danh sach tieu de thong bao
     Route::get('show-notification/{id}', [NotificationController::class, 'show']); //lay ra tieu de va noi dung thong bao voi $id
@@ -108,15 +109,4 @@ Route::group([
     Route::put('update-notification/{id}', [NotificationController::class, 'UpdateNotification']); //update thong bao
     Route::delete('delete-notification/{id}', [NotificationController::class, 'DestroyNotification']); //xoa 1 thong bao
     Route::post('sent-notification-students', [NotificationController::class, 'SentNotificationStudent']); //gui thong bao den sinh vien
-});
-
-//sinh vien
-Route::group([
-    'prefix' => 'student'
-], function () {
-    Route::get('info-student', [StudentController::class, 'show']); //sinh vien xem thong tin ca nhan
-    Route::post('request-student', [StudentController::class, 'store']); //sinh vien gui yeu cau xin giay xac nhan
-    Route::get('register-student', [StudentController::class, 'register']); //sinh vien xem thong tin ve giay cn dky nvqs cua minh
-    Route::get('notification-student', [StudentController::class, 'notification']); //danh sach thong bao cua ca nhan sinh vien
-
 });
