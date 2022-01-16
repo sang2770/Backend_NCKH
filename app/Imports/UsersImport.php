@@ -10,60 +10,69 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use App\Helper\Helper;
 use App\Models\Tb_tk_sinhvien;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Validators\Failure;
+use Maatwebsite\Excel\Validators\ValidationException;
 use \PhpOffice\PhpSpreadsheet\Shared\Date;
 
-class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
+class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation, SkipsOnFailure
 {
+    use Importable, SkipsFailures;
     /**
      * @param array $row
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
+    protected $rowNum;
+    public $Err = [];
     public function model(array $row)
     {
-        // var_dump($row);
-        try {
-            if (empty($row['tt'])) {
-                return null;
-            }
-            $TenLop = $row['ten_lop'];
-            $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
-            // Create Tài Khoản
-            $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
-            // var_dump($TaiKhoan);
-            return [
-                new Tb_sinhvien([
-                    'MaSinhVien' => $row['ma_sinh_vien'],
-                    'HoTen' => $row['ho_ten'],
-                    'NgaySinh' => Date::excelToDateTimeObject(intval($row['ngay_sinh']))->format('Y-m-d'),
-                    'NoiSinh' => $row['noi_sinh'],
-                    'GioiTinh' => $row['gioi_tinh'],
-                    'DanToc' => $row["dan_toc"],
-                    'TonGiao' => $row['ton_giao'],
-                    'QuocTich' => $row['quoc_tich'],
-                    'DiaChiBaoTin' => $row['dia_chi_khi_bao_tin'],
-                    'SDT' => $row['so_dien_thoai'],
-                    'Email' => $row['email'],
-                    'HoKhauTinh' => $row['ho_khau_tinhtp'],
-                    'HoKhauHuyen' => $row['ho_khau_quanhuyen'],
-                    'HoKhauXaPhuong' => $row['ho_khau_xaphuong'],
-                    'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
-                    'HeDaoTao' => $row['he_dao_tao'],
-                    'MaLop' => $MaLop,
-                    'SoCMTND' => $row['chung_minh_nhan_dan'],
-                    'NgayCapCMTND' => Date::excelToDateTimeObject(intval($row['ngay_cap_cmnd']))->format('Y-m-d'),
-                    'NoiCapCMTND' => $row['noi_cap_cmnd'],
-
-                ]),
-                new Tb_tk_sinhvien(
-                    $TaiKhoan
-                )
-            ];
-        } catch (\Throwable $th) {
-            throw $th;
+        if (empty($row['tt'])) {
+            return null;
         }
+        ++$this->rowNum;
+        $TenLop = $row['ten_lop'];
+        $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
+        if (!$MaLop) {
+            $error = ['err' => "Không tồn tại Tên lớp!", "row" => $this->rowNum];
+            $this->Err[] = $error;
+            return null;
+        }
+        // Create Tài Khoản
+        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
+        // var_dump($TaiKhoan);
+        return [
+            new Tb_sinhvien([
+                'MaSinhVien' => $row['ma_sinh_vien'],
+                'HoTen' => $row['ho_ten'],
+                'NgaySinh' => Date::excelToDateTimeObject(intval($row['ngay_sinh']))->format('Y-m-d'),
+                'NoiSinh' => $row['noi_sinh'],
+                'GioiTinh' => $row['gioi_tinh'],
+                'DanToc' => $row["dan_toc"],
+                'TonGiao' => $row['ton_giao'],
+                'QuocTich' => $row['quoc_tich'],
+                'DiaChiBaoTin' => $row['dia_chi_khi_bao_tin'],
+                'SDT' => $row['so_dien_thoai'],
+                'Email' => $row['email'],
+                'HoKhauTinh' => $row['ho_khau_tinhtp'],
+                'HoKhauHuyen' => $row['ho_khau_quanhuyen'],
+                'HoKhauXaPhuong' => $row['ho_khau_xaphuong'],
+                'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
+                'HeDaoTao' => $row['he_dao_tao'],
+                'MaLop' => $MaLop,
+                'SoCMTND' => $row['chung_minh_nhan_dan'],
+                'NgayCapCMTND' => Date::excelToDateTimeObject(intval($row['ngay_cap_cmnd']))->format('Y-m-d'),
+                'NoiCapCMTND' => $row['noi_cap_cmnd'],
+
+            ]),
+            new Tb_tk_sinhvien(
+                $TaiKhoan
+            )
+        ];
     }
     public function  rules(): array
     {

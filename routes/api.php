@@ -40,12 +40,15 @@ Route::prefix('student-management')->middleware(['auth:admin-api', 'scopes:admin
         Route::post('user', [StudentManagementController::class, 'store'])->name('Add');
         Route::post('users', [StudentManagementController::class, 'storeImport'])->name('AddList');
         Route::put('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
-        Route::put('users', [StudentManagementController::class, 'updateImport'])->name('UpdateList');
+        // Route::put('users', [StudentManagementController::class, 'updateImport'])->name('UpdateList');
         Route::get('users', [StudentManagementController::class, 'index'])->name('GetList');
         Route::get('users-export', [StudentManagementController::class, 'exportIndex'])->name('Export');
         Route::get('user/{id}', [StudentManagementController::class, 'show'])->name('GetOne');
         Route::get('majors', [StudentManagementController::class, 'indexMajors'])->name('GetMajors');
+        Route::get('class', [StudentManagementController::class, 'indexClass'])->name('GetClass');
         Route::get('majors-key', [StudentManagementController::class, 'indexMajorsKey'])->name('GetMajorsKey');
+        Route::post('majors', [StudentManagementController::class, 'importMajors']);
+        Route::post('class', [StudentManagementController::class, 'importClass']);
     }
 );
 /*

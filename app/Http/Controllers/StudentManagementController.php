@@ -6,6 +6,8 @@ use App\Exports\UsersExport;
 use App\Helper\Helper;
 use App\Http\Requests\AddStudentRequest;
 use App\Http\Requests\UpdateUser;
+use App\Imports\ClassImport;
+use App\Imports\MajorImport;
 use App\Imports\UpdateUserImport;
 use App\Imports\UsersImport;
 use App\Models\Tb_khoa;
@@ -15,6 +17,7 @@ use App\Models\Tb_tk_sinhvien;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentManagementController extends Controller
@@ -72,17 +75,26 @@ class StudentManagementController extends Controller
     //Thêm bằng Import File 
     public function storeImport(Request $request)
     {
-        try {
-            Excel::import(new UsersImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
+        $validator = Validator::make($request->all(), [
+            'file' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json($validator->getMessageBag(), 400);
+        }
+        $import = new UsersImport();
+        $import->import($request->file);
+        if (!$import->failures()->isNotEmpty() && count($import->Err) == 0) {
             return response()->json(['status' => "Success"]);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $failures) {
+        } else {
             $errors = [];
-            foreach ($failures->failures() as $value) {
+            foreach ($import->failures() as $value) {
                 $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
             }
+            foreach ($import->Err as $value) {
+                $errors[] = ['row' => $value['row'], 'err' => $value['err']];
+            }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
-        } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
     /**
@@ -146,13 +158,21 @@ class StudentManagementController extends Controller
     public function indexMajors(Request $request)
     {
         try {
-            $Khoas = Tb_khoa::select('TenKhoa')->value('TenKhoa');
+            $Khoas = Tb_khoa::pluck("TenKhoa");
             return response()->json(['status' => "Success", 'data' => $Khoas]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
-
+    public function indexClass(Request $request)
+    {
+        try {
+            $Lops = Tb_lop::pluck('TenLop');
+            return response()->json(['status' => "Success", 'data' => $Lops]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
     /**
      * Lấy danh sách Khóa
      */
@@ -165,6 +185,48 @@ class StudentManagementController extends Controller
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
+    // Them danh sach khoa
+    public function importMajors(Request $request)
+    {
+        try {
+            Excel::import(new MajorImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
+            return response()->json(['status' => "Success"]);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $failures) {
+            $errors = [];
+            foreach ($failures->failures() as $value) {
+                $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
+            }
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
+    // Them Danh Sach Lop
+    public function importClass(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json($validator->getMessageBag(), 400);
+        }
+        $import = new ClassImport();
+        $import->import($request->file);
+        if (!$import->failures()->isNotEmpty() && count($import->Err) == 0) {
+            return response()->json(['status' => "Success"]);
+        } else {
+            $errors = [];
+            foreach ($import->failures() as $value) {
+                $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
+            }
+            foreach ($import->Err as $value) {
+                $errors[] = ['row' => $value['row'], 'err' => $value['err']];
+            }
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
+        }
+    }
+
     /**
      * Xóa sinh viên theo mã sinh viên
      */
