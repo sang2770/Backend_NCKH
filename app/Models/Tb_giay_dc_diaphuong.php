@@ -16,6 +16,7 @@ class Tb_giay_dc_diaphuong extends Model
         'NoiOHienTai',
         'NoiChuyenDen',
         'LyDo',
+        'BanChiHuy',
         'MaGiayDK',
     ];
     protected $primaryKey = 'MaGiayDC_DP';

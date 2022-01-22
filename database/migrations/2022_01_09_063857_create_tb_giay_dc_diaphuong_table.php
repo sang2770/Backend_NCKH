@@ -21,6 +21,7 @@ class CreateTbGiayDcDiaphuongTable extends Migration
             $table->string('NoiOHienTai', 150);
             $table->string('NoiChuyenDen', 150);
             $table->string('LyDo', 100);
+            $table->string('BanChiHuy', 200);
             $table->unsignedInteger('MaGiayDK');
             $table->foreign('MaGiayDK')->references('MaGiayDK')->on('tb_giay_cn_dangky');
             $table->timestamps();
