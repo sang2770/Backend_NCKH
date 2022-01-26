@@ -9,6 +9,7 @@ use App\Http\Controllers\ConfirmMilitaryController;
 use App\Http\Controllers\LoginClientController;
 use App\Http\Controllers\MoveMilitaryController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MoveMilitaryLocalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,10 +103,18 @@ Route::group([
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
 });
 
+// 4. giay di chuyen tu dia phuong
+Route::group([
+    'prefix' => 'move-military-local-management'
+], function () {
+    Route::post('move-military-local-file', [MoveMilitaryLocalController::class, 'StoreFile']);
+    Route::post('move-military-local', [MoveMilitaryLocalController::class, 'Store']);
+});
+
 // thong bao
 Route::group([
     'prefix' => 'notification-management',
-    'middleware' => ['auth:admin-api', 'scopes:admin']
+   'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('index-header-notification', [NotificationController::class, 'IndexHeader']); //lay ra danh sach tieu de thong bao
     Route::get('show-notification/{id}', [NotificationController::class, 'show']); //lay ra tieu de va noi dung thong bao voi $id

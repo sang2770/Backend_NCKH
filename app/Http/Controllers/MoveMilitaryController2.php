@@ -10,9 +10,9 @@ use Nette\Utils\ArrayList;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Days;
 use PhpOffice\PhpWord\TemplateProcessor;
 
-class MoveMilitaryController extends Controller
+class MoveMilitaryController2 extends Controller
 {
-    public function Move(Request $request){
+    public function Moves(Request $request){
         $array = array();
         $templateProcessor = new TemplateProcessor('TemplateMilitary/MoveMilitaryTemplate.docx');
         $move = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')

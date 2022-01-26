@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-class ConfirmMilitaryController extends Controller
+class ConfirmMilitaryController2 extends Controller
 {
     public function Confirm(Request $request){ //MaYeuCau, NamHoc
         $array = array();
