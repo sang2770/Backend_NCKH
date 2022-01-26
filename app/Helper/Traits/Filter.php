@@ -10,7 +10,6 @@ trait Filterable
     public function scopeFilter($query, $request)
     {
         $param = Arr::except($request->query(), ['page', 'limit']);
-        // var_dump($param);
         foreach ($param as $field => $value) {
 
             $method = 'filter' . Str::studly($field);

@@ -11,6 +11,7 @@ use App\Imports\MajorImport;
 use App\Imports\UpdateUserImport;
 use App\Imports\UsersImport;
 use App\Models\Tb_khoa;
+use App\Models\Tb_lichsu;
 use App\Models\Tb_lop;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_tk_sinhvien;
@@ -64,8 +65,8 @@ class StudentManagementController extends Controller
             $validated['MaLop'] = $MaLop;
             // Begin trans
             DB::transaction(function () use ($validated, $TaiKhoan) { // Start the transaction
-                Tb_sinhvien::insert($validated);
-                Tb_tk_sinhvien::insert($TaiKhoan);
+                Tb_sinhvien::create($validated);
+                Tb_tk_sinhvien::create($TaiKhoan);
             });
             return response()->json(['status' => "Success", 'data' => ["SinhVien" => $validated, "TaiKhoan" => $TaiKhoan]]);
         } catch (Exception $e) {
@@ -113,25 +114,62 @@ class StudentManagementController extends Controller
             return response()->json(['status' => "Failed", 'Err_Message' => 'NotFound', 'infor' => $e->getMessage()]);
         }
     }
-
+    /**
+     * Lấy lịch sử chỉnh sửa sinh viên
+     */
+    public function userHistory(Request $request, $id)
+    {
+        try {
+            $list = Tb_lichsu::where('tb_lichsu.MaSinhVien', $id)
+                ->join('tb_tk_quanly', 'tb_tk_quanly.MaTK', '=', 'tb_lichsu.MaTK')
+                ->join('tb_sinhvien', 'tb_sinhvien.MaSinhVien', '=', 'tb_lichsu.MaSinhVien')
+                ->get(['NoiDung', 'HoTen', 'TenDangNhap', 'ThoiGian', 'tb_lichsu.MaSinhVien']);
+            $result = [];
+            foreach ($list as  $item) {
+                $Fields = explode(";", $item->NoiDung);
+                unset($Fields[count($Fields) - 1]);
+                $Context = [];
+                foreach ($Fields as $value) {
+                    $content = explode(":", $value);
+                    $Context[$content[0]] = $content[1];
+                }
+                $item->NoiDung = $Context;
+                $result[] = $item;
+            }
+            return response()->json(['status' => "Success", 'data' => $result]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
     /**
      * Sửa 1 sinh viên
      */
-    public function update(UpdateUser $request, $id)
+    public function update(Request $request, $id)
     {
         // var_dump($request->input());
-        $validated = $request->validated();
+        $validated = $request->input();
         try {
             // Get Ma Lop
             $TenLop = $request->TenLop;
-            $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
-            $request->MaLop = $MaLop;
-            $validated = $request->safe()->except(['TenLop']);
-            $validated['MaLop'] = $MaLop;
-            DB::transaction(function () use ($validated, $id) { // Start the transaction
+            if ($TenLop) {
+                $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
+                $request->MaLop = $MaLop;
+                $validated = $request->except(['TenLop']);
+                $validated['MaLop'] = $MaLop;
+            }
+            $validated = $request->except(['_method']);
+
+            $Admin = $request->user()->MaTK;
+            $NoiDung = "";
+            foreach ($validated as $key => $value) {
+                $NoiDung .= $key . ":" . $value . ";";
+            }
+            DB::transaction(function () use ($validated, $id, $Admin, $NoiDung) { // Start the transaction
+                Tb_lichsu::create(['NoiDung' => $NoiDung, 'MaSinhVien' => $id, 'MaTK' => $Admin]);
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
             });
-            return response()->json(['status' => "Success", 'data' => ["SinhVien" => $validated]]);
+            $user = Tb_sinhvien::where('MaSinhVien', $id)->get();
+            return response()->json(['status' => "Success", 'data' => ["SinhVien" => $user]]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
@@ -139,19 +177,19 @@ class StudentManagementController extends Controller
     /**
      * sửa theo danh sách sinh viên
      */
-    public function updateImport(Request $request)
-    {
-        try {
-            Excel::import(new UpdateUserImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
-            return response()->json(['status' => "Success"]);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $failures) {
-            $errors = [];
-            foreach ($failures->failures() as $value) {
-                $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
-            }
-            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
-        }
-    }
+    // public function updateImport(Request $request)
+    // {
+    //     try {
+    //         Excel::import(new UpdateUserImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
+    //         return response()->json(['status' => "Success"]);
+    //     } catch (\Maatwebsite\Excel\Validators\ValidationException $failures) {
+    //         $errors = [];
+    //         foreach ($failures->failures() as $value) {
+    //             $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
+    //         }
+    //         return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
+    //     }
+    // }
     /**
      * Lấy danh sách khoa
      */

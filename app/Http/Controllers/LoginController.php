@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TaiKhoanQuanLy;
 use App\Models\Tb_tk_quanly;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -25,8 +22,10 @@ class LoginController extends Controller
         if (auth()->guard('admin')->attempt($input)) {
             config(['auth.guards.api.provider' => 'admin']);
             $user = Tb_tk_quanly::select('*')->find(auth()->guard('admin')->user()->MaTK);
+
             $token = $user->createToken('authToken', ['admin'])->accessToken;
             $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => $user];
+
             return response()->json($result);
         } else {
             return response()->json(['status' => 'Failed', 'Err_Message' => "Tài khoản hoặc mật khẩu không đúng"]);

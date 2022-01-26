@@ -9,8 +9,8 @@ class Tb_khoa extends Model
 {
     protected $table = 'tb_khoa';
     protected $fillable = [
-        'MaKhoa', 
-        'TenKhoa', 
+        'MaKhoa',
+        'TenKhoa',
         'DiaChi',
         'SoDienThoai',
     ];

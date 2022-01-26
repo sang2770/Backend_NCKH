@@ -27,8 +27,9 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
         Passport::routes();
         // Tồn tại trong 1 ngày
-        Passport::tokensExpireIn(now()->addDay(1));
-
+        Passport::tokensExpireIn(now()->addDays(1));
+        Passport::refreshTokensExpireIn(now()->addDays(1));
+        Passport::personalAccessTokensExpireIn(now()->addDays(1));
         Passport::tokensCan([
             'user' => 'User Type',
             'admin' => 'Admin User Type',
