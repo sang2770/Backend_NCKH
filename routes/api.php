@@ -40,7 +40,7 @@ Route::prefix('student-management')->middleware(['auth:admin-api', 'scopes:admin
     function () {
         Route::post('user', [StudentManagementController::class, 'store'])->name('Add');
         Route::post('users', [StudentManagementController::class, 'storeImport'])->name('AddList');
-        Route::put('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
+        Route::patch('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
         Route::get('user-history/{id}', [StudentManagementController::class, 'userHistory'])->name('UpdateOne');
         // Route::put('users', [StudentManagementController::class, 'updateImport'])->name('UpdateList');
         Route::get('users', [StudentManagementController::class, 'index'])->name('GetList');
@@ -61,7 +61,8 @@ Quản lý yêu cầu sinh viên
 Route::prefix('request-management')->middleware(['auth:admin-api', 'scopes:admin'])->group(
     function () {
         Route::get('confirm', [RequestManagementController::class, 'index'])->name('GetListConfirm');
-        Route::post('confirm', [RequestManagementController::class, 'confirm'])->name('Confirm');
+        Route::post('confirm/{id}', [RequestManagementController::class, 'confirm'])->name('Confirm');
+        Route::post('confirmIndex', [RequestManagementController::class, 'confirmIndex'])->name('ConfirmIndex');
     }
 );
 /*
@@ -114,7 +115,7 @@ Route::group([
 // thong bao
 Route::group([
     'prefix' => 'notification-management',
-   'middleware' => ['auth:admin-api', 'scopes:admin']
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('index-header-notification', [NotificationController::class, 'IndexHeader']); //lay ra danh sach tieu de thong bao
     Route::get('show-notification/{id}', [NotificationController::class, 'show']); //lay ra tieu de va noi dung thong bao voi $id

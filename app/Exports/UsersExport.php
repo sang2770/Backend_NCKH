@@ -46,12 +46,11 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
         $page = $this->input->query('page');
         $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
             ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
-            ->filter($this->input)
-            ->paginate($limit, [
+            ->filter($this->input)->get([
                 'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                 'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
                 'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
-            ], 'page', $page);
+            ]);
         return $user;
     }
 }

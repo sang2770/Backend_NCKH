@@ -50,8 +50,8 @@ class UpdateUser extends FormRequest
     public function messages()
     {
         return [
-            'Email.email' => 'Invalid email format',
-            'SDT.digits' => 'Invalid phone number format',
+            'Email.email' => 'Email Không đúng định dạng',
+            'SoDienThoai.digits' => 'Số điện thoại không đúng định dạng',
         ];
     }
     protected function failedValidation(ValidationValidator $validator)

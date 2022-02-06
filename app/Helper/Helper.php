@@ -29,7 +29,10 @@ class Helper
             $name = explode(" ", $Input['HoTen']);
             $name = $name[count($name) - 1];
             $name = self::FormatText($name);
-            $NgaySinh =  explode("-", $Input['NgaySinh']);
+            $NgaySinh =  explode("/", $Input['NgaySinh']);
+            if (count($NgaySinh) == 1) {
+                $NgaySinh =  explode("-", $NgaySinh[0]);
+            }
             $NgaySinh = $NgaySinh[2] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
             return [
                 'TenDangNhap' => $name . $Input["MaSinhVien"] . "@st.utc.edu.vn",

@@ -55,8 +55,10 @@ class AddStudentRequest extends FormRequest
     public function messages()
     {
         return [
-            'Email.email' => 'Invalid email format',
-            'SoDienThoai.digits' => 'Invalid phone number format',
+            'Email.email' => 'Email Không đúng định dạng',
+            'SoDienThoai.digits' => 'Số điện thoại không đúng định dạng',
+            'MaSinhVien.unique' => 'Mã sinh viên phải là duy nhất',
+
         ];
     }
     protected function failedValidation(ValidationValidator $validator)
