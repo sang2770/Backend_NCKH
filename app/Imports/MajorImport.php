@@ -40,6 +40,12 @@ class MajorImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             '*.ten_khoa' => 'required'
         ];
     }
+    public function customValidationMessages()
+    {
+        return [
+            'ten_khoa.required' => 'Tên khoa là bắt buộc',
+        ];
+    }
     public function chunkSize(): int
     {
         return 500;

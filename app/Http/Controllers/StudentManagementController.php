@@ -196,18 +196,9 @@ class StudentManagementController extends Controller
     /**
      * Sửa 1 sinh viên
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUser $request, $id)
     {
-        $validated = $request->input();
-        $err = [];
-        foreach ($validated as $key => $value) {
-            if ($value == null) {
-                $err[] = $key . " không được để trống";
-            }
-        }
-        if (count($err) > 0) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $err]);
-        }
+        $validated = $request->validated();
         try {
             // Get Ma Lop
             $TenLop = $request->TenLop;
@@ -216,6 +207,8 @@ class StudentManagementController extends Controller
                 $request->MaLop = $MaLop;
                 $validated = Arr::except($request->input(), ["TenLop"]);
                 $validated['MaLop'] = $MaLop;
+            } else {
+                return response()->json(['status' => "Failed", 'Err_Message' => "MaLop không tồn tại"]);
             }
             unset($validated['_method']);
 
@@ -305,7 +298,7 @@ class StudentManagementController extends Controller
         } catch (\Maatwebsite\Excel\Validators\ValidationException $failures) {
             $errors = [];
             foreach ($failures->failures() as $value) {
-                $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
+                $errors[$value->row()] = implode(", ", $value->errors());
             }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         } catch (Exception $e) {
