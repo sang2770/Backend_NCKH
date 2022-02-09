@@ -217,7 +217,7 @@ class StudentManagementController extends Controller
     public function indexMajorsKey(Request $request)
     {
         try {
-            $Khoas = Tb_lop::distinct('Khoas')->value('Khoas');
+            $Khoas = Tb_lop::distinct('Khoas')->pluck('Khoas');
             return response()->json(['status' => "Success", 'data' => $Khoas]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);

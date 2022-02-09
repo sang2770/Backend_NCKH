@@ -34,6 +34,14 @@ class ConfirmMilitaryController extends Controller
         if($request->Khoas){
             $confirm = $confirm->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
+        if($request->TrangThaiXuLy){
+            $confirm = $confirm->where('Tb_yeucau.TrangThaiXuLy', '=', $request->TrangThaiXuLy);
+        }
+
+        $confirm = $confirm->where(function ($query) {
+            $query->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
+                ->orWhere('Tb_yeucau.TrangThaiXuLy', '=', 'Đã cấp');
+        });
 
         $count = $confirm->count();
         $confirm = $confirm->get();
@@ -41,17 +49,24 @@ class ConfirmMilitaryController extends Controller
         if($count!=0){
             for($i = 0; $i<$count; $i++){
 
-            Tb_giay_xn_truong::insert([
-                'NgayCap' => Carbon::now()->toDateString(), 
-                'NamHoc'  => $request->NamHoc,
-                'MaYeuCau'=> $confirm[$i]['MaYeuCau']
-            ]);
-
             $NgayCap = Carbon::now()->toDateString();
             $NgayCap =  explode("-", $NgayCap);
             $Ngay = $NgayCap[2];
             $Thang = $NgayCap[1];
             $Nam = $NgayCap[0];
+
+            if($Thang < 8){
+                $NamHoc = ($Nam -1 ) . " - " . $Nam ;
+            }
+            if($Thang >= 8){
+                $NamHoc = ($Nam) . " - " . ($Nam+1) ;
+            }
+
+            Tb_giay_xn_truong::insert([
+                'NgayCap' => Carbon::now()->toDateString(), 
+                'NamHoc'  => $NamHoc,
+                'MaYeuCau'=> $confirm[$i]['MaYeuCau']
+            ]);
 
             $NgaySinh = explode("-", $confirm[$i]["NgaySinh"]);
             $NgaySinh = $NgaySinh[2][0].$NgaySinh[2][1] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
@@ -63,7 +78,7 @@ class ConfirmMilitaryController extends Controller
                 'TenLop'    => $confirm[$i]["TenLop"],
                 'TenKhoa'   => $confirm[$i]["TenKhoa"],
                 'Khoas'     => $confirm[$i]["Khoas"],
-                'NamHoc'    => $request->NamHoc,
+                'NamHoc'    => $NamHoc,
                 'HeDaoTao'  => $confirm[$i]["HeDaoTao"],
                 'Ngay'      => $Ngay,
                 'Thang'     => $Thang,
