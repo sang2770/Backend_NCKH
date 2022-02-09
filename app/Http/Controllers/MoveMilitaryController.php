@@ -36,6 +36,9 @@ class MoveMilitaryController extends Controller
         if($request->Khoas){
             $move = $move->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
+        if($request->TinhTrangSinhVien){
+            $move = $move->where('Tb_sinhvien.TinhTrangSinhVien', '=', $request->TinhTrangSinhVien);
+        }
 
         $move = $move->where(function ($query) {
             $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
@@ -54,48 +57,53 @@ class MoveMilitaryController extends Controller
         $NgayHH = $Now->addDays(10)->toDateString();
         $NgayHH =  explode("-", $NgayHH);
 
+        $countMove = Tb_giay_dc_truong::count();
+        
         if($count!=0){
             for($i = 0; $i<$count; $i++){
                 
-                ///NgaySinh
-                $NgaySinh = explode("-", $move[$i]["NgaySinh"]);
-                
-                //Ngay Dang ky
-                $NgayDangKy = explode("-", $move[$i]["NgayDangKy"]);
-                $NgayDangKy = $NgayDangKy[2][0].$NgayDangKy[2][1] . '/' . $NgayDangKy[1] . '/' . $NgayDangKy[0];
-                
-                Tb_giay_dc_truong::insert([
-                    'SoGioiThieuDC' => $request->SoGioiThieuDC,
-                    'NgayCap'       => Carbon::now()->toDateString(), 
-                    'NgayHH'        => Carbon::now()->addDays(10)->toDateString(),
-                    'NoiChuyenVe'   => $move[$i]["BanChiHuy"],
-                    'NoiOHienTai'   => $move[$i]["NoiOHienTai"],
-                    'LyDo'          => $move[$i]["TinhTrangSinhVien"],
-                    'MaGiayDK'      => $move[$i]["MaGiayDK"],
-                ]);
+                $countCheck = Tb_giay_dc_truong::where('MaGiayDK', '=', $move[$i]["MaGiayDK"])->count();
+                if($countCheck === 0){
+                    ///NgaySinh
+                    $NgaySinh = explode("-", $move[$i]["NgaySinh"]);
+                    
+                    //Ngay Dang ky
+                    $NgayDangKy = explode("-", $move[$i]["NgayDangKy"]);
+                    $NgayDangKy = $NgayDangKy[2][0].$NgayDangKy[2][1] . '/' . $NgayDangKy[1] . '/' . $NgayDangKy[0];
+                    
+                    Tb_giay_dc_truong::insert([
+                        'SoGioiThieuDC' => $countMove,
+                        'NgayCap'       => Carbon::now()->toDateString(), 
+                        'NgayHH'        => Carbon::now()->addDays(10)->toDateString(),
+                        'NoiChuyenVe'   => $move[$i]["BanChiHuy"],
+                        'NoiOHienTai'   => $move[$i]["NoiOHienTai"],
+                        'LyDo'          => $move[$i]["TinhTrangSinhVien"],
+                        'MaGiayDK'      => $move[$i]["MaGiayDK"],
+                    ]);
 
-                $array1 = array(
-                    'HoTen'            => $move[$i]["HoTen"],
-                    'SoGioiThieuDC'    => $request->SoGioiThieuDC,
-                    'SoDangKy'         => $move[$i]["SoDangKy"],
-                    'NoiDangKy'        => $move[$i]["NoiDangKy"],
-                    'NgayDangKy'       => $NgayDangKy,
-                    'Ngay'             => $NgayCap[2],
-                    'Thang'            => $NgayCap[1],
-                    'Nam'              => $NgayCap[0],
-                    'NgaySinh'         => $NgaySinh[2][0].$NgaySinh[2][1],
-                    'ThangSinh'        => $NgaySinh[1],
-                    'NamSinh'          => $NgaySinh[0],
-                    'NoiOHienTai'      => $move[$i]["NoiOHienTai"],
-                    'NoiChuyenVe'      => $move[$i]["BanChiHuy"],
-                    'LyDo'             => $move[$i]["TinhTrangSinhVien"],
-                    'NgayHH'           => $NgayHH[2],
-                    'ThangHH'          => $NgayHH[1],
-                    'NamHH'            => $NgayHH[0],
-                    'i'                => $i + 1,
-                    );
+                    $array1 = array(
+                        'HoTen'            => $move[$i]["HoTen"],
+                        'SoGioiThieuDC'    => $countMove,
+                        'SoDangKy'         => $move[$i]["SoDangKy"],
+                        'NoiDangKy'        => $move[$i]["NoiDangKy"],
+                        'NgayDangKy'       => $NgayDangKy,
+                        'Ngay'             => $NgayCap[2],
+                        'Thang'            => $NgayCap[1],
+                        'Nam'              => $NgayCap[0],
+                        'NgaySinh'         => $NgaySinh[2][0].$NgaySinh[2][1],
+                        'ThangSinh'        => $NgaySinh[1],
+                        'NamSinh'          => $NgaySinh[0],
+                        'NoiOHienTai'      => $move[$i]["NoiOHienTai"],
+                        'NoiChuyenVe'      => $move[$i]["BanChiHuy"],
+                        'LyDo'             => $move[$i]["TinhTrangSinhVien"],
+                        'NgayHH'           => $NgayHH[2],
+                        'ThangHH'          => $NgayHH[1],
+                        'NamHH'            => $NgayHH[0],
+                        'i'                => $i + 1,
+                        );
 
-                $array[] = $array1;
+                    $array[] = $array1;
+                }
             }
             $templateProcessor->cloneBlock('block_name', 0, true, false, $array);   
             $filename = "DanhSachGiayDiChuyen";

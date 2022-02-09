@@ -8,7 +8,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-class MoveMilitaryLocalRequest extends FormRequest
+class UpdateRegister extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,14 +28,14 @@ class MoveMilitaryLocalRequest extends FormRequest
     public function rules()
     {
         return [
-            'SoGioiThieu'   => "required",
-            'NgayCap'       => "required",
-            'NgayHH'        => "required",
-            'NoiOHienTai'   => "required",
-            'NoiChuyenDen'  => "required",
-            'BanChiHuy'     => "required",
-            'MaSinhVien'    => "required",
-            'MaGiayDK'      => "unique:Tb_giay_dc_diaphuong"
+            'HoTen'             => "required",
+            'NgaySinh'          => "required",
+            'MaSinhVien'        => "required|unique:Tb_giay_cn_dangky",
+            'SoDangKy'          => "required",
+            'NgayDangKy'        => "required",
+            'NoiDangKy'         => "required",
+            'DiaChiThuongTru'   => "required",
+            'NgayNop'           => "required",
         ];
     }
 

@@ -17,7 +17,7 @@ class NotificationController extends Controller
         $page = $request->query('page');
         $count = Tb_thongbaochinh::select('MaThongBaoChinh')->count();
         if($count > 0){
-            $notification = Tb_thongbaochinh::orderBy('MaThongBaoChinh', 'DESC')->paginate($perPage = $limit, $columns = ['TieuDeTB'], $pageName = 'page', $page)->toArray();
+            $notification = Tb_thongbaochinh::orderBy('MaThongBaoChinh', 'DESC')->paginate($perPage = $limit, $columns = ['MaThongBaoChinh', 'TieuDeTB'], $pageName = 'page', $page)->toArray();
             return response()->json(['status' => "Success", 'data' => $notification["data"], 'pagination' => [
                 "page" => $notification['current_page'],
                 "first_page_url"    => $notification['first_page_url'],
@@ -32,7 +32,7 @@ class NotificationController extends Controller
 
     public function show($id){
         if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
-            $notification = Tb_thongbaochinh::select('TieuDeTB', 'NoiDungTB')->where('MaThongBaoChinh', $id)->get();
+            $notification = Tb_thongbaochinh::select('MaThongBaoChinh', 'TieuDeTB', 'NoiDungTB')->where('MaThongBaoChinh', $id)->get();
             return response()->json(['status' => "Success", 'data' => $notification]);
         }
         else{
@@ -123,10 +123,10 @@ class NotificationController extends Controller
                     ]);
                 }
             }
-            return response()->json(['status' => "Success!"]);
+            return response()->json(['status' => "Success"]);
         }
         else{
-            return response()->json(['status' => "Not Found!"]);
+            return response()->json(['status' => "Not Found"]);
         }
     }
 }

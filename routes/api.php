@@ -88,34 +88,43 @@ Route::prefix('file-management')->middleware(['auth:admin-api', 'scopes:admin'])
 // 1. giay chung nhan dang ky nvqs
 Route::group([
     'prefix' => 'register-military-management',
+    //'prefix' => 'register-military-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']); //them moi
+    Route::put('update-register-military/{id}', [RegisterMilitaryController::class, 'Update']);
     Route::get('filter-info-register', [RegisterMilitaryController::class, 'FilterRegister']);  //loc thong tin sinhvien cung thong tin giay cn dky
     Route::get('filter-info-confirm', [RegisterMilitaryController::class, 'FilterConfirm']); //loc thong tin giay xac nhan tu truong
     Route::get('filter-info-move', [RegisterMilitaryController::class, 'FilterMove']); //loc thong tin giay di chuyen nvqs tu truong
+    Route::get('filter-info-move-local', [RegisterMilitaryController::class, 'FilterMoveLocal']);
 });
 // 2. giay xac nhan tu truong
 Route::group([
     'prefix' => 'confirm-military-management',
+    // 'prefix' => 'confirm-military-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
 });
 // 3. giay di chuyen tu truong
 Route::group([
-    'prefix' => 'move-military-management'
+    'prefix' => 'move-military-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin'],
 ], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
 });
 
 // 4. giay di chuyen tu dia phuong
 Route::group([
-    'prefix' => 'move-military-local-management'
+    'prefix' => 'move-military-local-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
+
 ], function () {
-    Route::post('move-military-local-file', [MoveMilitaryLocalController::class, 'StoreFile']);
-    Route::post('move-military-local', [MoveMilitaryLocalController::class, 'Store']);
+    Route::post('store-move-military-local-file', [MoveMilitaryLocalController::class, 'StoreFile']);
+    Route::post('store-move-military-local', [MoveMilitaryLocalController::class, 'Store']);
+    Route::put('update-move-military-local', [MoveMilitaryLocalController::class, 'Update']);
+    Route::get('show-time-move-military-local/{id}', [MoveMilitaryLocalController::class, 'show']); //show lần cấp của từng sinh viên
 });
 
 // thong bao
