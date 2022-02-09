@@ -94,15 +94,24 @@ class StudentManagementController extends Controller
         }
         $import = new UsersImport();
         $import->import($request->file);
-        if (!$import->failures()->isNotEmpty() && count($import->Err) == 0) {
+        if ($import->failures()->count() == 0 && count($import->Err) == 0) {
             return response()->json(['status' => "Success"]);
         } else {
             $errors = [];
             foreach ($import->failures() as $value) {
-                $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
+                if (Arr::get($errors, $value->row())) {
+                    $errors[$value->row()] = $errors[$value->row()] . ',' . implode(", ", $value->errors());
+                } else {
+                    $errors[$value->row()] = implode(", ", $value->errors());
+                }
             }
             foreach ($import->Err as $value) {
-                $errors[] = ['row' => $value['row'], 'err' => [$value['err']]];
+
+                if (Arr::get($errors, $value['row'])) {
+                    $errors[$value['row']] = $errors[$value['row']] . ',' . $value['err'];
+                } else {
+                    $errors[$value['row']] = $value['err'];
+                }
             }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         }

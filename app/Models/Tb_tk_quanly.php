@@ -27,4 +27,8 @@ class Tb_tk_quanly extends Authenticatable
         // var_dump("Admin");
         return $this->MatKhau;
     }
+    public function getEmailAttribute()
+    {
+        return $this->TenDangNhap;
+    }
 }

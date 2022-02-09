@@ -27,7 +27,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    protected $rowNum;
+    protected $rowNum = 1;
     public $Err = [];
     public function model(array $row)
     {
@@ -44,7 +44,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
         }
         // Create Tài Khoản
         $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
-        // var_dump($TaiKhoan);
+        var_dump($TaiKhoan);
         return [
             new Tb_sinhvien([
                 'MaSinhVien' => $row['ma_sinh_vien'],
@@ -105,7 +105,6 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             'ma_sinh_vien.unique' => 'Mã sinh viên là duy nhất',
             'so_dien_thoai.digits' => 'Số điện thoại không đúng định dạng',
             'chung_minh_nhan_dan.unique' => "Số chứng minh nhân dân/CCCD là duy nhất"
-
         ];
     }
     public function chunkSize(): int

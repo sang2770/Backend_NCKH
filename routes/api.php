@@ -6,6 +6,7 @@ use App\Http\Controllers\RequestManagementController;
 use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\RegisterMilitaryController;
 use App\Http\Controllers\ConfirmMilitaryController;
+use App\Http\Controllers\ForgotPassWord;
 use App\Http\Controllers\LoginClientController;
 use App\Http\Controllers\MoveMilitaryController;
 use App\Http\Controllers\NotificationController;
@@ -23,12 +24,17 @@ Route::group([
     'prefix' => 'auth/admin'
 ], function () {
     Route::post('login', [LoginController::class, 'Login']);
+    Route::post('forget-password', [ForgotPassWord::class, "Forgot"]);
+    Route::post('reset-password', [ForgotPassWord::class, "Reset"]);
+
     // Route::post('signup', [LoginController::class, 'signup']);
     Route::group([
         'middleware' => ['auth:admin-api', 'scopes:admin']
     ], function () {
         Route::delete('logout', [LoginController::class, 'logout']);
+        Route::post('ChangePassword', [LoginController::class, 'change']);
         Route::get('me', [LoginController::class, 'user']);
+        Route::post('signup', [LoginController::class, 'signup']);
     });
 });
 /*

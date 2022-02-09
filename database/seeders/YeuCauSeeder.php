@@ -24,7 +24,7 @@ class YeuCauSeeder extends Seeder
             'MaSinhVien' => '211200574',
             'NgayYeuCau' => '2022-01-10',
             'NgayXuLy' => '2022-01-12',
-            'TrangThaiXuLy' => 'Đã xử lý'
+            'TrangThaiXuLy' => 'Chờ xử lý'
         ]);
     }
 }
