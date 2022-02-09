@@ -59,12 +59,11 @@ class LoginClientController extends Controller
         }
         try {
             $Id = $request->MaSinhVien;
-            $Old = Hash::make($request->Old);
             $New = Hash::make($request->New);
-            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id);
+            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
             if (!$user) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
-            } elseif (!$user = $user->where("MatKhau", $Old)) {
+            } elseif (!Hash::check($request->Old, $user->MatKhau)) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không chính xác!"]);
             } else {
                 Tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);

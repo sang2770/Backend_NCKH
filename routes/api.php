@@ -6,6 +6,8 @@ use App\Http\Controllers\RequestManagementController;
 use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\RegisterMilitaryController;
 use App\Http\Controllers\ConfirmMilitaryController;
+use App\Http\Controllers\ForgotPassWord;
+use App\Http\Controllers\LoginClientController;
 use App\Http\Controllers\MoveMilitaryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\MoveMilitaryLocalController;
@@ -22,12 +24,17 @@ Route::group([
     'prefix' => 'auth/admin'
 ], function () {
     Route::post('login', [LoginController::class, 'Login']);
+    Route::post('forget-password', [ForgotPassWord::class, "Forgot"]);
+    Route::post('reset-password', [ForgotPassWord::class, "Reset"]);
+
     // Route::post('signup', [LoginController::class, 'signup']);
     Route::group([
         'middleware' => ['auth:admin-api', 'scopes:admin']
     ], function () {
         Route::delete('logout', [LoginController::class, 'logout']);
+        Route::post('ChangePassword', [LoginController::class, 'change']);
         Route::get('me', [LoginController::class, 'user']);
+        Route::post('signup', [LoginController::class, 'signup']);
     });
 });
 /*
@@ -100,7 +107,8 @@ Route::group([
 });
 // 3. giay di chuyen tu truong
 Route::group([
-    'prefix' => 'move-military-management'
+    'prefix' => 'move-military-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin'],
 ], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
 });
@@ -113,7 +121,7 @@ Route::group([
     Route::post('store-move-military-local-file', [MoveMilitaryLocalController::class, 'StoreFile']);
     Route::post('store-move-military-local', [MoveMilitaryLocalController::class, 'Store']);
     Route::put('update-move-military-local', [MoveMilitaryLocalController::class, 'Update']);
-    Route::get('show-time-move-military-local/{id}', [MoveMilitaryLocalController::class, 'show']);//show lần cấp của từng sinh viên
+    Route::get('show-time-move-military-local/{id}', [MoveMilitaryLocalController::class, 'show']); //show lần cấp của từng sinh viên
 });
 
 // thong bao
