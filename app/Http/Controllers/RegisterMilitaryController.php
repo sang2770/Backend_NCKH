@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Exception;
 use App\Http\Requests\RegisterMilitaryRequest;
+use App\Http\Requests\UpdateRegister;
 use App\Models\Tb_sinhvien;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,7 +61,7 @@ class RegisterMilitaryController extends Controller
     public function Update(RegisterMilitaryRequest $request, $id){
         if(Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists()){
             $task = $this->edit($id);
-            $input = $request->all();
+            $input = $request->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop');
             $task->fill($input)->save();
             return response()->json(['status' => "Success updated"]);
         }
@@ -184,7 +185,9 @@ class RegisterMilitaryController extends Controller
                             ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
                             ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=' , 'Tb_sinhvien.MaSinhVien')
                             ->join('Tb_giay_dc_diaphuong', 'Tb_giay_cn_dangky.MaGiayDK', '=' , 'Tb_giay_dc_diaphuong.MaGiayDK')
-                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_dc_diaphuong.SoGioiThieu', 'Tb_giay_dc_diaphuong.BanChiHuy');
+                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_lop.TenLop', 
+                            'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_dc_diaphuong.SoGioiThieu', 'Tb_giay_dc_diaphuong.BanChiHuy',
+                            'Tb_giay_dc_diaphuong.NgayCap', 'Tb_giay_dc_diaphuong.NgayHH', 'Tb_giay_dc_diaphuong.NoiOHienTai', 'Tb_giay_dc_diaphuong.NoiChuyenDen');
 
         if($request->MaSinhVien){
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);

@@ -28,9 +28,6 @@ class UpdateRegister extends FormRequest
     public function rules()
     {
         return [
-            'HoTen'             => "required",
-            'NgaySinh'          => "required",
-            'MaSinhVien'        => "required|unique:Tb_giay_cn_dangky",
             'SoDangKy'          => "required",
             'NgayDangKy'        => "required",
             'NoiDangKy'         => "required",
