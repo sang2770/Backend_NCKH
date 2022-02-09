@@ -61,12 +61,6 @@ class ConfirmMilitaryController extends Controller
         if ($count != 0) {
             for ($i = 0; $i < $count; $i++) {
 
-                Tb_giay_xn_truong::insert([
-                    'NgayCap' => Carbon::now()->toDateString(),
-                    'NamHoc'  => $request->NamHoc,
-                    'MaYeuCau' => $confirm[$i]['MaYeuCau']
-                ]);
-
             $NgayCap = Carbon::now()->toDateString();
             $NgayCap =  explode("-", $NgayCap);
             $Ngay = $NgayCap[2];
@@ -85,6 +79,8 @@ class ConfirmMilitaryController extends Controller
                 'NamHoc'  => $NamHoc,
                 'MaYeuCau'=> $confirm[$i]['MaYeuCau']
             ]);
+
+            Tb_yeucau::where('MaYeuCau', '=', $confirm[$i]['MaYeuCau']) ->update(['TrangThaiXuLy' => 'Đã cấp']);
 
             $NgaySinh = explode("-", $confirm[$i]["NgaySinh"]);
             $NgaySinh = $NgaySinh[2][0].$NgaySinh[2][1] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];

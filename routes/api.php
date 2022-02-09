@@ -100,8 +100,8 @@ Route::group([
 });
 // 2. giay xac nhan tu truong
 Route::group([
-    'prefix' => 'confirm-military-management',
-    'middleware' => ['auth:admin-api', 'scopes:admin']
+    'prefix' => 'confirm-military-management'
+    // 'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
 });
