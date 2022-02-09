@@ -30,7 +30,6 @@ class RegisterMilitaryRequest extends FormRequest
         return [
             'HoTen'             => "required",
             'NgaySinh'          => "required",
-            'MaSinhVien'        => "required|unique:Tb_giay_cn_dangky",
             'SoDangKy'          => "required",
             'NgayDangKy'        => "required",
             'NoiDangKy'         => "required",
