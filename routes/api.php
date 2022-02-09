@@ -35,17 +35,12 @@ Route::group([
 Quản lý sinh viên
 -----------------
 */
-// Route::prefix('student-management')->middleware(['auth:admin-api', 'scopes:admin'])->group(
-Route::prefix('student-management')->group(
+Route::prefix('student-management')->middleware(['auth:admin-api', 'scopes:admin'])->group(
     function () {
         Route::post('user', [StudentManagementController::class, 'store'])->name('Add');
         Route::post('users', [StudentManagementController::class, 'storeImport'])->name('AddList');
-<<<<<<< HEAD
-        Route::put('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
-=======
         Route::patch('user/{id}', [StudentManagementController::class, 'update'])->name('UpdateOne');
         Route::get('user-history/{id}', [StudentManagementController::class, 'userHistory'])->name('UpdateOne');
->>>>>>> 660f79a9d0655ca749fd1046d5072bec7b30d65b
         // Route::put('users', [StudentManagementController::class, 'updateImport'])->name('UpdateList');
         Route::get('users', [StudentManagementController::class, 'index'])->name('GetList');
         Route::get('users-export', [StudentManagementController::class, 'exportIndex'])->name('Export');
@@ -85,9 +80,8 @@ Route::prefix('file-management')->middleware(['auth:admin-api', 'scopes:admin'])
 // nghia vu quan su
 // 1. giay chung nhan dang ky nvqs
 Route::group([
-    'prefix' => 'register-military-management'
-    //'prefix' => 'register-military-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin']
+    'prefix' => 'register-military-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']); //them moi
@@ -99,9 +93,8 @@ Route::group([
 });
 // 2. giay xac nhan tu truong
 Route::group([
-    'prefix' => 'confirm-military-management'
-    // 'prefix' => 'confirm-military-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin']
+    'prefix' => 'confirm-military-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
 });
@@ -114,7 +107,8 @@ Route::group([
 
 // 4. giay di chuyen tu dia phuong
 Route::group([
-    'prefix' => 'move-military-local-management'
+    'prefix' => 'move-military-local-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-move-military-local-file', [MoveMilitaryLocalController::class, 'StoreFile']);
     Route::post('store-move-military-local', [MoveMilitaryLocalController::class, 'Store']);
@@ -124,14 +118,8 @@ Route::group([
 
 // thong bao
 Route::group([
-<<<<<<< HEAD
-    'prefix' => 'notification-management'
-    //'prefix' => 'notification-management',
-   // 'middleware' => ['auth:admin-api', 'scopes:admin']
-=======
     'prefix' => 'notification-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
->>>>>>> 660f79a9d0655ca749fd1046d5072bec7b30d65b
 ], function () {
     Route::get('index-header-notification', [NotificationController::class, 'IndexHeader']); //lay ra danh sach tieu de thong bao
     Route::get('show-notification/{id}', [NotificationController::class, 'show']); //lay ra tieu de va noi dung thong bao voi $id
