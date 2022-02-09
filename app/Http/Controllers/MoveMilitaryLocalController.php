@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MoveMilitaryLocalRequest;
+use App\Http\Requests\UpdateMoveLocalRequest;
 use App\Imports\MoveMilitaryLocalImport;
 use App\Models\Tb_giay_cn_dangky;
 use App\Models\Tb_giay_dc_diaphuong;
@@ -74,14 +75,15 @@ class MoveMilitaryLocalController extends Controller
 
     //update
     public function edit($id){
-        $edit = Tb_giay_dc_diaphuong::findOrFail($id);
+        $edit = Tb_giay_dc_diaphuong::where('MaGiayDC_DP', $id)->first();
         return $edit;
     }
 
-    public function Update(MoveMilitaryLocalRequest $request, $id){
+    public function Update(UpdateMoveLocalRequest $request, $id){
+        $request->validated();
         if(Tb_giay_dc_diaphuong::where('MaGiayDC_DP', $id)->exists()){
             $task = $this->edit($id);
-            $input = $request->all();
+            $input = $request->only('SoGioiThieu', 'NgayCap', 'NgayHH', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
             $task->fill($input)->save();
             return response()->json(['status' => "Success updated"]);
         }

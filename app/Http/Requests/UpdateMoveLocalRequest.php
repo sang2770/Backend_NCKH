@@ -8,7 +8,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
-class RegisterMilitaryRequest extends FormRequest
+class UpdateMoveLocalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,17 +28,14 @@ class RegisterMilitaryRequest extends FormRequest
     public function rules()
     {
         return [
-            'HoTen'             => "required",
-            'NgaySinh'          => "required",
-            'MaSinhVien'        => "required|unique:Tb_giay_cn_dangky",
-            'SoDangKy'          => "required",
-            'NgayDangKy'        => "required",
-            'NoiDangKy'         => "required",
-            'DiaChiThuongTru'   => "required",
-            'NgayNop'           => "required",
+            'SoGioiThieu'   => "required",
+            'NgayCap'       => "required",
+            'NgayHH'        => "required",
+            'NoiOHienTai'   => "required",
+            'NoiChuyenDen'  => "required",
+            'BanChiHuy'     => "required",
         ];
     }
-
     protected function failedValidation(ValidationValidator $validator)
     {
         $errors = (new ValidationException($validator))->errors();
