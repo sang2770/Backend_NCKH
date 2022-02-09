@@ -61,11 +61,11 @@ class RequestManagementController extends Controller
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
-    public function confirm($id)
+    public function confirm(Request $request, $id)
     {
         $Date = date('y-m-d H-i');
         try {
-            Tb_yeucau::where('MaSinhVien', $id)
+            Tb_yeucau::where('MaSinhVien', $id)->where('MaYeuCau', $request->MaYeuCau)
                 ->update(['TrangThaiXuLy' => 'Đã xử lý', "NgayXuLy" => $Date]);
             return response()->json(['status' => "Success"]);
         } catch (Exception $e) {
