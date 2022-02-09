@@ -88,7 +88,6 @@ Route::prefix('file-management')->middleware(['auth:admin-api', 'scopes:admin'])
 // 1. giay chung nhan dang ky nvqs
 Route::group([
     'prefix' => 'register-military-management',
-    //'prefix' => 'register-military-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
@@ -102,7 +101,6 @@ Route::group([
 // 2. giay xac nhan tu truong
 Route::group([
     'prefix' => 'confirm-military-management',
-    // 'prefix' => 'confirm-military-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
@@ -119,7 +117,6 @@ Route::group([
 Route::group([
     'prefix' => 'move-military-local-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
-
 ], function () {
     Route::post('store-move-military-local-file', [MoveMilitaryLocalController::class, 'StoreFile']);
     Route::post('store-move-military-local', [MoveMilitaryLocalController::class, 'Store']);
