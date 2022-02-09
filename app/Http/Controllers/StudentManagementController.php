@@ -17,6 +17,7 @@ use App\Models\Tb_sinhvien;
 use App\Models\Tb_tk_sinhvien;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -33,7 +34,12 @@ class StudentManagementController extends Controller
         $page = $request->query('page');
         // Loc
         try {
-            $user = Tb_sinhvien::filter($request)->paginate($limit, ['*'], 'page', $page)->toArray();
+            $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
+                ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->paginate($limit, [
+                    'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
+                    'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
+                    'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
+                ], 'page', $page)->toArray();
             return response()->json(['status' => "Success", 'data' => $user['data'], 'pagination' => [
                 "page" => $user['current_page'],
                 "limit" => $limit,
@@ -54,11 +60,14 @@ class StudentManagementController extends Controller
     // Thêm đơn
     public function store(AddStudentRequest $request)
     {
+        $validated = $request->validated();
         try {
-            $validated = $request->validated();
             // get MaLop
             $TenLop = $request->TenLop;
             $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
+            if (!$MaLop) {
+                return response()->json(['status' => "Failed", 'Err_Message' => "MaLop không tồn tại"]);
+            }
             $request->MaLop = $MaLop;
             $TaiKhoan = Helper::CreateUsers($request->safe()->only(["MaSinhVien", "NgaySinh", "HoTen"]));
             $validated = $request->safe()->except(['TenLop']);
@@ -93,7 +102,7 @@ class StudentManagementController extends Controller
                 $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
             }
             foreach ($import->Err as $value) {
-                $errors[] = ['row' => $value['row'], 'err' => $value['err']];
+                $errors[] = ['row' => $value['row'], 'err' => [$value['err']]];
             }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         }
@@ -104,7 +113,12 @@ class StudentManagementController extends Controller
     public function show($id)
     {
         try {
-            $Student = Tb_sinhvien::where('MaSinhVien', $id)->first();
+            $Student = DB::table('Tb_sinhvien')->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+                ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')->where("MaSinhVien", $id)->get([
+                    'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
+                    'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
+                    'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
+                ])->first();
             if ($Student) {
                 return response()->json(['status' => "Success", 'data' => $Student]);
             } else {
@@ -119,11 +133,33 @@ class StudentManagementController extends Controller
      */
     public function userHistory(Request $request, $id)
     {
+        $Tranfer = [
+            'MaSinhVien' => "Mã sinh viên",
+            'HoTen' => 'Họ và tên',
+            'NgaySinh' => 'Ngày sinh',
+            'NoiSinh' => 'Nơi sinh',
+            'GioiTinh' => 'Giới tính',
+            'DanToc' => 'Dân tộc',
+            'TonGiao' => 'Tôn giáo',
+            'QuocTich' => 'Quốc tịch',
+            'SoCMTND' => 'Số Chứng minh nhân dân',
+            'NgayCapCMTND' => 'Ngày cấp CMTND',
+            'NoiCapCMTND' => 'Nơi cấp CMTND',
+            'DiaChiBaoTin' => 'Địa chỉ báo tin',
+            'SDT' => 'Số điện thoại',
+            'Email' => 'Email',
+            'HoKhauTinh' => 'Hộ khẩu tỉnh',
+            'HoKhauHuyen' => 'Hộ khẩu huyện',
+            'HoKhauXaPhuong' => 'Hộ khẩu xã/phường',
+            'TinhTrangSinhVien' => 'Tình trạng sinh viên',
+            'HeDaoTao' => 'Hệ đào tạo',
+            'TenLop' => 'Tên lớp'
+        ];
         try {
             $list = Tb_lichsu::where('tb_lichsu.MaSinhVien', $id)
                 ->join('tb_tk_quanly', 'tb_tk_quanly.MaTK', '=', 'tb_lichsu.MaTK')
                 ->join('tb_sinhvien', 'tb_sinhvien.MaSinhVien', '=', 'tb_lichsu.MaSinhVien')
-                ->get(['NoiDung', 'HoTen', 'TenDangNhap', 'ThoiGian', 'tb_lichsu.MaSinhVien']);
+                ->get(['NoiDung', 'TenDangNhap', 'ThoiGian', 'tb_lichsu.MaSinhVien']);
             $result = [];
             foreach ($list as  $item) {
                 $Fields = explode(";", $item->NoiDung);
@@ -131,7 +167,14 @@ class StudentManagementController extends Controller
                 $Context = [];
                 foreach ($Fields as $value) {
                     $content = explode(":", $value);
-                    $Context[$content[0]] = $content[1];
+                    if ($content[0] === "MaLop") {
+                        $Lop = Tb_lop::find($content[1])->TenLop;
+                        // var_dump($Lop);
+                        $Context["Tên lớp"] = $Lop;
+                        // var_dump($Context["TenLop"]);
+                    } else {
+                        $Context[$Tranfer[$content[0]]] = $content[1];
+                    }
                 }
                 $item->NoiDung = $Context;
                 $result[] = $item;
@@ -146,32 +189,53 @@ class StudentManagementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // var_dump($request->input());
         $validated = $request->input();
+        $err = [];
+        foreach ($validated as $key => $value) {
+            if ($value == null) {
+                $err[] = $key . " không được để trống";
+            }
+        }
+        if (count($err) > 0) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $err]);
+        }
         try {
             // Get Ma Lop
             $TenLop = $request->TenLop;
             if ($TenLop) {
                 $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
                 $request->MaLop = $MaLop;
-                $validated = $request->except(['TenLop']);
+                $validated = Arr::except($request->input(), ["TenLop"]);
                 $validated['MaLop'] = $MaLop;
             }
-            $validated = $request->except(['_method']);
+            unset($validated['_method']);
 
+            $user = Tb_sinhvien::find($id);
+            if (!$user) {
+                return response()->json(['status' => "Failed"]);
+            }
             $Admin = $request->user()->MaTK;
             $NoiDung = "";
             foreach ($validated as $key => $value) {
-                $NoiDung .= $key . ":" . $value . ";";
+                if (trim($value) != trim($user[$key])) {
+                    $NoiDung .= $key . ":" . $value . ";";
+                }
             }
             DB::transaction(function () use ($validated, $id, $Admin, $NoiDung) { // Start the transaction
-                Tb_lichsu::create(['NoiDung' => $NoiDung, 'MaSinhVien' => $id, 'MaTK' => $Admin]);
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
+                if (strlen($NoiDung) > 0) {
+                    Tb_lichsu::create(['NoiDung' => $NoiDung, 'MaSinhVien' => $id, 'MaTK' => $Admin]);
+                }
             });
-            $user = Tb_sinhvien::where('MaSinhVien', $id)->get();
-            return response()->json(['status' => "Success", 'data' => ["SinhVien" => $user]]);
+            $user = DB::table('Tb_sinhvien')->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+                ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')->where("MaSinhVien", $id)->get([
+                    'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
+                    'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
+                    'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
+                ])->first();
+            return response()->json(['status' => "Success", 'data' => $user]);
         } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', "inf" => $e->getMessage()]);
         }
     }
     /**
@@ -259,7 +323,7 @@ class StudentManagementController extends Controller
                 $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
             }
             foreach ($import->Err as $value) {
-                $errors[] = ['row' => $value['row'], 'err' => $value['err']];
+                $errors[] = ['row' => $value['row'], 'err' => [$value['err']]];
             }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         }

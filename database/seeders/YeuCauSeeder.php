@@ -15,22 +15,16 @@ class YeuCauSeeder extends Seeder
     public function run()
     {
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204227',
+            'MaSinhVien' => '211200574',
             'NgayYeuCau' => '2022-01-20',
             'NgayXuLy' => '2022-01-20',
             'TrangThaiXuLy' => 'Chờ xử lý'
         ]);
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204226',
+            'MaSinhVien' => '211200574',
             'NgayYeuCau' => '2022-01-10',
             'NgayXuLy' => '2022-01-12',
             'TrangThaiXuLy' => 'Đã xử lý'
-        ]);
-        Tb_yeucau::insert([
-            'MaSinhVien' => '191204228',
-            'NgayYeuCau' => '2022-01-01',
-            'NgayXuLy' => '2022-01-12',
-            'TrangThaiXuLy' => 'Đã cấp'
         ]);
     }
 }

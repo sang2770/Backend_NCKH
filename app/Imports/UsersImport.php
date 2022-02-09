@@ -99,6 +99,15 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             "*.noi_cap_cmnd" => "required",
         ];
     }
+    public function customValidationMessages()
+    {
+        return [
+            'ma_sinh_vien.unique' => 'Mã sinh viên là duy nhất',
+            'so_dien_thoai.digits' => 'Số điện thoại không đúng định dạng',
+            'chung_minh_nhan_dan.unique' => "Số chứng minh nhân dân/CCCD là duy nhất"
+
+        ];
+    }
     public function chunkSize(): int
     {
         return 500;

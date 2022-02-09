@@ -11,10 +11,11 @@ trait Filterable
     {
         $param = Arr::except($request->query(), ['page', 'limit']);
         foreach ($param as $field => $value) {
-
-            $method = 'filter' . Str::studly($field);
-            if (method_exists($this, $method)) {
-                $this->{$method}($query, $value);
+            if (strlen(trim($value)) > 0) {
+                $method = 'filter' . Str::studly($field);
+                if (method_exists($this, $method)) {
+                    $this->{$method}($query, $value);
+                }
             }
         }
         return $query;

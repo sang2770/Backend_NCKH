@@ -47,6 +47,10 @@ class Tb_sinhvien extends Model
     {
         return $query->where('HoTen', 'LIKE', '%' . $value . '%');
     }
+    public function filterLop($query, $value)
+    {
+        return $query->where('TenLop', 'LIKE', '%' . $value . '%');
+    }
     public function filterKhoa($query, $value)
     {
         return $query->where('TenKhoa', 'LIKE', '%' . $value . '%');
@@ -58,5 +62,9 @@ class Tb_sinhvien extends Model
     public function filterTinhtrangsinhvien($query, $value)
     {
         return $query->where('TinhTrangSinhVien', $value);
+    }
+    public function filterTrangThaiXuLy($query, $value)
+    {
+        return $query->where('TrangThaiXuLy', $value);
     }
 }
