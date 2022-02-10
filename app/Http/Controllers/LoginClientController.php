@@ -26,7 +26,7 @@ class LoginClientController extends Controller
             config(['auth.guards.api.provider' => 'user']);
             $user = Tb_tk_sinhvien::find(auth()->guard('user')->user()->MaTKSV);
             $token = $user->createToken('authToken', ['user'])->accessToken;
-            $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => Auth::user()];
+            $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => $user];
             return response()->json($result);
         } else {
             return response()->json(['status' => 'Failed', 'Err_Message' => "Tài khoản hoặc mật khẩu không đúng"]);

@@ -2,6 +2,8 @@
 
 namespace App\Helper;
 
+use Illuminate\Support\Facades\Hash;
+
 class Helper
 {
     static function FormatText($str): string
@@ -36,7 +38,7 @@ class Helper
             $NgaySinh = $NgaySinh[2] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
             return [
                 'TenDangNhap' => $name . $Input["MaSinhVien"] . "@st.utc.edu.vn",
-                'MatKhau' => $NgaySinh,
+                'MatKhau' => Hash::make($NgaySinh),
                 'MaSinhVien' => $Input["MaSinhVien"],
             ];
         } catch (\Throwable $th) {
