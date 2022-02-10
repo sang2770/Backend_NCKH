@@ -237,7 +237,7 @@ class StudentManagementController extends Controller
                 ])->first();
             return response()->json(['status' => "Success", 'data' => $user]);
         } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', "inf" => $e->getMessage()]);
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!']);
         }
     }
     /**

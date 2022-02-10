@@ -14,7 +14,7 @@ class AddRequest extends Migration
     public function up()
     {
         Schema::table('Tb_yeucau', function (Blueprint $table) {
-            $table->integer('LanCap')->nullable();
+            $table->integer('LanXinCap')->nullable();
         });
     }
 

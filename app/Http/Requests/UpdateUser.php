@@ -58,10 +58,15 @@ class UpdateUser extends FormRequest
     {
 
         $errors = (new ValidationException($validator))->errors();
+        $err = [];
+        foreach ($errors as $key => $value) {
+            $err[] = $value[0];
+        }
         throw new HttpResponseException(response()->json(
             [
                 'status' => "Failed",
-                'Err_Message' => $errors,
+                'Err_Message' => "Dữ liệu đầu vào sai!",
+                "info" => $err,
                 'status_code' => 422,
             ],
             JsonResponse::HTTP_UNPROCESSABLE_ENTITY
