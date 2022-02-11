@@ -29,11 +29,13 @@ class StudentController extends Controller
     public function create($Input){
         try {
             $NgayYeuCau = Carbon::now()->toDateString();
+            $LanCap = Tb_yeucau::where('MaSinhVien', $Input['MaSinhVien'])->count();
             return [
                 'MaSinhVien'        => $Input['MaSinhVien'],
                 'NgayYeuCau'        => $NgayYeuCau,
                 'NgayXuLy'          => $NgayYeuCau,
-                'TrangThaiXuLy'     => 'Chờ xử lý'
+                'TrangThaiXuLy'     => 'Chờ xử lý',
+                'LanXinCap'         => $LanCap + 1
             ];
         } catch (\Throwable $th) {
             throw $th;
@@ -56,7 +58,8 @@ class StudentController extends Controller
     public function register(Request $request){
         $info = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
                             ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.NgaySinh', 'Tb_giay_cn_dangky.SoDangKy', 'Tb_giay_cn_dangky.NgayDangKy', 'Tb_giay_cn_dangky.NoiDangKy', 'Tb_giay_cn_dangky.DiaChiThuongTru');
+                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.NgaySinh', 'Tb_giay_cn_dangky.SoDangKy', 
+                            'Tb_giay_cn_dangky.NgayDangKy', 'Tb_giay_cn_dangky.NoiDangKy', 'Tb_giay_cn_dangky.DiaChiThuongTru');
 
         if($info->exists()){
             $info = $info->get();
@@ -89,5 +92,10 @@ class StudentController extends Controller
         else{
             return response()->json(['status' => "Not Found!"]);
         }
+    }
+
+    //sv xem thong tin cac lan yeu cau giay xac nhan
+    public function showRequest(Request $request){
+        
     }
 }
