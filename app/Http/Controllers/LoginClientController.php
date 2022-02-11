@@ -47,11 +47,13 @@ class LoginClientController extends Controller
     // Get User
     public function change(Request $request)
     {
+        var_dump($request->user());
         $validator = Validator::make($request->input(), [
             'MaSinhVien' => 'required',
+            'TenDangNhap' => 'required',
             'Old' => 'required',
             'New' => 'required',
-
+            'New_Repeat' => "required"
         ]);
         if ($validator->fails()) {
             // Bad Request
@@ -59,12 +61,15 @@ class LoginClientController extends Controller
         }
         try {
             $Id = $request->MaSinhVien;
+            $Name = $request->TenDangNhap;
             $New = Hash::make($request->New);
-            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
+            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->where("TenDangNhap", $Name)->first();;
             if (!$user) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
             } elseif (!Hash::check($request->Old, $user->MatKhau)) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không chính xác!"]);
+            } elseif ($request->New != $request->New_Repeat) {
+                return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không trùng khớp"]);
             } else {
                 Tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);
                 $request->user()->token()->revoke();

@@ -12,21 +12,26 @@ use Carbon\Carbon;
 class StudentController extends Controller
 {
     //thong tin sinh vien
-    public function show(Request $request){
-        if(Tb_sinhvien::where('MaSinhVien', '=', $request->MaSinhVien)->exists()){
+    public function show(Request $request, $id)
+    {
+        if (Tb_sinhvien::where('MaSinhVien', '=', $id)->exists()) {
             $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-                            ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-                            ->where('MaSinhVien', '=', $request->MaSinhVien)
-                            ->select('Tb_sinhvien.*', 'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas')->get();
+                ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
+                ->where('MaSinhVien', '=', $id)
+                ->select('Tb_sinhvien.*', 'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas')->get([
+                    'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
+                    'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
+                    'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
+                ])->first();
 
-            return response()->json(['status' => "Success", 'data' => $info]);
-        }
-        else{
+            return response()->json(["status" => "Success", 'data' => $info]);
+        } else {
             return response()->json(['status' => "Not Found!!!"]);
         }
     }
 
-    public function create($Input){
+    public function create($Input)
+    {
         try {
             $NgayYeuCau = Carbon::now()->toDateString();
             $LanCap = Tb_yeucau::where('MaSinhVien', $Input['MaSinhVien'])->count();
@@ -43,7 +48,8 @@ class StudentController extends Controller
     }
 
     //sinh vien gui yeu cau
-    public function store(RequestStudentRequest $request){
+    public function store(RequestStudentRequest $request)
+    {
         $req = $request->validated();
         try {
             $req = $this->create($request->all());
@@ -55,41 +61,41 @@ class StudentController extends Controller
     }
 
     //sv xem thong tin giay chung nhan dky nvqs
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $info = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
                             ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
                             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.NgaySinh', 'Tb_giay_cn_dangky.SoDangKy', 
                             'Tb_giay_cn_dangky.NgayDangKy', 'Tb_giay_cn_dangky.NoiDangKy', 'Tb_giay_cn_dangky.DiaChiThuongTru');
 
-        if($info->exists()){
+        if ($info->exists()) {
             $info = $info->get();
-            return response()->json(['status' => "Success", 'data' => $info]);    
-        }
-        else{
+            return response()->json(['status' => "Success", 'data' => $info]);
+        } else {
             return response()->json(['status' => "Not Found!"]);
         }
     }
 
     //sv xem thong bao
-    public function notification(Request $request){
+    public function notification(Request $request)
+    {
         $limit = $request->query('limit');
         $page = $request->query('page');
         $noti = Tb_sinhvien::join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')
-                            ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
-                            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-                            ->select('Tb_thongbaochinh.TieuDeTB');
+            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')
+            ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
+            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
+            ->select('Tb_thongbaochinh.TieuDeTB');
 
-        if($noti->exists()){
+        if ($noti->exists()) {
             $noti = $noti->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
             return response()->json(['status' => "Success", 'data' => $noti["data"], 'pagination' => [
                 "page" => $noti['current_page'],
                 "first_page_url"    => $noti['first_page_url'],
                 "next_page_url"     => $noti['next_page_url'],
                 "TotalPage"         => $noti['last_page']
-            ]]);    
-        }
-        else{
+            ]]);
+        } else {
             return response()->json(['status' => "Not Found!"]);
         }
     }
