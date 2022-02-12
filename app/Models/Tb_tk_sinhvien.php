@@ -30,4 +30,8 @@ class Tb_tk_sinhvien extends Authenticatable
                 // var_dump('Client')
                 return $this->MatKhau;
         }
+        public function getEmailAttribute()
+        {
+                return $this->TenDangNhap;
+        }
 }
