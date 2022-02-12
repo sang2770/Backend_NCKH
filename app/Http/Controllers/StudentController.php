@@ -100,8 +100,23 @@ class StudentController extends Controller
         }
     }
 
-    //sv xem thong tin cac lan yeu cau giay xac nhan
+    //sv xem danh sach các giay xac nhan đã xin cấp
     public function showRequest(Request $request){
-        
+        $limit = $request->query('limit');
+        $page = $request->query('page');
+        $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $request->MaSinhVien)
+        ->select('NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy')->get();
+
+        if ($info->exists()) {
+            $info = $info->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
+            return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
+                "page" => $info['current_page'],
+                "first_page_url"    => $info['first_page_url'],
+                "next_page_url"     => $info['next_page_url'],
+                "TotalPage"         => $info['last_page']
+            ]]);
+        } else {
+            return response()->json(['status' => "Not Found!"]);
+        }
     }
 }
