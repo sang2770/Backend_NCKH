@@ -101,11 +101,11 @@ class StudentController extends Controller
     }
 
     //sv xem danh sach các giay xac nhan đã xin cấp
-    public function showRequest(Request $request){
+    public function showRequest(Request $request, $id){
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $request->MaSinhVien)
-        ->select('NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy')->get();
+        $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $id)
+        ->select('NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
 
         if ($info->exists()) {
             $info = $info->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();

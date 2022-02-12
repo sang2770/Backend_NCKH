@@ -20,6 +20,6 @@ Route::group([
         Route::post('request-student', [StudentController::class, 'store']); //sinh vien gui yeu cau xin giay xac nhan
         Route::get('register-student', [StudentController::class, 'register']); //sinh vien xem thong tin ve giay cn dky nvqs cua minh
         Route::get('notification-student', [StudentController::class, 'notification']); //danh sach thong bao cua ca nhan sinh vien
-        Route::get('list-request-student', [StudentController::class, 'showRequest']); //danh sach giay xac nhan tu truong
+        Route::get('list-request-student/{id}', [StudentController::class, 'showRequest']); //danh sach giay xac nhan tu truong
     });
 });
