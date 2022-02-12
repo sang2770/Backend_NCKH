@@ -8,6 +8,8 @@ Route::group([
     'prefix' => 'auth/client'
 ], function () {
     Route::post('login', [LoginClientController::class, 'Login']);
+    Route::post('forget-password', [LoginClientController::class, "Forgot"]);
+    Route::post('reset-password', [LoginClientController::class, "Reset"]);
     Route::group([
         'middleware' => ['auth:user-api', 'scopes:user']
     ], function () {
