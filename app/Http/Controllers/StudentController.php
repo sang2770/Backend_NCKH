@@ -76,7 +76,7 @@ class StudentController extends Controller
         }
     }
 
-    //sv xem thong bao
+    //danh sach tieu de thong bao
     public function notification(Request $request)
     {
         $limit = $request->query('limit');
@@ -85,7 +85,32 @@ class StudentController extends Controller
             ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')
             ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
             ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-            ->select('Tb_thongbaochinh.TieuDeTB');
+            ->select('Tb_thongbaochinh.TieuDeTB', 'Tb_thongbaochinh.MaThongBaoChinh', 'Tb_sinhvien.MaSinhVien');
+
+        if ($noti->exists()) {
+            $noti = $noti->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
+            return response()->json(['status' => "Success", 'data' => $noti["data"], 'pagination' => [
+                "page" => $noti['current_page'],
+                "first_page_url"    => $noti['first_page_url'],
+                "next_page_url"     => $noti['next_page_url'],
+                "TotalPage"         => $noti['last_page']
+            ]]);
+        } else {
+            return response()->json(['status' => "Not Found!"]);
+        }
+    }
+
+    //sv xem chi tiet tung thong bao
+    public function notificationID(Request $request)
+    {
+        $limit = $request->query('limit');
+        $page = $request->query('page');
+        $noti = Tb_sinhvien::join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')
+            ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
+            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
+            ->where('Tb_thongbaosv.MaThongBaoChinh', '=', $request->MaThongBaoChinh)
+            ->select('Tb_thongbaochinh.TieuDeTB', 'Tb_thongbaochinh.NoiDungTB');
 
         if ($noti->exists()) {
             $noti = $noti->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -105,7 +130,7 @@ class StudentController extends Controller
         $limit = $request->query('limit');
         $page = $request->query('page');
         $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $id)
-        ->select('NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
+        ->select('MaYeuCau', 'MaSinhVien', 'NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
 
         if ($info->exists()) {
             $info = $info->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -116,6 +141,22 @@ class StudentController extends Controller
                 "TotalPage"         => $info['last_page']
             ]]);
         } else {
+            return response()->json(['status' => "Not Found!"]);
+        }
+    }
+
+    //xoa yeu cau xac nhan (chi xoa những yêu cầu chưa cấp (đã cấp thì k thể xóa yêu cầu))
+    public function DestroyRequest($id, $msv){
+        if(Tb_yeucau::where('MaYeuCau', $id)
+            ->where('MaSinhVien', $msv)
+            ->where(function ($query) {
+                $query->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
+                    ->orWhere('Tb_yeucau.TrangThaiXuLy', '=', 'Chờ xử lý');
+            })->exists()){
+            Tb_yeucau::where('MaYeuCau', $id)->delete();
+            return response()->json(['status' => "Success deleted"]);
+        }
+        else{
             return response()->json(['status' => "Not Found!"]);
         }
     }
