@@ -33,7 +33,7 @@ class ForgotPassWord extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => "Failed",
-                "Err_Message" => $e->getMessage()
+                "Err_Message" => "Không tìm thấy Email hợp lệ"
             ]);
         }
     }
@@ -45,7 +45,7 @@ class ForgotPassWord extends Controller
                 $passwordReset->delete();
                 return response()->json([
                     'status' => "Failed",
-                    'Err_Message' => 'This password reset token is invalid.',
+                    'Err_Message' => 'Token không hợp lệ.',
                 ], 422);
             }
             $user = Tb_tk_quanly::where('TenDangNhap', $passwordReset->email)->firstOrFail();
@@ -59,7 +59,7 @@ class ForgotPassWord extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => "Failed",
-                "Err_Message" => $e->getMessage()
+                "Err_Message" => "Token không hợp lệ."
             ]);
         }
     }

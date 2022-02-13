@@ -61,15 +61,21 @@ class StudentController extends Controller
     }
 
     //sv xem thong tin giay chung nhan dky nvqs
-    public function register(Request $request)
+    public function register(Request $request, $id)
     {
         $info = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.NgaySinh', 'Tb_giay_cn_dangky.SoDangKy', 
-                            'Tb_giay_cn_dangky.NgayDangKy', 'Tb_giay_cn_dangky.NoiDangKy', 'Tb_giay_cn_dangky.DiaChiThuongTru');
+            ->where('Tb_sinhvien.MaSinhVien', '=', $id)
+            ->select(
+                'Tb_sinhvien.HoTen',
+                'Tb_sinhvien.NgaySinh',
+                'Tb_giay_cn_dangky.SoDangKy',
+                'Tb_giay_cn_dangky.NgayDangKy',
+                'Tb_giay_cn_dangky.NoiDangKy',
+                'Tb_giay_cn_dangky.DiaChiThuongTru'
+            );
 
         if ($info->exists()) {
-            $info = $info->get();
+            $info = $info->first();
             return response()->json(['status' => "Success", 'data' => $info]);
         } else {
             return response()->json(['status' => "Not Found!"]);
@@ -101,11 +107,12 @@ class StudentController extends Controller
     }
 
     //sv xem danh sach các giay xac nhan đã xin cấp
-    public function showRequest(Request $request, $id){
+    public function showRequest(Request $request, $id)
+    {
         $limit = $request->query('limit');
         $page = $request->query('page');
         $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $id)
-        ->select('NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
+            ->select('NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
 
         if ($info->exists()) {
             $info = $info->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();

@@ -109,7 +109,7 @@ class LoginClientController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => "Failed",
-                "Err_Message" => "Có sự cố vui vòng thử lại sau"
+                "Err_Message" => "Not found!"
             ]);
         }
     }
@@ -135,7 +135,7 @@ class LoginClientController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => "Failed",
-                "Err_Message" => "Not found!"
+                "Err_Message" => "This password reset token is invalid."
             ]);
         }
     }
