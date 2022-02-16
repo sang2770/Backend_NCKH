@@ -16,8 +16,8 @@ class CreateTbKhoaTable extends Migration
         Schema::create('tb_khoa', function (Blueprint $table) {
             $table->increments('MaKhoa');
             $table->string('TenKhoa', 100);
-            $table->string('DiaChi', 100);
-            $table->string('SoDienThoai', 11);
+            $table->string('DiaChi', 100)->nullable();
+            $table->string('SoDienThoai', 11)->nullable();
         });
     }
 

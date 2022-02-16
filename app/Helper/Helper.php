@@ -45,4 +45,22 @@ class Helper
             throw $th;
         }
     }
+    public static  function CheckDate($date)
+    {
+        $NgaySinh =  explode("/", $date);
+        if (count($NgaySinh) == 1) {
+            $NgaySinh =  explode("-", $NgaySinh[0]);
+        }
+        if (count($NgaySinh) < 2 || count($NgaySinh) > 3) {
+            return false;
+        }
+        $day = $NgaySinh[2];
+        $month = $NgaySinh[1];
+        $year = $NgaySinh[0];
+        if (checkdate($month, $day, $year)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

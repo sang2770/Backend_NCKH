@@ -52,10 +52,7 @@ class RequestManagementController extends Controller
         $ListStudentID = json_decode($request->MSV);
         $Date = date('y-m-d H-i');
         try {
-            foreach ($ListStudentID as $Id) {
-                Tb_yeucau::where('MaSinhVien', $Id)
-                    ->update(['TrangThaiXuLy' => 'Đã xử lý', "NgayXuLy" => $Date]);
-            }
+            Tb_yeucau::where('MaYeuCau', '>', 0)->update(['TrangThaiXuLy' => 'Đã xử lý', "NgayXuLy" => $Date]);
             return response()->json(['status' => "Success"]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);

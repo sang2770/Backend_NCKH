@@ -15,14 +15,14 @@ class YeuCauSeeder extends Seeder
     public function run()
     {
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204226',
+            'MaSinhVien' => '191203366',
             'NgayYeuCau' => '2022-01-20',
             'NgayXuLy' => '2022-01-20',
             'TrangThaiXuLy' => 'Chờ xử lý',
             'LanXinCap'     => '1'
         ]);
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204227',
+            'MaSinhVien' => '191203366',
             'NgayYeuCau' => '2022-01-10',
             'NgayXuLy' => '2022-01-12',
             'TrangThaiXuLy' => 'Chờ xử lý',

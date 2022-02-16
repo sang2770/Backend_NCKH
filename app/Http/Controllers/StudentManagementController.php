@@ -21,6 +21,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use PHPUnit\TextUI\Help;
 
 class StudentManagementController extends Controller
 {
@@ -72,6 +73,9 @@ class StudentManagementController extends Controller
             $TaiKhoan = Helper::CreateUsers($request->safe()->only(["MaSinhVien", "NgaySinh", "HoTen"]));
             $validated = $request->safe()->except(['TenLop']);
             $validated['MaLop'] = $MaLop;
+            if (!Helper::CheckDate($request->NgaySinh) || !Helper::CheckDate($request->NgayCapCMTND)) {
+                return response()->json(['status' => "Failed", 'Err_Message' => "Định dạng ngày tháng là y-m-d hoặc y/m/d"]);
+            }
             // Begin trans
             DB::transaction(function () use ($validated, $TaiKhoan) { // Start the transaction
                 Tb_sinhvien::create($validated);
@@ -90,7 +94,7 @@ class StudentManagementController extends Controller
         ]);
         if ($validator->fails()) {
             // Bad Request
-            return response()->json($validator->getMessageBag(), 400);
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Bạn chưa chọn file']);
         }
         $import = new UsersImport();
         $import->import($request->file);
@@ -309,7 +313,7 @@ class StudentManagementController extends Controller
         ]);
         if ($validator->fails()) {
             // Bad Request
-            return response()->json($validator->getMessageBag(), 400);
+            return response()->json(['status' => "Failed", 'Err_Message' => "Tải file để thêm"]);
         }
         $import = new ClassImport();
         $import->import($request->file);
@@ -318,10 +322,19 @@ class StudentManagementController extends Controller
         } else {
             $errors = [];
             foreach ($import->failures() as $value) {
-                $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
+                if (Arr::get($errors, $value->row())) {
+                    $errors[$value->row()] = $errors[$value->row()] . ',' . implode(", ", $value->errors());
+                } else {
+                    $errors[$value->row()] = implode(", ", $value->errors());
+                }
             }
             foreach ($import->Err as $value) {
-                $errors[] = ['row' => $value['row'], 'err' => [$value['err']]];
+
+                if (Arr::get($errors, $value['row'])) {
+                    $errors[$value['row']] = $errors[$value['row']] . ',' . $value['err'];
+                } else {
+                    $errors[$value['row']] = $value['err'];
+                }
             }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         }

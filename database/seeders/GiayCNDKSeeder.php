@@ -23,7 +23,7 @@ class GiayCNDKSeeder extends Seeder
             'NoiDangKy'         => 'Nam Định',
             'DiaChiThuongTru'   => 'Hải Hậu, Nam Định',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '191233112'
+            'MaSinhVien'        => '211200553'
         ]);
     }
 }
