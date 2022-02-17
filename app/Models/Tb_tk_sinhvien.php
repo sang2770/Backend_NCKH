@@ -16,7 +16,6 @@ class Tb_tk_sinhvien extends Authenticatable
         protected $table = 'tb_tk_sinhvien';
         protected $fillable = [
                 'MaTKSV',
-                'TenDangNhap',
                 'MatKhau',
                 'MaSinhVien',
         ];
@@ -27,11 +26,10 @@ class Tb_tk_sinhvien extends Authenticatable
         public $timestamps = true;
         public function getAuthPassword()
         {
-                // var_dump('Client')
                 return $this->MatKhau;
         }
         public function getEmailAttribute()
         {
-                return $this->TenDangNhap;
+                return $this->MaSinhVien;
         }
 }

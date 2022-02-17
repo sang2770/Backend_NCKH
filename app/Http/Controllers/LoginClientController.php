@@ -18,14 +18,14 @@ class LoginClientController extends Controller
     public function Login(Request $request)
     {
         $validator = Validator::make($request->input(), [
-            'TenDangNhap' => 'required',
+            'MaSinhVien' => 'required',
             'password' => 'required'
         ]);
         if ($validator->fails()) {
             // Bad Request
             return response()->json($validator->getMessageBag(), 400);
         }
-        $input = $request->only('TenDangNhap', 'password');
+        $input = $request->only('MaSinhVien', 'password');
         if (auth()->guard('user')->attempt($input)) {
             config(['auth.guards.api.provider' => 'user']);
             $user = Tb_tk_sinhvien::find(auth()->guard('user')->user()->MaTKSV);
