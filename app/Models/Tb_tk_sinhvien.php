@@ -13,7 +13,7 @@ class Tb_tk_sinhvien extends Authenticatable
 {
         use HasApiTokens, HasFactory, Notifiable;
 
-        protected $table = 'tb_tk_sinhvien';
+        protected $table = 'Tb_tk_sinhvien';
         protected $fillable = [
                 'MaTKSV',
                 'MatKhau',

@@ -13,13 +13,13 @@ class CreateTbYeucauTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_yeucau', function (Blueprint $table) {
+        Schema::create('Tb_yeucau', function (Blueprint $table) {
             $table->Increments('MaYeuCau');
             $table->string('MaSinhVien', 20);
             $table->dateTime('NgayYeuCau');
             $table->dateTime('NgayXuLy');
             $table->string('TrangThaiXuLy', 100);
-            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
+            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('Tb_sinhvien');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateTbYeucauTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_yeucau');
+        Schema::dropIfExists('Tb_yeucau');
     }
 }

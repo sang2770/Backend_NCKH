@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 class Tb_sinhvien extends Authenticatable
 {
     use Filterable, Notifiable;
-    protected $table = 'tb_sinhvien';
+    protected $table = 'Tb_sinhvien';
     protected $fillable = [
         'MaSinhVien',
         'HoTen',

@@ -13,7 +13,7 @@ class CreateTbKhoaTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_khoa', function (Blueprint $table) {
+        Schema::create('Tb_khoa', function (Blueprint $table) {
             $table->increments('MaKhoa');
             $table->string('TenKhoa', 100);
             $table->string('DiaChi', 100)->nullable();
@@ -28,6 +28,7 @@ class CreateTbKhoaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_khoa');
+        
+        Schema::dropIfExists('Tb_khoa');
     }
 }

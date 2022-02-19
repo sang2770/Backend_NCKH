@@ -13,12 +13,12 @@ class CreateTbLopTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_lop', function (Blueprint $table) {
+        Schema::create('Tb_lop', function (Blueprint $table) {
             $table->increments('MaLop');
             $table->string('TenLop', 60);
             $table->string('Khoas', 20);
             $table->unsignedInteger('MaKhoa');
-            $table->foreign('MaKhoa')->references('MaKhoa')->on('tb_khoa');
+            $table->foreign('MaKhoa')->references('MaKhoa')->on('Tb_khoa');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateTbLopTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_lop');
+        Schema::dropIfExists('Tb_lop');
     }
 }

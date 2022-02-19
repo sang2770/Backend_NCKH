@@ -13,7 +13,7 @@ class CreateTbTkQuanlyTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_tk_quanly', function (Blueprint $table) {
+        Schema::create('Tb_tk_quanly', function (Blueprint $table) {
             $table->increments('MaTK');
             $table->string('TenDangNhap', 60);
             $table->string('MatKhau', 60);
@@ -28,6 +28,6 @@ class CreateTbTkQuanlyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_tk_quanly');
+        Schema::dropIfExists('Tb_tk_quanly');
     }
 }

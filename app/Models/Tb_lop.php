@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tb_lop extends Model
 {
-    protected $table = 'tb_lop';
+    protected $table = 'Tb_lop';
     protected $fillable = [
         'MaLop', 
         'TenLop', 

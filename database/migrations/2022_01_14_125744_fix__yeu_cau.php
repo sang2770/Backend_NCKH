@@ -13,7 +13,7 @@ class FixYeuCau extends Migration
      */
     public function up()
     {
-        Schema::table('tb_yeucau', function (Blueprint $table) {
+        Schema::table('Tb_yeucau', function (Blueprint $table) {
             $table->dateTime('NgayXuLy')->nullable()->change();
         });
     }

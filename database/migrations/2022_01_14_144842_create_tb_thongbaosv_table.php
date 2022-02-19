@@ -17,8 +17,8 @@ class CreateTbThongbaosvTable extends Migration
             $table->dateTime('ThoiGianTB');
             $table->unsignedInteger('MaTKSV');
             $table->unsignedInteger('MaThongBaoChinh');
-            $table->foreign('MaTKSV')->references('MaTKSV')->on('tb_tk_sinhvien');
-            $table->foreign('MaThongBaoChinh')->references('MaThongBaoChinh')->on('tb_thongbaochinh');
+            $table->foreign('MaTKSV')->references('MaTKSV')->on('Tb_tk_sinhvien');
+            $table->foreign('MaThongBaoChinh')->references('MaThongBaoChinh')->on('Tb_thongbaochinh');
             $table->timestamps();
         });
     }

@@ -8,12 +8,12 @@ class CreateGiayXacNhan extends Migration
 {
     public function up()
     {
-        Schema::create('tb_giay_xn_truong', function (Blueprint $table) {
+        Schema::create('Tb_giay_xn_truong', function (Blueprint $table) {
             $table->Increments('MaGiayXN_Truong');
             $table->dateTime('NgayCap');
             $table->string('NamHoc', 20);
             $table->unsignedInteger('MaYeuCau');
-            $table->foreign('MaYeuCau')->references('MaYeuCau')->on('tb_yeucau');
+            $table->foreign('MaYeuCau')->references('MaYeuCau')->on('Tb_yeucau');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ class CreateGiayXacNhan extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_giay_xn_truong');
+        Schema::dropIfExists('Tb_giay_xn_truong');
     }
 }

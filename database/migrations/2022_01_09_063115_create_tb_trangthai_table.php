@@ -13,7 +13,7 @@ class CreateTbTrangthaiTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_trangthai', function (Blueprint $table) {
+        Schema::create('Tb_trangthai', function (Blueprint $table) {
             $table->string('SoQuyetDinh', 20);
             $table->dateTime('NgayQuyetDinh');
             $table->string('MaSinhVien', 20);
@@ -28,6 +28,6 @@ class CreateTbTrangthaiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_trangthai');
+        Schema::dropIfExists('Tb_trangthai');
     }
 }

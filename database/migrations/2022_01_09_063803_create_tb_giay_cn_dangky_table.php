@@ -13,7 +13,7 @@ class CreateTbGiayCnDangkyTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_giay_cn_dangky', function (Blueprint $table) {
+        Schema::create('Tb_giay_cn_dangky', function (Blueprint $table) {
             $table->increments('MaGiayDK');
             $table->string('SoDangKy', 20);
             $table->dateTime('NgayDangKy');
@@ -21,7 +21,7 @@ class CreateTbGiayCnDangkyTable extends Migration
             $table->string('DiaChiThuongTru', 150);
             $table->dateTime('NgayNop');
             $table->string('MaSinhVien', 20);
-            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
+            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('Tb_sinhvien');
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ class CreateTbGiayCnDangkyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_giay_cn_dangky');
+        Schema::dropIfExists('Tb_giay_cn_dangky');
     }
 }
