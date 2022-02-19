@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
+use App\Models\Tb_sinhvien;
 use App\Models\Tb_tk_sinhvien;
 use App\Notifications\ResetPasswordRequest;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class LoginClientController extends Controller
 {
+
     public function Login(Request $request)
     {
         $validator = Validator::make($request->input(), [
@@ -83,6 +85,7 @@ class LoginClientController extends Controller
             return response()->json(['status' => 'Failed', 'Err_Message' => $e->getMessage()]);
         }
     }
+    
     // Override
     public function TenDangNhap()
     {
@@ -93,9 +96,9 @@ class LoginClientController extends Controller
     {
         try {
             $request->validate(['email' => "required|email"]);
-            $user = Tb_tk_sinhvien::where('TenDangNhap', $request->email)->firstOrFail();
+            $user = Tb_sinhvien::where('Email', $request->email)->firstOrFail();
             $passwordReset = PasswordReset::updateOrCreate([
-                'email' => $user->TenDangNhap,
+                'email' => $user->Email,
             ], [
                 'token' => Str::random(60),
             ]);
@@ -109,7 +112,8 @@ class LoginClientController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => "Failed",
-                "Err_Message" => "Not found!"
+                "Err_Message" => "Not found!",
+                "info"=>$e->getMessage()
             ]);
         }
     }

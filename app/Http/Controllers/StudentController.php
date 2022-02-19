@@ -8,9 +8,45 @@ use App\Models\Tb_yeucau;
 use Illuminate\Http\Request;
 use Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    public function changeProfile(Request $request)
+    {
+       $validator=Validator::make($request->all(),[
+           "MaSinhVien"=>"required",
+           "Email"=>"email",
+           "SDT"=>"digits:10"
+       ],[
+           "Email.email"=>"Email không đúng định dạng",
+           "SDT.digits"=>'Số điện thoại phải đủ 10 số',
+       ]);
+       if ($validator->fails()) {
+        //    var_dump($validator->errors()->messages());
+           $error=[];
+           foreach ($validator->errors()->messages() as $key => $value) {
+               $error[]=$value[0];
+        }
+        return response()->json(['status' => "Failed", 'Err_Message' => "Dữ liệu đầu vào sai", "info"=>$error]);
+        }
+        else{
+            $user=Tb_sinhvien::find($request->MaSinhVien);
+            if($user)
+            {
+                $input=$request->input();
+                unset($input["_method"]);
+                DB::transaction(function () use ($input, $user) {
+                    $user->update($input);
+                });
+                return response()->json(["status"=>"Success", "data"=>$user->first()]);
+            }
+            else{
+                return response()->json(['status' => "Failed", 'Err_Message' => "NotFound"]);
+            }
+        }
+    }
     //thong tin sinh vien
     public function show(Request $request, $id)
     {

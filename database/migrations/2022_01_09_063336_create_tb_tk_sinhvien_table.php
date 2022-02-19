@@ -16,6 +16,7 @@ class CreateTbTkSinhvienTable extends Migration
         Schema::create('tb_tk_sinhvien', function (Blueprint $table) {
             $table->increments('MaTKSV');
             $table->string('MatKhau', 60);
+            $table->string('Gmail', 60)->nullable();
             $table->string('MaSinhVien', 20);
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
             $table->timestamps();

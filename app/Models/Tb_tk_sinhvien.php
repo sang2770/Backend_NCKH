@@ -32,4 +32,5 @@ class Tb_tk_sinhvien extends Authenticatable
         {
                 return $this->MaSinhVien;
         }
+        
 }

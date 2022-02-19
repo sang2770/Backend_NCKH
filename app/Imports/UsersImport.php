@@ -43,7 +43,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             return null;
         }
         // Create Tài Khoản
-        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
+        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"], "Gmail"=>$row['Email']]);
         // var_dump($TaiKhoan);
         return [
             new Tb_sinhvien([
