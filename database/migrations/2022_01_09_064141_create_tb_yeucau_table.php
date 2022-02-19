@@ -17,11 +17,10 @@ class CreateTbYeucauTable extends Migration
             $table->Increments('MaYeuCau');
             $table->string('MaSinhVien', 20);
             $table->dateTime('NgayYeuCau');
-            $table->dateTime('NgayXuLy');
+            $table->dateTime('NgayXuLy')->nullable();
             $table->string('TrangThaiXuLy', 100);
             $table->integer('LanXinCap')->nullable();
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('Tb_sinhvien');
-            
             $table->timestamps();
         });
     }
