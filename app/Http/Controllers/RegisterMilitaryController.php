@@ -68,7 +68,6 @@ class RegisterMilitaryController extends Controller
     {
         $validated = $request->validated();
         try {
-            // $validated = $request->safe()->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop', 'MaSinhVien');
             $validated = $this->create($request->all());
             Tb_giay_cn_dangky::insert($validated);
             return response()->json(['status' => "Success", 'data' => ["ThongTinDangKy" => $validated]]);
