@@ -9,6 +9,7 @@ use App\Notifications\ResetPasswordRequest;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -56,7 +57,6 @@ class LoginClientController extends Controller
         // var_dump($request->user());
         $validator = Validator::make($request->input(), [
             'MaSinhVien' => 'required',
-            'TenDangNhap' => 'required',
             'Old' => 'required',
             'New' => 'required',
             'New_Repeat' => "required"
@@ -67,9 +67,8 @@ class LoginClientController extends Controller
         }
         try {
             $Id = $request->MaSinhVien;
-            $Name = $request->TenDangNhap;
             $New = Hash::make($request->New);
-            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->where("TenDangNhap", $Name)->first();;
+            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
             if (!$user) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
             } elseif (!Hash::check($request->Old, $user->MatKhau)) {
@@ -127,15 +126,23 @@ class LoginClientController extends Controller
                     'status' => "Failed",
                     'Err_Message' => 'This password reset token is invalid.',
                 ], 422);
+            };
+            $user=DB::table('Tb_tk_sinhvien')->join('Tb_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')->where('Email', $passwordReset->email);
+            if($user->exists())
+            {
+                $user->update(['MatKhau' => Hash::make($request->MatKhau)]);
+                $passwordReset->delete();
+                return response()->json([
+                    'status' => "Success",
+                    'Message' => "Bạn đã thay đổi thành công vui lòng login lại.",
+                ]);
+            }else{
+                return response()->json([
+                    'status' => "Failed",
+                    "Err_Message" => "NotFound!"
+                ]);
             }
-            $user = Tb_tk_sinhvien::where('TenDangNhap', $passwordReset->email)->firstOrFail();
-            $updatePasswordUser = $user->update(['MatKhau' => Hash::make($request->MatKhau)]);
-            $passwordReset->delete();
-
-            return response()->json([
-                'status' => "Success",
-                'Message' => "Bạn đã thay đổi thành công vui lòng login lại.",
-            ]);
+            
         } catch (Exception $e) {
             return response()->json([
                 'status' => "Failed",
