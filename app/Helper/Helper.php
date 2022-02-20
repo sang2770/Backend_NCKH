@@ -37,7 +37,7 @@ class Helper
             }
             $NgaySinh = $NgaySinh[2] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
             return [
-                "Gmail"=>$Input["Gmail"],
+                "Gmail"=>$Input["Email"],
                 'MatKhau' => Hash::make($NgaySinh),
                 'MaSinhVien' => $Input["MaSinhVien"],
             ];
