@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class MajorImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
 {
+    use Tb_Khoa;
     /**
      * @param array $row
      *
