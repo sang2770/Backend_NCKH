@@ -18,7 +18,6 @@ class MajorImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
      */
     public function model(array $row)
     {
-        var_dump($row);
         try {
             if (empty($row['tt'])) {
                 return null;
