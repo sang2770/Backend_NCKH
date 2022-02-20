@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Imports;
-
-use App\Models\Tb_Khoa;
+use App\Models\Tb_khoa;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
