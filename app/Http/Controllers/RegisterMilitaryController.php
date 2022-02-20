@@ -85,7 +85,6 @@ class RegisterMilitaryController extends Controller
 
     public function Update(UpdateRegisterRequest $request, $id)
     {
-        // var_dump($request->input());
         $request->validated();
         if (Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists()) {
             $task = $this->edit($id);
