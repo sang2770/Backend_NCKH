@@ -30,11 +30,6 @@ class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
         if (empty($row['tt'])) {
             return null;
         }
-        var_dump([
-            'TenLop' => $row['ten_lop'],
-            'Khoas' => $row['khoa'],
-            'MaKhoa' => $MaKhoa,
-        ]);
         return [
             new Tb_Lop([
                 'TenLop' => $row['ten_lop'],
