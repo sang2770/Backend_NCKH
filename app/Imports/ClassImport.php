@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Tb_khoa;
+use App\Models\Tb_Lop;
 
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
@@ -12,7 +13,6 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\ValidationException;
-use App\Models\Tb_Lop;
 class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
 {
     use Importable, SkipsFailures;
