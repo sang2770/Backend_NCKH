@@ -4,7 +4,6 @@ namespace App\Imports;
 
 use App\Models\Tb_khoa;
 use App\Models\Tb_Lop;
-
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -12,7 +11,6 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Validators\ValidationException;
 class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
 {
     use Importable, SkipsFailures;
@@ -32,6 +30,11 @@ class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
         if (empty($row['tt'])) {
             return null;
         }
+        var_dump([
+            'TenLop' => $row['ten_lop'],
+            'Khoas' => $row['khoa'],
+            'MaKhoa' => $MaKhoa,
+        ]);
         return [
             new Tb_Lop([
                 'TenLop' => $row['ten_lop'],
