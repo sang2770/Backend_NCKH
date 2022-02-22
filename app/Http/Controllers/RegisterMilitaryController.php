@@ -42,12 +42,33 @@ class RegisterMilitaryController extends Controller
         }
     }
 
+    public function create($Input){
+        try {
+            $date = date_create($Input['NgayDangKy']);
+            $NgayDK = date_format($date, 'Y-m-d H:i:s');
+
+            $date2 = date_create($Input['NgayNop']);
+            $NgayNop = date_format($date2, 'Y-m-d H:i:s');
+            
+            return [
+                'SoDangKy'          => $Input['SoDangKy'],
+                'NgayDangKy'        => $NgayDK,
+                'NoiDangKy'         => $Input['NoiDangKy'],
+                'DiaChiThuongTru'   => $Input['DiaChiThuongTru'],
+                'NgayNop'           => $NgayNop,
+                'MaSinhVien'        => $Input['MaSinhVien'],
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     //thêm từng giấy cn dky
     public function Store(RegisterMilitaryRequest $request)
     {
         $validated = $request->validated();
         try {
-            $validated = $request->safe()->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop', 'MaSinhVien');
+            $validated = $this->create($request->all());
             Tb_giay_cn_dangky::insert($validated);
             return response()->json(['status' => "Success", 'data' => ["ThongTinDangKy" => $validated]]);
         } catch (Exception $e) {
@@ -64,7 +85,6 @@ class RegisterMilitaryController extends Controller
 
     public function Update(UpdateRegisterRequest $request, $id)
     {
-        // var_dump($request->input());
         $request->validated();
         if (Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists()) {
             $task = $this->edit($id);

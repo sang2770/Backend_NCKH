@@ -46,10 +46,17 @@ class MoveMilitaryLocalController extends Controller
         try {
             $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
             $LyDo = "Trúng tuyển đại học, cao đẳng";
+
+            $date = date_create($Input['NgayCap']);
+            $NgayCap = date_format($date, 'Y-m-d H:i:s');
+
+            $date2 = date_create($Input['NgayHH']);
+            $NgayHH = date_format($date2, 'Y-m-d H:i:s');
+            
             return [
                 'SoGioiThieu'          => $Input['SoGioiThieu'],
-                'NgayCap'              => $Input['NgayCap'],
-                'NgayHH'               => $Input['NgayHH'],
+                'NgayCap'              => $NgayCap,
+                'NgayHH'               => $NgayHH,
                 'NoiOHienTai'          => $Input['NoiOHienTai'],
                 'NoiChuyenDen'         => $Input['NoiChuyenDen'],
                 'LyDo'                 => $LyDo,
