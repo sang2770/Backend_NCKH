@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Tb_khoa;
-use App\Models\Tb_Lop;
+use App\Models\Tb_lop;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -31,7 +31,7 @@ class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             return null;
         }
         return [
-            new Tb_Lop([
+            new Tb_lop([
                 'TenLop' => $row['ten_lop'],
                 'Khoas' => $row['khoa'],
                 'MaKhoa' => $MaKhoa,
