@@ -22,7 +22,7 @@ class MajorImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
                 return null;
             }
             return [
-                new Tb_Khoa([
+                new Tb_khoa([
                     'TenKhoa' => $row['ten_khoa'],
                     'DiaChi' => $row['dia_chi'],
                     'SoDienThoai' => $row['so_dien_thoai'],
