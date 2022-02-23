@@ -10,7 +10,7 @@ class CreateGiayXacNhan extends Migration
     {
         Schema::create('Tb_giay_xn_truong', function (Blueprint $table) {
             $table->Increments('MaGiayXN_Truong');
-            $table->dateTime('NgayCap');
+            $table->date('NgayCap');
             $table->string('NamHoc', 20);
             $table->unsignedInteger('MaYeuCau');
             $table->foreign('MaYeuCau')->references('MaYeuCau')->on('Tb_yeucau');

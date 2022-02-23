@@ -17,7 +17,7 @@ class CreateTbThongbaochinhTable extends Migration
             $table->Increments('MaThongBaoChinh');
             $table->string('TieuDeTB', 200);
             $table->string('NoiDungTB', 200);
-            $table->dateTime('ThoiGianTao');
+            $table->date('ThoiGianTao');
             $table->timestamps();
         });
     }

@@ -16,14 +16,14 @@ class CreateTbSinhvienTable extends Migration
         Schema::create('Tb_sinhvien', function (Blueprint $table) {
             $table->string('MaSinhVien', 20);
             $table->string('HoTen', 100);
-            $table->dateTime('NgaySinh');
+            $table->date('NgaySinh');
             $table->string('NoiSinh', 100);
             $table->string('GioiTinh', 20);
             $table->string('DanToc', 20);
             $table->string('TonGiao', 20);
             $table->string('QuocTich', 20);
             $table->string('SoCMTND', 20);
-            $table->dateTime('NgayCapCMTND');
+            $table->date('NgayCapCMTND');
             $table->string('NoiCapCMTND', 100);
             $table->string('DiaChiBaoTin', 300);
             $table->string('SDT', 11);

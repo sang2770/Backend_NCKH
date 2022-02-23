@@ -58,7 +58,7 @@ class StudentManagementController extends Controller
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
-    // Thêm đơn
+    // Thêm 1 sinh viên
     public function store(AddStudentRequest $request)
     {
         $validated = $request->validated();
@@ -86,7 +86,7 @@ class StudentManagementController extends Controller
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
-    //Thêm bằng Import File 
+    //Thêm sinh viên bằng Import File 
     public function storeImport(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -302,7 +302,7 @@ class StudentManagementController extends Controller
             }
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+            return response()->json(['status' => "Failed", 'Err_Message' => "File không hợp lệ"]);
         }
     }
     // Them Danh Sach Lop

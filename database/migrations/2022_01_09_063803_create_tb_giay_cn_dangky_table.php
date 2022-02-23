@@ -16,10 +16,10 @@ class CreateTbGiayCnDangkyTable extends Migration
         Schema::create('Tb_giay_cn_dangky', function (Blueprint $table) {
             $table->increments('MaGiayDK');
             $table->string('SoDangKy', 20);
-            $table->dateTime('NgayDangKy');
+            $table->date('NgayDangKy');
             $table->string('NoiDangKy', 150);
             $table->string('DiaChiThuongTru', 150);
-            $table->dateTime('NgayNop');
+            $table->date('NgayNop');
             $table->string('MaSinhVien', 20);
             $table->foreign('MaSinhVien')->references('MaSinhVien')->on('Tb_sinhvien');
             $table->timestamps();
