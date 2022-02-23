@@ -13,7 +13,6 @@ class Tb_sinhvien extends Authenticatable
 {
     use Filterable, Notifiable;
     protected $table = 'Tb_sinhvien';
-    protected $dateFormat = 'y/m/d';
     protected $fillable = [
         'MaSinhVien',
         'HoTen',
