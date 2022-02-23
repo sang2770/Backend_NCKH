@@ -95,7 +95,7 @@ class RegisterMilitaryController extends Controller
             return response()->json(['status' => "Not Found!"]);
         }
     }
-    /// loc ra thong tin sinh vien kem thong tin giay chung nhan dky
+   /// loc ra thong tin sinh vien kem thong tin giay chung nhan dky
     public function FilterRegister(Request $request)
     {
         $limit = $request->query('limit');
