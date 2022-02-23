@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tb_trangthai extends Model
 {
-    protected $table = 'tb_trangthai';
+    protected $table = 'Tb_trangthai';
     protected $fillable = [
         'SoQuyetDinh', 
         'NgayQuyetDinh', 

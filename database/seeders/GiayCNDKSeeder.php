@@ -17,13 +17,13 @@ class GiayCNDKSeeder extends Seeder
     {
 
         Tb_giay_cn_dangky::insert([
-            'MaGiayDK'          => '3',
+            'MaGiayDK'          => '5',
             'SoDangKy'          => '135/DK',
             'NgayDangKy'        => '2019-05-05',
             'NoiDangKy'         => 'Nam Định',
             'DiaChiThuongTru'   => 'Hải Hậu, Nam Định',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '211200174'
+            'MaSinhVien'        => '211200553'
         ]);
     }
 }

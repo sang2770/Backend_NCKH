@@ -13,7 +13,7 @@ class CreateTbGiayDcTruongTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_giay_dc_truong', function (Blueprint $table) {
+        Schema::create('Tb_giay_dc_truong', function (Blueprint $table) {
             $table->increments('MaGiayDC_Truong');
             $table->string('SoGioiThieuDC', 20);
             $table->dateTime('NgayCap');
@@ -22,7 +22,7 @@ class CreateTbGiayDcTruongTable extends Migration
             $table->string('NoiOHienTai', 150);
             $table->string('LyDo', 100);
             $table->unsignedInteger('MaGiayDK');
-            $table->foreign('MaGiayDK')->references('MaGiayDK')->on('tb_giay_cn_dangky');
+            $table->foreign('MaGiayDK')->references('MaGiayDK')->on('Tb_giay_cn_dangky');
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ class CreateTbGiayDcTruongTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_giay_dc_truong');
+        Schema::dropIfExists('Tb_giay_dc_truong');
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Imports;
-
-use App\Models\Tb_Khoa;
+use App\Models\Tb_khoa;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -18,13 +17,12 @@ class MajorImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
      */
     public function model(array $row)
     {
-        // var_dump($row);
         try {
             if (empty($row['tt'])) {
                 return null;
             }
             return [
-                new Tb_Khoa([
+                new Tb_khoa([
                     'TenKhoa' => $row['ten_khoa'],
                     'DiaChi' => $row['dia_chi'],
                     'SoDienThoai' => $row['so_dien_thoai'],

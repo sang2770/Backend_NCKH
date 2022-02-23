@@ -13,12 +13,11 @@ class CreateTbTkSinhvienTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_tk_sinhvien', function (Blueprint $table) {
+        Schema::create('Tb_tk_sinhvien', function (Blueprint $table) {
             $table->increments('MaTKSV');
-            $table->string('TenDangNhap', 60);
             $table->string('MatKhau', 60);
             $table->string('MaSinhVien', 20);
-            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('tb_sinhvien');
+            $table->foreign('MaSinhVien')->references('MaSinhVien')->on('Tb_sinhvien');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateTbTkSinhvienTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_tk_sinhvien');
+        Schema::dropIfExists('Tb_tk_sinhvien');
     }
 }

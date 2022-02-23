@@ -13,7 +13,7 @@ class CreateTbSinhvienTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_sinhvien', function (Blueprint $table) {
+        Schema::create('Tb_sinhvien', function (Blueprint $table) {
             $table->string('MaSinhVien', 20);
             $table->string('HoTen', 100);
             $table->dateTime('NgaySinh');
@@ -25,7 +25,7 @@ class CreateTbSinhvienTable extends Migration
             $table->string('SoCMTND', 20);
             $table->dateTime('NgayCapCMTND');
             $table->string('NoiCapCMTND', 100);
-            $table->string('DiaChiBaoTin', 100);
+            $table->string('DiaChiBaoTin', 300);
             $table->string('SDT', 11);
             $table->string('Email', 50);
             $table->string('HoKhauTinh', 50);
@@ -35,7 +35,7 @@ class CreateTbSinhvienTable extends Migration
             $table->string('HeDaoTao', 50);
             $table->unsignedInteger('MaLop');
             $table->primary('MaSinhVien');
-            $table->foreign('MaLop')->references('MaLop')->on('tb_lop');
+            $table->foreign('MaLop')->references('MaLop')->on('Tb_lop');
             $table->timestamps();
         });
     }
@@ -47,6 +47,6 @@ class CreateTbSinhvienTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_sinhvien');
+        Schema::dropIfExists('Tb_sinhvien');
     }
 }

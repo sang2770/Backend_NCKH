@@ -6,11 +6,13 @@ use App\Helper\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Tb_sinhvien extends Model
+class Tb_sinhvien extends Authenticatable
 {
-    use Filterable;
-    protected $table = 'tb_sinhvien';
+    use Filterable, Notifiable;
+    protected $table = 'Tb_sinhvien';
     protected $fillable = [
         'MaSinhVien',
         'HoTen',
@@ -66,5 +68,9 @@ class Tb_sinhvien extends Model
     public function filterTrangThaiXuLy($query, $value)
     {
         return $query->where('TrangThaiXuLy', $value);
+    }
+    public function routeNotificationForMail($notification)
+    {
+        return $this->Email;
     }
 }

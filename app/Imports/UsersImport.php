@@ -43,13 +43,13 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             return null;
         }
         // Create Tài Khoản
-        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"], "HoTen" => $row["ho_ten"]]);
-        var_dump($TaiKhoan);
+        $TaiKhoan = Helper::CreateUsers(["MaSinhVien" => (string)$row["ma_sinh_vien"], "NgaySinh" => (string)$row["ngay_sinh"]]);
+        // var_dump($TaiKhoan);
         return [
             new Tb_sinhvien([
                 'MaSinhVien' => $row['ma_sinh_vien'],
                 'HoTen' => $row['ho_ten'],
-                'NgaySinh' => Date::excelToDateTimeObject(intval($row['ngay_sinh']))->format('Y-m-d'),
+                'NgaySinh' => $row['ngay_sinh'],
                 'NoiSinh' => $row['noi_sinh'],
                 'GioiTinh' => $row['gioi_tinh'],
                 'DanToc' => $row["dan_toc"],
@@ -65,7 +65,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
                 'HeDaoTao' => $row['he_dao_tao'],
                 'MaLop' => $MaLop,
                 'SoCMTND' => $row['chung_minh_nhan_dan'],
-                'NgayCapCMTND' => Date::excelToDateTimeObject(intval($row['ngay_cap_cmnd']))->format('Y-m-d'),
+                'NgayCapCMTND' => $row['ngay_cap_cmnd'],
                 'NoiCapCMTND' => $row['noi_cap_cmnd'],
 
             ]),

@@ -20,7 +20,7 @@ class CreateBangLichSu extends Migration
             $table->dateTime("ThoiGian");
             $table->unsignedInteger("MaTK");
             $table->foreign("MaSinhVien")->references("MaSinhVien")->on("Tb_sinhvien");
-            $table->foreign("MaTK")->references("MaTK")->on("tb_tk_quanly");
+            $table->foreign("MaTK")->references("MaTK")->on("Tb_tk_quanly");
         });
     }
 

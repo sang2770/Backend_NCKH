@@ -13,7 +13,7 @@ class CreateTbThongbaochinhTable extends Migration
      */
     public function up()
     {
-        Schema::create('tb_thongbaochinh', function (Blueprint $table) {
+        Schema::create('Tb_thongbaochinh', function (Blueprint $table) {
             $table->Increments('MaThongBaoChinh');
             $table->string('TieuDeTB', 200);
             $table->string('NoiDungTB', 200);
@@ -29,6 +29,6 @@ class CreateTbThongbaochinhTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_thongbaochinh');
+        Schema::dropIfExists('Tb_thongbaochinh');
     }
 }

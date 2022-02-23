@@ -8,9 +8,45 @@ use App\Models\Tb_yeucau;
 use Illuminate\Http\Request;
 use Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    public function changeProfile(Request $request)
+    {
+       $validator=Validator::make($request->all(),[
+           "MaSinhVien"=>"required",
+           "Email"=>"email",
+           "SDT"=>"digits:10"
+       ],[
+           "Email.email"=>"Email không đúng định dạng",
+           "SDT.digits"=>'Số điện thoại phải đủ 10 số',
+       ]);
+       if ($validator->fails()) {
+        //    var_dump($validator->errors()->messages());
+           $error=[];
+           foreach ($validator->errors()->messages() as $key => $value) {
+               $error[]=$value[0];
+        }
+        return response()->json(['status' => "Failed", 'Err_Message' => "Dữ liệu đầu vào sai", "info"=>$error]);
+        }
+        else{
+            $user=Tb_sinhvien::find($request->MaSinhVien);
+            if($user)
+            {
+                $input=$request->input();
+                unset($input["_method"]);
+                DB::transaction(function () use ($input, $user) {
+                    $user->update($input);
+                });
+                return response()->json(["status"=>"Success", "data"=>$user->first()]);
+            }
+            else{
+                return response()->json(['status' => "Failed", 'Err_Message' => "NotFound"]);
+            }
+        }
+    }
     //thong tin sinh vien
     public function show(Request $request, $id)
     {
@@ -61,15 +97,21 @@ class StudentController extends Controller
     }
 
     //sv xem thong tin giay chung nhan dky nvqs
-    public function register(Request $request)
+    public function register(Request $request, $id)
     {
         $info = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.NgaySinh', 'Tb_giay_cn_dangky.SoDangKy', 
-                            'Tb_giay_cn_dangky.NgayDangKy', 'Tb_giay_cn_dangky.NoiDangKy', 'Tb_giay_cn_dangky.DiaChiThuongTru');
+            ->where('Tb_sinhvien.MaSinhVien', '=', $id)
+            ->select(
+                'Tb_sinhvien.HoTen',
+                'Tb_sinhvien.NgaySinh',
+                'Tb_giay_cn_dangky.SoDangKy',
+                'Tb_giay_cn_dangky.NgayDangKy',
+                'Tb_giay_cn_dangky.NoiDangKy',
+                'Tb_giay_cn_dangky.DiaChiThuongTru'
+            );
 
         if ($info->exists()) {
-            $info = $info->get();
+            $info = $info->first();
             return response()->json(['status' => "Success", 'data' => $info]);
         } else {
             return response()->json(['status' => "Not Found!"]);
@@ -126,11 +168,12 @@ class StudentController extends Controller
     }
 
     //sv xem danh sach các giay xac nhan đã xin cấp
-    public function showRequest(Request $request, $id){
+    public function showRequest(Request $request, $id)
+    {
         $limit = $request->query('limit');
         $page = $request->query('page');
         $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $id)
-        ->select('MaYeuCau', 'MaSinhVien', 'NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
+            ->select('MaYeuCau', 'MaSinhVien', 'NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
 
         if ($info->exists()) {
             $info = $info->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -146,17 +189,18 @@ class StudentController extends Controller
     }
 
     //xoa yeu cau xac nhan (chi xoa những yêu cầu chưa cấp (đã cấp thì k thể xóa yêu cầu))
-    public function DestroyRequest($id, $msv){
-        if(Tb_yeucau::where('MaYeuCau', $id)
+    public function DestroyRequest($id, $msv)
+    {
+        if (Tb_yeucau::where('MaYeuCau', $id)
             ->where('MaSinhVien', $msv)
             ->where(function ($query) {
                 $query->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
                     ->orWhere('Tb_yeucau.TrangThaiXuLy', '=', 'Chờ xử lý');
-            })->exists()){
+            })->exists()
+        ) {
             Tb_yeucau::where('MaYeuCau', $id)->delete();
             return response()->json(['status' => "Success deleted"]);
-        }
-        else{
+        } else {
             return response()->json(['status' => "Not Found!"]);
         }
     }

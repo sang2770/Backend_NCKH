@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Tb_lop extends Model
 {
-    protected $table = 'tb_lop';
+    protected $table = 'Tb_lop';
     protected $fillable = [
         'MaLop', 
         'TenLop', 
