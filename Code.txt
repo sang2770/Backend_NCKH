@@ -18,4 +18,6 @@ Composer tự động phiên bản
 php artisan cache:clear
 php artisan config:clear
 Multi model
+
+$ heroku git:remote -a testnvqs
 https://stackoverflow.com/questions/52851208/laravel-passport-multiple-authentication-using-guards

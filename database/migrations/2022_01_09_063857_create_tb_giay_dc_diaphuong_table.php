@@ -16,8 +16,8 @@ class CreateTbGiayDcDiaphuongTable extends Migration
         Schema::create('Tb_giay_dc_diaphuong', function (Blueprint $table) {
             $table->increments('MaGiayDC_DP');
             $table->string('SoGioiThieu', 20);
-            $table->dateTime('NgayCap');
-            $table->dateTime('NgayHH');
+            $table->date('NgayCap');
+            $table->date('NgayHH');
             $table->string('NoiOHienTai', 150);
             $table->string('NoiChuyenDen', 150);
             $table->string('LyDo', 100);

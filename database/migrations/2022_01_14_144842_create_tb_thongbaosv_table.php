@@ -14,7 +14,7 @@ class CreateTbThongbaosvTable extends Migration
     public function up()
     {
         Schema::create('Tb_thongbaosv', function (Blueprint $table) {
-            $table->dateTime('ThoiGianTB');
+            $table->date('ThoiGianTB');
             $table->unsignedInteger('MaTKSV');
             $table->unsignedInteger('MaThongBaoChinh');
             $table->foreign('MaTKSV')->references('MaTKSV')->on('Tb_tk_sinhvien');

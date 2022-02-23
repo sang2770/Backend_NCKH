@@ -15,7 +15,7 @@ class CreateTbTrangthaiTable extends Migration
     {
         Schema::create('Tb_trangthai', function (Blueprint $table) {
             $table->string('SoQuyetDinh', 20);
-            $table->dateTime('NgayQuyetDinh');
+            $table->date('NgayQuyetDinh');
             $table->string('MaSinhVien', 20);
             $table->primary('MaSinhVien');
         });

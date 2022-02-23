@@ -7,11 +7,12 @@ use App\Models\Tb_lop;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
+class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation, SkipsOnFailure
 {
     use Importable, SkipsFailures;
     protected $rowNum = 1;
@@ -44,6 +45,16 @@ class ClassImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             '*.ten_lop' => 'required',
             '*.khoa' => 'required',
             '*.ten_khoa' => 'required'
+
+        ];
+    }
+    public function customValidationMessages()
+    {
+        return [
+            
+            'ten_khoa.required' => 'Cột Tên khoa là bắt buộc',
+            'ten_lop.required' => 'Cột Tên lớp là bắt buộc',
+            'khoa.required'=>'Cột Khóa là bắt buộc'
 
         ];
     }
