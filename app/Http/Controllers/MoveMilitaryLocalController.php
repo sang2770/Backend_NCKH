@@ -45,14 +45,12 @@ class MoveMilitaryLocalController extends Controller
     public function create($Input){
         $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
         $count = Tb_giay_dc_diaphuong::select('MaGiayDK')->where('Tb_giay_dc_diaphuong.MaGiayDK', '=', $MagiayDK[0]['MaGiayDK'])->count();
+
         if($count>0){
             return null;
         }
         else{
             try {
-                var_dump($count);
-                var_dump($MagiayDK[0]['MaGiayDK']);
-                
                 $LyDo = "Trúng tuyển đại học, cao đẳng";
 
                 $date = date_create($Input['NgayCap']);
@@ -83,14 +81,14 @@ class MoveMilitaryLocalController extends Controller
         try {
             $validated = $this->create($request->all());
             if($validated == null){
-                return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
+                return response()->json(['status' => "Failedd", 'Err_Message' => $request->MaSinhVien]);
             }
             else{
                 Tb_giay_dc_diaphuong::insert($validated);
                 return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
             }
         } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
 
