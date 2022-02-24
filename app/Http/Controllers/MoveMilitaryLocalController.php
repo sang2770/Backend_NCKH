@@ -43,28 +43,37 @@ class MoveMilitaryLocalController extends Controller
     }
 
     public function create($Input){
-        try {
-            $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
-            $LyDo = "Trúng tuyển đại học, cao đẳng";
+        $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
+        $count = Tb_giay_dc_diaphuong::select('MaGiayDK')->where('Tb_giay_dc_diaphuong.MaGiayDK', '=', $MagiayDK[0]['MaGiayDK'])->count();
+        if($count>0){
+            return null;
+        }
+        else{
+            try {
+                var_dump($count);
+                var_dump($MagiayDK[0]['MaGiayDK']);
+                
+                $LyDo = "Trúng tuyển đại học, cao đẳng";
 
-            $date = date_create($Input['NgayCap']);
-            $NgayCap = date_format($date, 'Y-m-d H:i:s');
+                $date = date_create($Input['NgayCap']);
+                $NgayCap = date_format($date, 'Y-m-d H:i:s');
 
-            $date2 = date_create($Input['NgayHH']);
-            $NgayHH = date_format($date2, 'Y-m-d H:i:s');
-            
-            return [
-                'SoGioiThieu'          => $Input['SoGioiThieu'],
-                'NgayCap'              => $NgayCap,
-                'NgayHH'               => $NgayHH,
-                'NoiOHienTai'          => $Input['NoiOHienTai'],
-                'NoiChuyenDen'         => $Input['NoiChuyenDen'],
-                'LyDo'                 => $LyDo,
-                'BanChiHuy'            => $Input['BanChiHuy'],
-                'MaGiayDK'             => $MagiayDK[0]['MaGiayDK'],
-            ];
-        } catch (\Throwable $th) {
-            throw $th;
+                $date2 = date_create($Input['NgayHH']);
+                $NgayHH = date_format($date2, 'Y-m-d H:i:s');
+                
+                return [
+                    'SoGioiThieu'          => $Input['SoGioiThieu'],
+                    'NgayCap'              => $NgayCap,
+                    'NgayHH'               => $NgayHH,
+                    'NoiOHienTai'          => $Input['NoiOHienTai'],
+                    'NoiChuyenDen'         => $Input['NoiChuyenDen'],
+                    'LyDo'                 => $LyDo,
+                    'BanChiHuy'            => $Input['BanChiHuy'],
+                    'MaGiayDK'             => $MagiayDK[0]['MaGiayDK'],
+                ];
+            } catch (\Throwable $th) {
+                throw $th;
+            }
         }
     }
 
@@ -73,8 +82,13 @@ class MoveMilitaryLocalController extends Controller
         $validated = $request->validated();
         try {
             $validated = $this->create($request->all());
-            Tb_giay_dc_diaphuong::insert($validated);
-            return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
+            if($validated == null){
+                return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
+            }
+            else{
+                Tb_giay_dc_diaphuong::insert($validated);
+                return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
+            }
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
