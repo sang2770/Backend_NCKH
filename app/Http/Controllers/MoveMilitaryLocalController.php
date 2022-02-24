@@ -80,17 +80,24 @@ class MoveMilitaryLocalController extends Controller
     //thêm từng giấy dc dia phuong 
     public function Store(MoveMilitaryLocalRequest $request){
         $validated = $request->validated();
-        try {
-            $validated = $this->create($request->all());
-            if($validated == null){
-                return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
+
+        $msv = Tb_sinhvien::select('MaSinhVien')->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)->count();
+        if($msv > 0){
+            try {
+                $validated = $this->create($request->all());
+                if($validated == null){
+                    return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
+                }
+                else{
+                    Tb_giay_dc_diaphuong::insert($validated);
+                    return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
+                }
+            } catch (Exception $e) {
+                return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
             }
-            else{
-                Tb_giay_dc_diaphuong::insert($validated);
-                return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
-            }
-        } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+        else{
+            return response()->json(['status' => "Failed", 'Err_Message' => "Không tồn tại mã sinh viên này"]);
         }
     }
 
