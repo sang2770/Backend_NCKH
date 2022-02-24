@@ -111,8 +111,14 @@ class LoginController extends Controller
     {
         // var_dump("Me");
         $user = $request->user();
-        $result = ['status' => 'Success',  'user' => $user];
-        return response()->json($result);
+        if($user)
+        {
+            $result = ['status' => 'Success',  'user' => $user];
+            return response()->json($result);
+        }else{
+            return response()->json(["status"=>"Failed"]);
+        }
+
     }
     // Override
     public function TenDangNhap()

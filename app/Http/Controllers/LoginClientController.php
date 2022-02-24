@@ -48,8 +48,14 @@ class LoginClientController extends Controller
     // Get User
     public function user(Request $request)
     {
-        $result = ['status' => 'Success',  'user' => $request->user()];
-        return response()->json($result);
+        $user = $request->user();
+        if($user)
+        {
+            $result = ['status' => 'Success',  'user' => $user];
+            return response()->json($result);
+        }else{
+            return response()->json(["status"=>"Failed"]);
+        }
     }
     // Get User
     public function change(Request $request)
@@ -150,4 +156,5 @@ class LoginClientController extends Controller
             ]);
         }
     }
+    
 }
