@@ -88,7 +88,7 @@ class MoveMilitaryLocalController extends Controller
                 return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
             }
         } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+            return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
         }
     }
 
