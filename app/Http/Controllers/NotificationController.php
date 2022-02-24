@@ -74,7 +74,7 @@ class NotificationController extends Controller
             $task = $this->edit($id);
             $input = $request->all();
             $task->fill($input)->save();
-            return response()->json(['status' => "Success updated"]);
+            return response()->json(['status' => "Success updated", 'data' => $task->fill($input)]);
         }
         else{
             return response()->json(['status' => "Not Found!"]);
