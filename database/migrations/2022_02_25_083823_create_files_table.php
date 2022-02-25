@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTbThongbaochinhTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateTbThongbaochinhTable extends Migration
      */
     public function up()
     {
-        Schema::create('Tb_thongbaochinh', function (Blueprint $table) {
-            $table->Increments('MaThongBaoChinh');
-            $table->string('TieuDeTB', 200);
-            $table->string('NoiDungTB', 200);
-            $table->string('FileName', 200);
-            $table->date('ThoiGianTao');
+        Schema::create('files', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ class CreateTbThongbaochinhTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Tb_thongbaochinh');
+        Schema::dropIfExists('files');
     }
 }

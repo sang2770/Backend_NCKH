@@ -12,6 +12,7 @@ class Tb_thongbaochinh extends Model
         'MaThongBaoChinh', 
         'TieuDeTB',
         'NoiDungTB', 
+        'FileName',
         'ThoiGianTao',
     ];
     protected $primaryKey = 'MaThongBaoChinh';

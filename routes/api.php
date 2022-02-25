@@ -135,4 +135,5 @@ Route::group([
     Route::put('update-notification/{id}', [NotificationController::class, 'UpdateNotification']); //update thong bao
     Route::delete('delete-notification/{id}', [NotificationController::class, 'DestroyNotification']); //xoa 1 thong bao
     Route::post('sent-notification-students', [NotificationController::class, 'SentNotificationStudent']); //gui thong bao den sinh vien
+    Route::get('download-file-notification/{name}', [NotificationController::class, 'DownloadFile']);
 });

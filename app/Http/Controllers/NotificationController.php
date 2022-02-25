@@ -9,6 +9,7 @@ use Exception;
 use App\Http\Requests\NotificationRequest;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_thongbaosv;
+use Illuminate\Support\Facades\File;
 
 class NotificationController extends Controller
 {
@@ -39,13 +40,40 @@ class NotificationController extends Controller
             return response()->json(['status' => "Failed"]);
         }
     }
-
+    
+    public function countFile()
+    {
+        $count = 0;
+        foreach (File::allFiles(public_path('FileStudent')) as $value) {
+            $count++;
+        }
+        return $count;
+    }
     public function create($Input){
         try {
+            $filename = "";
             $ThoiGianTB = Carbon::now()->toDateString();
             return [
                 'TieuDeTB'          => $Input['TieuDeTB'],
                 'NoiDungTB'         => $Input['NoiDungTB'],
+                'FileName'          => $filename,
+                'ThoiGianTao'        => $ThoiGianTB
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function createFile($Input){
+        try {
+            $count = $this->countFile();
+            $filename = $Input['file']->getClientOriginalName();
+            $filename = $count . "_" . $filename;
+            $ThoiGianTB = Carbon::now()->toDateString();
+            return [
+                'TieuDeTB'          => $Input['TieuDeTB'],
+                'NoiDungTB'         => $Input['NoiDungTB'],
+                'FileName'          => $filename,
                 'ThoiGianTao'        => $ThoiGianTB
             ];
         } catch (\Throwable $th) {
@@ -56,9 +84,27 @@ class NotificationController extends Controller
     public function StoreNotification(NotificationRequest $request){
         $Notification = $request->validated();
         try {
-            $Notification = $this->create($request->all());
+            if($request->hasFile('file'))
+            {
+                $Notification = $this->createFile($request->all());
+                $filename = $request->file->getClientOriginalName();
+                $request->file->move(public_path("FileNoti"), $filename);
+            }
+            else{
+                $Notification = $this->create($request->all());
+            }
             Tb_thongbaochinh::insert($Notification);
             return response()->json(['status' => "Success", 'data' => ["ThongBao" => $Notification]]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
+
+    public function DownloadFile($name)
+    {
+        try {
+            $path = public_path('FileNoti/' . $name);
+            return response()->download($path);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
