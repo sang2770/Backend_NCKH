@@ -11,6 +11,7 @@ use App\Models\Tb_sinhvien;
 use App\Models\Tb_thongbaosv;
 use Illuminate\Support\Facades\File;
 
+
 class NotificationController extends Controller
 {
     public function IndexHeader(Request $request){
@@ -33,7 +34,7 @@ class NotificationController extends Controller
 
     public function show($id){
         if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
-            $notification = Tb_thongbaochinh::select('MaThongBaoChinh', 'TieuDeTB', 'NoiDungTB')->where('MaThongBaoChinh', $id)->get();
+            $notification = Tb_thongbaochinh::select('MaThongBaoChinh', 'TieuDeTB', 'NoiDungTB', 'FileName')->where('MaThongBaoChinh', $id)->get();
             return response()->json(['status' => "Success", 'data' => $notification]);
         }
         else{
@@ -44,7 +45,7 @@ class NotificationController extends Controller
     public function countFile()
     {
         $count = 0;
-        foreach (File::allFiles(public_path('FileStudent')) as $value) {
+        foreach (File::allFiles(public_path('FileNoti')) as $value) {
             $count++;
         }
         return $count;
@@ -87,7 +88,9 @@ class NotificationController extends Controller
             if($request->hasFile('file'))
             {
                 $Notification = $this->createFile($request->all());
+                $count = $this->countFile();
                 $filename = $request->file->getClientOriginalName();
+                $filename = $count . "_" . $filename;
                 $request->file->move(public_path("FileNoti"), $filename);
             }
             else{
@@ -100,35 +103,141 @@ class NotificationController extends Controller
         }
     }
 
-    public function DownloadFile($name)
-    {
-        try {
-            $path = public_path('FileNoti/' . $name);
-            return response()->download($path);
-        } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
-        }
-    }
-
     public function edit($id){
         $edit = Tb_thongbaochinh::findOrFail($id);
         return $edit;
     }
 
-    public function UpdateNotification(NotificationRequest $request, $id){
-        if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
-            $task = $this->edit($id);
-            $input = $request->all();
-            $task->fill($input)->save();
-            return response()->json(['status' => "Success updated", 'data' => $task->fill($input)]);
-        }
-        else{
-            return response()->json(['status' => "Not Found!"]);
+    public function Res($Input, $id){
+        try {
+            $filename = Tb_thongbaochinh::select('FileName')->where('MaThongBaoChinh', $id)->get();
+            return [
+                'TieuDeTB'          => $Input['TieuDeTB'],
+                'NoiDungTB'         => $Input['NoiDungTB'],
+                'FileName'          => $filename[0]['FileName'],
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
+    public function UpdateNotification(NotificationRequest $request, $id){
+        try {
+            if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
+                $task = $this->edit($id);
+                $input = $this->Res($request->all(), $id);
+                $task->fill($input)->save();
+                return response()->json(['status' => "Success updated"]);
+            }else{
+                return response()->json(['status' => "Not Found!"]);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
+
+    //update file
+    public function UpdateFile(Request $request, $id){
+        try{
+            if($request->hasFile('file'))
+            {
+                $filename = Tb_thongbaochinh::select('FileName')->where('MaThongBaoChinh', $id)->get();
+                if($filename[0]['FileName'] != ""){
+                    $name = $filename[0]['FileName'];
+                }else{
+                    $count = $this->countFile();
+                    $name = $request->file->getClientOriginalName();
+                    $name = $count . "_" . $name;
+                }
+                $request->file->move(public_path("FileNoti"), $name);
+                return response()->json(['status' => "Success", 'data' => $name]);
+            }else{
+                return response()->json(['status' => "Failed"]);
+            }
+        }catch(Exception $e){
+            return response()->json(['status' => "Failed", 'Err' => $e->getMessage()]);
+        }
+    }
+
+    //cap nhat filename sau khi uploadfile
+    public function ResUpdate($id, $filename){
+        try {
+            $info = Tb_thongbaochinh::select('*')->where('MaThongBaoChinh', $id)->get();
+            return [
+                'TieuDeTB'          => $info[0]['TieuDeTB'],
+                'NoiDungTB'         => $info[0]['NoiDungTB'],
+                'FileName'          => $filename,
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    
+    public function UpdateName($id, $filename){
+        try {
+            if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
+                $task = $this->edit($id);
+                $input = $this->ResUpdate($id, $filename);
+                $task->fill($input)->save();
+                return response()->json(['status' => "Success", 'data' => $filename]);
+            }else{
+                return response()->json(['status' => "Not Found!"]);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!']);
+        }
+    }
+
+    //xoa file
+    public function DeleteFile($id){
+        try{
+            $filename = Tb_thongbaochinh::select('FileName')->where('MaThongBaoChinh', $id)->get();
+            $path = public_path('FileNoti/' . $filename[0]["FileName"]);
+            File::delete($path);
+            return response()->json(['status' => "Success"]);
+        }catch(Exception $e){
+            return response()->json(['status' => "Failed"]);
+        }
+    }
+    //cap nhat ten file sau khi xoa file
+    public function ResDelete($id){
+        try {
+            $info = Tb_thongbaochinh::select('*')->where('MaThongBaoChinh', $id)->get();
+            $filename = "";
+            return [
+                'TieuDeTB'          => $info[0]['TieuDeTB'],
+                'NoiDungTB'         => $info[0]['NoiDungTB'],
+                'FileName'          => $filename,
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function UpdateNoti($id){
+        try {
+            if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
+                $task = $this->edit($id);
+                $input = $this->ResDelete($id);
+                $task->fill($input)->save();
+                return response()->json(['status' => "Success"]);
+            }else{
+                return response()->json(['status' => "Not Found!"]);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!']);
+        }
+    }
+
+    //xoa thong bao
     public function DestroyNotification($id){
         if(Tb_thongbaochinh::where('MaThongBaoChinh', $id)->exists()){
+            $filename = Tb_thongbaochinh::select('FileName')->where('MaThongBaoChinh', '=', $id)->get();
+            if($filename != ""){
+                $path = public_path('FileNoti/' . $filename[0]["FileName"]);
+                File::delete($path);
+            }
             Tb_thongbaochinh::where('MaThongBaoChinh', $id)->delete();
             return response()->json(['status' => "Success deleted"]);
         }

@@ -17,16 +17,19 @@ class ThongBaoChinhSeeder extends Seeder
         Tb_thongbaochinh::insert([
             'TieuDeTB'      => 'Tiêu đề thông báo 1',
             'NoiDungTB'     => 'Nội dung thông báo 1', 
+            'FileName'      => '',
             'ThoiGianTao'   => '2020-10-10',
         ]);
         Tb_thongbaochinh::insert([
             'TieuDeTB'      => 'Tiêu đề thông báo 2',
             'NoiDungTB'     => 'Nội dung thông báo 2', 
+            'FileName'      => '',
             'ThoiGianTao'   => '2020-10-20',
         ]);
         Tb_thongbaochinh::insert([
             'TieuDeTB'      => 'Tiêu đề thông báo 3',
             'NoiDungTB'     => 'Nội dung thông báo 3', 
+            'FileName'      => '',
             'ThoiGianTao'   => '2020-12-20',
         ]);
     }

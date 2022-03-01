@@ -152,7 +152,7 @@ class StudentController extends Controller
             ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
             ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
             ->where('Tb_thongbaosv.MaThongBaoChinh', '=', $request->MaThongBaoChinh)
-            ->select('Tb_thongbaochinh.TieuDeTB', 'Tb_thongbaochinh.NoiDungTB');
+            ->select('Tb_thongbaochinh.TieuDeTB', 'Tb_thongbaochinh.NoiDungTB', 'Tb_thongbaochinh.FileName');
 
         if ($noti->exists()) {
             $noti = $noti->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -164,6 +164,17 @@ class StudentController extends Controller
             ]]);
         } else {
             return response()->json(['status' => "Not Found!"]);
+        }
+    }
+
+    //download thong bao
+    public function DownloadFile($name)
+    {
+        try {
+            $path = public_path('FileNoti/' . $name);
+            return response()->download($path);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
     }
 

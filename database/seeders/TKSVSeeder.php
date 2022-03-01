@@ -15,27 +15,19 @@ class TKSVSeeder extends Seeder
      */
     public function run()
     {
-        // Tb_tk_sinhvien::insert([
-        //     'TenDangNhap' => "quan19123311@st.utc.edu.vn",
-        //     'MatKhau' =>  Hash::make('1234'),
-        //     'MaSinhVien' => "19123311",
-        // ]);
         Tb_tk_sinhvien::insert([
-            'TenDangNhap' => "Sang@st.utc.edu.vn",
+            'MatKhau' =>  Hash::make('1234'),
+            'MaSinhVien' => "191204226",
+        ]);
+        
+        Tb_tk_sinhvien::insert([
             'MatKhau' => Hash::make('1234'),
-            'MaSinhVien' => "211200553",
+            'MaSinhVien' => "191204227",
         ]);
 
-        // Tb_tk_sinhvien::insert([
-        //     'TenDangNhap' => "sang191204227@st.utc.edu.vn",
-        //     'MatKhau' => Hash::make('171372'),
-        //     'MaSinhVien' => "191204227",
-        // ]);
-
-        // Tb_tk_sinhvien::insert([
-        //     'TenDangNhap' => "hoang191204227@st.utc.edu.vn",
-        //     'MatKhau' => Hash::make('34352'),
-        //     'MaSinhVien' => "191204228",
-        // ]);
+        Tb_tk_sinhvien::insert([
+            'MatKhau' => Hash::make('1234'),
+            'MaSinhVien' => "191204228",
+        ]);
     }
 }
