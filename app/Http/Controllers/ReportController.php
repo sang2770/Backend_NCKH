@@ -19,7 +19,7 @@ class ReportController extends Controller
     //Thống kê biến động
     private function LogicFluctuations($request)
     {
-        $student=Tb_sinhvien::filter($request);
+        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request);
         $Learning=$student->select(
             DB::raw("
             sum(case when month(NgayQuanLy)<=1 then 1 else 0  END) as '1',
@@ -37,7 +37,7 @@ class ReportController extends Controller
             count(tb_sinhvien.MaSinhVien) as Tong
             ")
         )->where('TinhTrangSinhVien', 'like', "%Đang học%")->first()->toArray();
-        $student=Tb_sinhvien::filter($request);
+        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request);
         $Out=$student->select(
             DB::raw("
             sum(case when month(NgayKetThuc)=1 then 1 else 0  END) as '1',
@@ -90,7 +90,6 @@ class ReportController extends Controller
             ]);
        } catch (Exception $e) {
         return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
-           
        }
     }
     // Thống kê cập nhật
@@ -125,6 +124,7 @@ class ReportController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Nam' => 'required',
+            'MaSinhVien'=>'required'
         ]);
         if ($validator->fails()) {
             // Bad Request
@@ -339,7 +339,6 @@ class ReportController extends Controller
         $ResultLogic=$this->LogicExportImport($request);
         $HistoryCount=$ResultLogic[0];
         $History=$ResultLogic[1];
-
         $Export=[
             'Ngay'=>$date->day,
             'Thang'=>$date->month,
