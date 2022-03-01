@@ -19,7 +19,12 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
+            'MaSinhVien',
+            'HoTen',
+            'NgaySinh',
+            'NoiSinh',
+            'GioiTinh',
+            'DanToc',
             'TonGiao',
             'QuocTich',
             'DiaChiBaoTin',
