@@ -34,13 +34,19 @@ class Tb_sinhvien extends Authenticatable
         'TinhTrangSinhVien',
         'HeDaoTao',
         'MaLop',
+        "NgayQuanLy",
+        "NgayKetThuc"
     ];
     protected $hidden = [
         'created_at', 'updated_at'
     ];
     protected $primaryKey = 'MaSinhVien';
-    public $timestamps = true;
-
+    const CREATED_AT = 'NgayQuanLy';
+    const UPDATED_AT = 'updated_date';
+    public function filterNam($query, $value)
+    {
+        return $query->whereYear('NgayQuanLy', $value)->orWhereYear('NgayKetThuc', $value);
+    }
     public function filterMasinhvien($query, $value)
     {
         return $query->where('MaSinhVien', $value);

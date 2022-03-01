@@ -33,10 +33,13 @@ class CreateTbSinhvienTable extends Migration
             $table->string('HoKhauXaPhuong', 50);
             $table->string('TinhTrangSinhVien', 50);
             $table->string('HeDaoTao', 50);
+            $table->date('NgayQuanLy');
+            $table->date("updated_date");
+            $table->date('NgayKetThuc')->nullable();
             $table->unsignedInteger('MaLop');
             $table->primary('MaSinhVien');
             $table->foreign('MaLop')->references('MaLop')->on('Tb_lop');
-            $table->timestamps();
+            
         });
     }
 

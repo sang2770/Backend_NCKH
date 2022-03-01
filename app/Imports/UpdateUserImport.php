@@ -4,65 +4,62 @@ namespace App\Imports;
 
 use App\Models\Tb_lop;
 use App\Models\Tb_sinhvien;
-use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
-use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\ToModel;
 
-class UpdateUserImport implements ToCollection, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation
+class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation, SkipsOnFailure
 {
-    public function collection(Collection $rows)
+    use Importable, SkipsFailures;
+    public $Err = [];
+    protected $rowNum = 1;
+    public function model(array $row)
     {
-
-        foreach ($rows as $row) {
-            // var_dump($row);
-            if (empty($row['tt'])) {
-                return null;
-            }
-            $TenLop = $row['ten_lop'];
-            $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
-            Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update([
-                'HoTen' => $row['ho_ten'],
-                'NgaySinh' => $row['ngay_sinh'],
-                'NoiSinh' => $row['noi_sinh'],
-                'GioiTinh' => $row['gioi_tinh'],
-                'DanToc' => $row["dan_toc"],
-                'TonGiao' => $row['ton_giao'],
-                'QuocTich' => $row['quoc_tich'],
-                'DiaChiBaoTin' => $row['dia_chi_khi_bao_tin'],
-                'SDT' => $row['so_dien_thoai'],
-                'Email' => $row['email'],
-                'HoKhauTinh' => $row['ho_khau_tinhtp'],
-                'HoKhauHuyen' => $row['ho_khau_quanhuyen'],
-                'HoKhauXaPhuong' => $row['ho_khau_xaphuong'],
-                'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
-                'HeDaoTao' => $row['he_dao_tao'],
-                'MaLop' => $MaLop,
-            ]);
+        if (empty($row['tt'])) {
+            return null;
         }
+        ++$this->rowNum;
+        $TenLop = $row['ten_lop'];
+        $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
+        if (!$MaLop) {
+            $error = ['err' => "Không tồn tại Tên lớp!", "row" => $this->rowNum];
+            $this->Err[] = $error;
+            return null;
+        }
+        Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update([
+            'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
+        ]);
+        if(!Str::contains(str::upper($row['tinh_trang_sinh_vien']), Str::upper("Đang học")))
+            {
+                Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>date('Y-m-d')]);
+            }else{
+                Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>null]);     
+            }
+        return null;
     }
     public function  rules(): array
     {
         return [
             "*.ma_sinh_vien" => "required",
             '*.ho_ten' => "required",
-            "*.ngay_sinh" => "required",
-            "*.noi_sinh" => "required",
-            "*.email" => "required|email",
-            "*.gioi_tinh" => "required",
-            "*.ton_giao" => "required",
-            "*.quoc_tich" => "required",
-            "*.dan_toc" => "required",
-            "*.so_dien_thoai" => "required|digits:10",
-            "*.dia_chi_khi_bao_tin" => "required",
-            "*.he_dao_tao" => "required",
             "*.tinh_trang_sinh_vien" => "required",
-            "*.ho_khau_tinhtp" => "required",
-            "*.ho_khau_quanhuyen" => "required",
-            "*.ho_khau_xaphuong" => "required",
             "*.ten_lop" => "required"
+        ];
+    }
+    public function customValidationMessages()
+    {
+        return [
+            
+            'ma_sinh_vien.required' => 'Cột mã sinh viên là bắt buộc',
+            'ho_ten.required' => 'Cột họ tên là bắt buộc',
+            'tinh_trang_sinh_vien.required'=>'Cột tình trạng sinh viên là bắt buộc là bắt buộc'
+
         ];
     }
     public function chunkSize(): int
