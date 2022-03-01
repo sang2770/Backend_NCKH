@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBangLichSu extends Migration
+class CreateErrImportStudent extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateBangLichSu extends Migration
      */
     public function up()
     {
-        Schema::create('Tb_LichSu', function (Blueprint $table) {
-            $table->increments("ID");
-            $table->string("NoiDung", 500);
-            $table->string("MaSinhVien");
+        Schema::create('tb_ErrImportStudent', function (Blueprint $table) {
+            $table->id();
+            $table->string("NoiDung", 1000);
             $table->dateTime("ThoiGian");
+            $table->string("TrangThai", 50);
             $table->unsignedInteger("MaTK");
-            $table->foreign("MaSinhVien")->references("MaSinhVien")->on("Tb_sinhvien");
             $table->foreign("MaTK")->references("MaTK")->on("Tb_tk_quanly");
         });
     }
@@ -31,6 +30,6 @@ class CreateBangLichSu extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Tb_LichSu');
+        Schema::dropIfExists('tb_ErrImportStudent');
     }
 }

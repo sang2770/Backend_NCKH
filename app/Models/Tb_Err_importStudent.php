@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tb_lichsu extends Model
+class Tb_Err_importStudent extends Model
 {
-
-    protected $table = 'Tb_lichsu';
-    protected $primaryKey = 'ID';
+    use HasFactory;
+    protected $table = 'tb_ErrImportStudent';
     protected $fillable = [
-        'ID',
         'NoiDung',
-        'MaSinhVien',
+        'ThoiGian',
         'MaTK',
-        "ThoiGian"
+        'TrangThai'
     ];
-    public $timestamps = true;
     const CREATED_AT = "ThoiGian";
     const UPDATED_AT = null;
 }

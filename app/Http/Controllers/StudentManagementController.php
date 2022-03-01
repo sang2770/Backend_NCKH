@@ -10,6 +10,7 @@ use App\Imports\ClassImport;
 use App\Imports\MajorImport;
 use App\Imports\UpdateUserImport;
 use App\Imports\UsersImport;
+use App\Models\Tb_Err_importStudent;
 use App\Models\Tb_khoa;
 use App\Models\Tb_lichsu;
 use App\Models\Tb_lop;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPUnit\TextUI\Help;
-
+use Illuminate\Support\Str;
 class StudentManagementController extends Controller
 {
     /**
@@ -98,7 +99,9 @@ class StudentManagementController extends Controller
         }
         $import = new UsersImport();
         $import->import($request->file);
+        $Admin = $request->user()->MaTK;
         if ($import->failures()->count() == 0 && count($import->Err) == 0) {
+            Tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
             return response()->json(['status' => "Success"]);
         } else {
             $errors = [];
@@ -117,6 +120,8 @@ class StudentManagementController extends Controller
                     $errors[$value['row']] = $value['err'];
                 }
             }
+            
+            Tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên có ".count($errors)." lỗi","TrangThai"=>"Failed", "MaTK"=>$Admin]);
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         }
     }
@@ -211,7 +216,6 @@ class StudentManagementController extends Controller
                 return response()->json(['status' => "Failed", 'Err_Message' => "MaLop không tồn tại"]);
             }
             unset($validated['_method']);
-
             $user = Tb_sinhvien::find($id);
             if (!$user) {
                 return response()->json(['status' => "Failed"]);
@@ -225,6 +229,12 @@ class StudentManagementController extends Controller
             }
             DB::transaction(function () use ($validated, $id, $Admin, $NoiDung) { // Start the transaction
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
+                if(!Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Đang học")))
+                {
+                    Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>date('Y-m-d')]);
+                }else{
+                    Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>null]);     
+                }
                 if (strlen($NoiDung) > 0) {
                     Tb_lichsu::create(['NoiDung' => $NoiDung, 'MaSinhVien' => $id, 'MaTK' => $Admin]);
                 }
@@ -243,19 +253,43 @@ class StudentManagementController extends Controller
     /**
      * sửa theo danh sách sinh viên
      */
-    // public function updateImport(Request $request)
-    // {
-    //     try {
-    //         Excel::import(new UpdateUserImport, $request->file, \Maatwebsite\Excel\Excel::XLSX);
-    //         return response()->json(['status' => "Success"]);
-    //     } catch (\Maatwebsite\Excel\Validators\ValidationException $failures) {
-    //         $errors = [];
-    //         foreach ($failures->failures() as $value) {
-    //             $errors[] = ['row' => $value->row(), 'err' => $value->errors()];
-    //         }
-    //         return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
-    //     }
-    // }
+    public function updateImport(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Bạn chưa chọn file']);
+        }
+        $Admin = $request->user()->MaTK;
+        $import = new UpdateUserImport();
+        $import->import($request->file);
+        if ($import->failures()->count() == 0 && count($import->Err) == 0) {
+            Tb_Err_importStudent::create(['NoiDung'=>"Sửa trạng thái sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
+            return response()->json(['status' => "Success"]);
+        } else {
+            $errors = [];
+            foreach ($import->failures() as $value) {
+                if (Arr::get($errors, $value->row())) {
+                    $errors[$value->row()] = $errors[$value->row()] . ',' . implode(", ", $value->errors());
+                } else {
+                    $errors[$value->row()] = implode(", ", $value->errors());
+                }
+            }
+            foreach ($import->Err as $value) {
+
+                if (Arr::get($errors, $value['row'])) {
+                    $errors[$value['row']] = $errors[$value['row']] . ',' . $value['err'];
+                } else {
+                    $errors[$value['row']] = $value['err'];
+                }
+            }
+            Tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên có ".count($errors)." lỗi","TrangThai"=>"Failed", "MaTK"=>$Admin]);
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
+        }
+        
+    }
     /**
      * Lấy danh sách khoa
      */
