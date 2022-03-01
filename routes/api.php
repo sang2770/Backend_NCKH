@@ -162,11 +162,11 @@ Route::group([
     Route::get('show-notification/{id}', [NotificationController::class, 'show']); //lay ra tieu de va noi dung thong bao voi $id
     Route::post('store-notification', [NotificationController::class, 'StoreNotification']);  //luu thong bao moi
     Route::put('update-notification/{id}', [NotificationController::class, 'UpdateNotification']); //update thong bao
-    Route::put('update-notification-file/{id}', [NotificationController::class, 'UpdateNoti']); //update filename thong bao
+    Route::put('update-notification-file/{id}', [NotificationController::class, 'UpdateNoti']); //update filename sau khi xoa
     Route::delete('delete-notification/{id}', [NotificationController::class, 'DestroyNotification']); //xoa 1 thong bao
     Route::post('sent-notification-students', [NotificationController::class, 'SentNotificationStudent']); //gui thong bao den sinh vien
     Route::post('post-notification-file/{id}', [NotificationController::class, 'UpdateFile']); //update file thong bao
     Route::delete('delete-notification-file/{id}', [NotificationController::class, 'DeleteFile']); //xoa file thong bao
-    Route::put('update-filename/{id}/{filename}', [NotificationController::class, 'UpdateName']); //xoa file thong bao
+    Route::put('update-filename/{id}/{filename}', [NotificationController::class, 'UpdateName']); //update filename sau khi uploadfile
 
 });
