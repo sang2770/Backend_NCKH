@@ -20,7 +20,7 @@ class ReportController extends Controller
     //Thống kê biến động
     private function LogicFluctuations($request)
     {
-        $student= DB::table('Tb_sinhvien')->join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa');
+        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request);
         $Learning=$student->select(
             DB::raw("
             sum(case when month(NgayQuanLy)<=1 then 1 else 0  END) as '1',
