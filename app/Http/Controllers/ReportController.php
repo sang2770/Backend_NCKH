@@ -41,6 +41,7 @@ class ReportController extends Controller
                 }
             }
         }
+        var_dump($Learning);
         $Learning['Tong']=max($Learning);
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
@@ -85,7 +86,6 @@ class ReportController extends Controller
         }
        try {
         $result=$this->LogicFluctuations($request);
-        var_dump($result);
         return response()->json([
             'status'=>"Success",
             'data'=>[
