@@ -100,7 +100,7 @@ class ReportController extends Controller
     // Thống kê cập nhật
     private function LogicUpdateReport($request)
     {
-        $list = Tb_lichsu::where('tb_lichsu.MaSinhVien', $request->MaSinhVien);
+        $list = Tb_lichsu::where('Tb_lichsu.MaSinhVien', $request->MaSinhVien);
             
             if($list->count()==0)
             {
@@ -120,9 +120,9 @@ class ReportController extends Controller
                 $list =$list->whereYear('ThoiGian', $request->Nam);
             }
             $list=$list
-                ->join('tb_tk_quanly', 'tb_tk_quanly.MaTK', '=', 'tb_lichsu.MaTK')
-                ->join('tb_sinhvien', 'tb_sinhvien.MaSinhVien', '=', 'tb_lichsu.MaSinhVien')
-                ->select('NoiDung', 'TenDangNhap', 'ThoiGian', 'tb_lichsu.MaSinhVien');
+                ->join('Tb_tk_quanly', 'Tb_tk_quanly.MaTK', '=', 'Tb_lichsu.MaTK')
+                ->join('tb_sinhvien', 'tb_sinhvien.MaSinhVien', '=', 'Tb_lichsu.MaSinhVien')
+                ->select('NoiDung', 'TenDangNhap', 'ThoiGian', 'Tb_lichsu.MaSinhVien');
             return $list;           
     }
     public function ExportUpdate(Request $request)
