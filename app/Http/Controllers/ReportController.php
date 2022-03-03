@@ -61,14 +61,14 @@ class ReportController extends Controller
                 }
             }
         }
-        var_dump($Out);
+        
         $chart=[];
         if($Learning['Tong']!=0 || $Out['Tong']!=0)
         {
             foreach ($Learning as $key => $value) {
                 if($key!='Tong')
                 {
-                $chart[]=[$value, $Out[$key]?$Out[$key]:0];
+                $chart[]=[$value, isset($Out[$key])?$Out[$key]:0];
                 }
             }
             
