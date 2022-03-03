@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Tb_Err_importStudent;
+use App\Models\Tb_giay_xn_truong;
 use App\Models\Tb_lichsu;
 use App\Models\Tb_lop;
 use App\Models\Tb_sinhvien;
@@ -366,7 +367,263 @@ class ReportController extends Controller
         }
     }
     
-    
+    ///thong ke tinh trang cap phat giay gioi thieu di chuyen tu truong
+    private function CreateReportMove($request)
+    {
+        $student=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+        ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
+        ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+        ->filter($request);
+        $Learning=$student->select(
+            DB::raw("
+            sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
+            sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
+            sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
+            sum(case when month(NgayCap)=4 then 1 else 0  END) as '4',
+            sum(case when month(NgayCap)=5 then 1 else 0  END) as '5',
+            sum(case when month(NgayCap)=6 then 1 else 0  END) as '6',
+            sum(case when month(NgayCap)=7 then 1 else 0  END) as '7',
+            sum(case when month(NgayCap)=8 then 1 else 0  END) as '8',
+            sum(case when month(NgayCap)=9 then 1 else 0  END) as '9',
+            sum(case when month(NgayCap)=10 then 1 else 0  END) as '10',
+            sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
+            sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
+            count(Tb_giay_dc_truong.MaGiayDC_Truong) as Tong
+            ")
+        )->where('TinhTrangSinhVien', 'like', "%Đã tốt nghiệp%");
 
+        if($request->Khoas){
+            $Learning = $Learning->where('Tb_lop.Khoas', '=', $request->Khoas);
+        }
 
+        $Learning = $Learning->first()->toArray();
+        $studentOut=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+        ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
+        ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+        ->filter($request);
+        $Out=$studentOut->select(
+            DB::raw("
+            sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
+            sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
+            sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
+            sum(case when month(NgayCap)=4 then 1 else 0  END) as '4',
+            sum(case when month(NgayCap)=5 then 1 else 0  END) as '5',
+            sum(case when month(NgayCap)=6 then 1 else 0  END) as '6',
+            sum(case when month(NgayCap)=7 then 1 else 0  END) as '7',
+            sum(case when month(NgayCap)=8 then 1 else 0  END) as '8',
+            sum(case when month(NgayCap)=9 then 1 else 0  END) as '9',
+            sum(case when month(NgayCap)=10 then 1 else 0  END) as '10',
+            sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
+            sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
+            count(Tb_giay_dc_truong.MaGiayDC_Truong) as Tong
+            ")
+        )->where('TinhTrangSinhVien', 'like', "%Đã thôi học%");
+        
+        if($request->Khoas){
+            $Out = $Out->where('Tb_lop.Khoas', '=', $request->Khoas);
+        }
+
+        $Out = $Out->first()->toArray();
+
+        $chart=[];
+        if($Learning['Tong']!=0 || $Out['Tong']!=0)
+        {
+            foreach ($Learning as $key => $value) {
+                if($key!='Tong')
+                {
+                $chart[]=[$value, $Out[$key]?$Out[$key]:0];
+                }
+            }
+        }
+        return [$Learning['Tong'], $Out['Tong'], $chart];
+    }
+
+    public function ReportMoveMilitary(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'Nam' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Thiếu dữ liệu đầu vào']);
+        }
+       try {
+        $result=$this->CreateReportMove($request);
+        return response()->json([
+            'status'=>"Success",
+            'data'=>[
+                "Total_Learning"=>$result[0],
+                "Total_Out"=>$result[1],
+                "Chart"=>$result[2]
+            ]
+            ]);
+       } catch (Exception $e) {
+        return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+       }
+    }
+
+    //thong ke tinh trang cap phat giay xac nhan nvqs
+    private function CreateReportConfirm($request)
+    {
+        $student=Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+        ->join('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
+        ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+        ->filter($request);
+        $Learning=$student->select(
+            DB::raw("
+            sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
+            sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
+            sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
+            sum(case when month(NgayCap)=4 then 1 else 0  END) as '4',
+            sum(case when month(NgayCap)=5 then 1 else 0  END) as '5',
+            sum(case when month(NgayCap)=6 then 1 else 0  END) as '6',
+            sum(case when month(NgayCap)=7 then 1 else 0  END) as '7',
+            sum(case when month(NgayCap)=8 then 1 else 0  END) as '8',
+            sum(case when month(NgayCap)=9 then 1 else 0  END) as '9',
+            sum(case when month(NgayCap)=10 then 1 else 0  END) as '10',
+            sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
+            sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
+            count(Tb_giay_xn_truong.MaGiayXN_Truong) as Tong
+            ")
+        )->where('Tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
+        
+        if($request->Khoas){
+            $Learning = $Learning->where('Tb_lop.Khoas', '=', $request->Khoas);
+        }
+
+        $Learning = $Learning->first()->toArray();
+        $chart=[];
+        if($Learning['Tong']!=0)
+        {
+            foreach ($Learning as $key => $value) {
+                if($key!='Tong')
+                {
+                    $chart[]=[$value];
+                }
+            }
+        }
+        return [$Learning['Tong'], $chart];
+    }
+
+    public function ReportConfirmMilitary(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'Nam' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Thiếu dữ liệu đầu vào']);
+        }
+       try {
+        $result=$this->CreateReportConfirm($request);
+        return response()->json([
+            'status'=>"Success",
+            'data'=>[
+                "Total_Learning"=>$result[0],
+                "Chart"=>$result[1]
+            ]
+            ]);
+       } catch (Exception $e) {
+        return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+       }
+    }
+
+    //xuat bao cao thong ke tinh trang cap phat giay xac nhan nvqs theo thang nam khoas
+    public function ExportFileConfirm(Request $request){
+        $validator = Validator::make($request->all(), [
+            'Nam' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Thiếu dữ liệu đầu vào']);
+        }
+        try {
+        $date=Carbon::now();
+        $result=$this->CreateReportConfirm($request);
+        if($request->Thang){
+            $templateProcessor = new TemplateProcessor('TemplateReport/ExportConfirmMiliMonth.docx');
+        }
+        else{
+            $templateProcessor = new TemplateProcessor('TemplateReport/ExportConfirmMili.docx');
+        }
+        $Export=[
+            'Ngay'=>$date->day,
+            'Thang'=>$date->month,
+            'Nam'=>$date->year,
+            'NamTk'=>$request->Nam,
+            'ThangTK'=>$request->Thang ? "Tháng ".$request->Thang : "",
+            'NgayTK'=>$request->Ngay ? "Ngày ".$request->Ngay : "",
+            'Khoas'=>$request->Khoas ? "\n- Khóa: ".$request->Khoas : "",
+            "Total_Learning"=>$request->Thang ? $result[1][(int)$request->Thang - 1][0] : $result[0],
+        ];
+
+        if($result[1]){
+            foreach ($result[1] as $key=> $value) {
+                $Export['I'.($key+1)]=$value[0];
+            }
+        }else{
+            $month = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+            foreach ($month as $m) {
+                $Export['I'.($m)]=0;
+            }
+        }
+        $templateProcessor->cloneBlock('block_name', 0, true, false, [$Export]);
+        $filename = "ReportConfirm";
+        $templateProcessor->saveAs($filename . '.docx');
+        return response()->download($filename . '.docx')->deleteFileAfterSend(true);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
+
+    //xuat bao cao thong ke tinh trang cap phat giay gioi thieu di chuyen nvqs theo thang nam khoas
+    public function ExportFileMove(Request $request){
+        $validator = Validator::make($request->all(), [
+            'Nam' => 'required',
+        ]);
+        if ($validator->fails()) {
+            // Bad Request
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Thiếu dữ liệu đầu vào']);
+        }
+        try {
+        $date=Carbon::now();
+        $result=$this->CreateReportMove($request);
+        if($request->Thang){
+            $templateProcessor = new TemplateProcessor('TemplateReport/ExportMoveMiliMonth.docx');
+        }
+        else{
+            $templateProcessor = new TemplateProcessor('TemplateReport/ExportMoveMili.docx');
+        }
+        $Export=[
+            'Ngay'=>$date->day,
+            'Thang'=>$date->month,
+            'Nam'=>$date->year,
+            'NamTk'=>$request->Nam,
+            'ThangTK'=>$request->Thang ? "Tháng ".$request->Thang : "",
+            'NgayTK'=>$request->Ngay ? "Ngày ".$request->Ngay : "",
+            'Khoas'=>$request->Khoas ? "\n- Khóa: ".$request->Khoas : "",
+            "Total_Learning"=>$request->Thang ? $result[2][(int)$request->Thang - 1][0] : $result[0],
+            "Total_Out"=>$request->Thang ? $result[2][(int)$request->Thang - 1][1] : $result[1],
+        ];
+        if($result[2]){
+            foreach ($result[2] as $key=> $value) {
+                $Export['I'.($key+1)]=$value[0];
+                $Export['O'.($key+1)]=$value[1];
+            }
+        }else{
+            $month = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+            foreach ($month as $m) {
+                $Export['I'.($m)]=0;
+                $Export['O'.($m)]=0;
+            }
+        }
+
+        $templateProcessor->cloneBlock('block_name', 0, true, false, [$Export]);
+        $filename = "ReportConfirm";
+        $templateProcessor->saveAs($filename . '.docx');
+        return response()->download($filename . '.docx')->deleteFileAfterSend(true);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
 }

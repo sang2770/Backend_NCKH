@@ -101,7 +101,10 @@ Route::prefix('export-report')->group(
         Route::get('export-student-fluctuations', [ReportController::class, 'ReportFluctuations']);
         Route::get('export-student-update', [ReportController::class, 'ReportUpdate']);
         Route::get('export-student-import', [ReportController::class, 'ReportImport']);
-
+        Route::get('report-movemili', [ReportController::class, 'ReportMoveMilitary']);
+        Route::get('report-confirm-mili', [ReportController::class, 'ReportConfirmMilitary']);
+        Route::get('export-file-confirm-mili', [ReportController::class, 'ExportFileConfirm']);
+        Route::get('export-file-move-mili', [ReportController::class, 'ExportFileMove']);
 
     }
 );

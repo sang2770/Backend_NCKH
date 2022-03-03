@@ -38,9 +38,12 @@ class StudentSeeder extends Seeder
             'SoCMTND' => '191203368',
             'NgayCapCMTND' => '2022-10-10',
             'NoiCapCMTND' => "HaiHau",
+            'NgayQuanLy' => '2019-09-10',
+            'updated_date' => '2019-09-10',
+            'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204227',
+            'MaSinhVien'        => '191203366',
             'HoTen'             => 'Nguyễn Văn Sang',
             'NgaySinh'          => '2001-10-26',
             'NoiSinh'           => 'Hà Nội',
@@ -60,6 +63,9 @@ class StudentSeeder extends Seeder
             'TinhTrangSinhVien' => 'Đang học',
             'HeDaoTao'          => 'Hệ đào tạo chính quy',
             'MaLop'             => '2',
+            'NgayQuanLy' => '2019-09-10',
+            'updated_date' => '2019-09-10',
+            'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
             'MaSinhVien'        => '191204226',
@@ -82,6 +88,9 @@ class StudentSeeder extends Seeder
             'TinhTrangSinhVien' => 'Đang học',
             'HeDaoTao'          => 'Hệ đào tạo chính quy',
             'MaLop'             => '3',
+            'NgayQuanLy' => '2019-09-10',
+            'updated_date' => '2019-09-10',
+            'NgayKetThuc'  => '2023-06-25',
         ]);
     }
 }

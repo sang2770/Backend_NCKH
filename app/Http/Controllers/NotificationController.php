@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
 use App\Http\Requests\NotificationRequest;
+use App\Models\Tb_giay_cn_dangky;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_thongbaosv;
 use Illuminate\Support\Facades\File;
@@ -250,8 +251,12 @@ class NotificationController extends Controller
         $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
                             ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
                             ->join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                            ->select('Tb_tk_sinhvien.MaTKSV', 'Tb_sinhvien.MaSinhVien');
+                            ->leftJoin('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+                            ->select('Tb_sinhvien.MaSinhVien', 'Tb_giay_cn_dangky.MaGiayDK', 'Tb_tk_sinhvien.MaTKSV');
 
+        if($request->MaGiayDK){
+            $info = $info->where('Tb_giay_cn_dangky.MaGiayDK', '=', null);
+        }
         if($request->MaSinhVien){
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
@@ -278,7 +283,7 @@ class NotificationController extends Controller
                     ]);
                 }
             }
-            return response()->json(['status' => "Success"]);
+            return response()->json(['status' => "Success", 'data' => $info]);
         }
         else{
             return response()->json(['status' => "Not Found"]);

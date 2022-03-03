@@ -22,7 +22,7 @@ class TKSVSeeder extends Seeder
         
         Tb_tk_sinhvien::insert([
             'MatKhau' => Hash::make('1234'),
-            'MaSinhVien' => "191204227",
+            'MaSinhVien' => "191203366",
         ]);
 
         Tb_tk_sinhvien::insert([
