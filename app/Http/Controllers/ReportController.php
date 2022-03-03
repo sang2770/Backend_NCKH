@@ -226,7 +226,7 @@ class ReportController extends Controller
                     $Total_Failed+=1;
                 }
             }
-            $History=Tb_Err_importStudent::join('tb_tk_quanly', 'tb_tk_quanly.MaTK', '=', 'tb_ErrImportStudent.MaTK')
+            $History=Tb_Err_importStudent::join('Tb_tk_quanly', 'Tb_tk_quanly.MaTK', '=', 'tb_ErrImportStudent.MaTK')
             ->select('TenDangNhap', 'NoiDung', 'ThoiGian', 'TrangThai');
             return [[$Total_Success, $Total_Failed], $History];
     }
