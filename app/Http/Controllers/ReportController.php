@@ -22,70 +22,49 @@ class ReportController extends Controller
     {
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
-        ->filter($request);
-        // $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
-        // $Learning=[];
-        // $Learning['Tong']=0;
-        // foreach ($student as $key=>$value) {
-        //     $time=Carbon::parse($value['NgayQuanLy']);
-        //     for($i=0;$i<count($Month);$i++) {
-        //         var_dump($i);
-        //         // if($time->month <= $Month[$i])
-        //         // {
-        //         //     $Learning[''.$Month[$i]]=$Learning[''.$Month[$i]]?$Learning[''.$Month[$i]]+1:1;
-        //         //     var_dump(''.$Month[$i]);
-        //         // }else{
-        //         //     break;
-        //         // }
-        //     }
-        //     $Learning['Tong']+=1;     
-        // }
-        // var_dump($Learning);
-        $Learning=$student->select(
-            DB::raw("
-            sum(case when month(NgayQuanLy)<=1 then 1 else 0  END) as '1',
-            sum(case when month(NgayQuanLy)<=2 then 1 else 0  END) as '2',
-            sum(case when month(NgayQuanLy)<=3 then 1 else 0  END) as '3',
-            sum(case when month(NgayQuanLy)<=4 then 1 else 0  END) as '4',
-            sum(case when month(NgayQuanLy)<=5 then 1 else 0  END) as '5',
-            sum(case when month(NgayQuanLy)<=6 then 1 else 0  END) as '6',
-            sum(case when month(NgayQuanLy)<=7 then 1 else 0  END) as '7',
-            sum(case when month(NgayQuanLy)<=8 then 1 else 0  END) as '8',
-            sum(case when month(NgayQuanLy)<=9 then 1 else 0  END) as '9',
-            sum(case when month(NgayQuanLy)<=10 then 1 else 0  END) as '10',
-            sum(case when month(NgayQuanLy)<=11 then 1 else 0  END) as '11',
-            sum(case when month(NgayQuanLy)<=12 then 1 else 0  END) as '12',
-            count(tb_sinhvien.MaSinhVien) as Tong
-            ")
-        )->where('TinhTrangSinhVien', 'like', "%Đang học%")->first()->toArray();
-        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request);
-        $Out=$student->select(
-            $student->raw("
-            sum(case when month(NgayKetThuc)=1 then 1 else 0  END) as '1',
-            sum(case when month(NgayKetThuc)=2 then 1 else 0  END) as '2',
-            sum(case when month(NgayKetThuc)=3 then 1 else 0  END) as '3',
-            sum(case when month(NgayKetThuc)=4 then 1 else 0  END) as '4',
-            sum(case when month(NgayKetThuc)=5 then 1 else 0  END) as '5',
-            sum(case when month(NgayKetThuc)=6 then 1 else 0  END) as '6',
-            sum(case when month(NgayKetThuc)=7 then 1 else 0  END) as '7',
-            sum(case when month(NgayKetThuc)=8 then 1 else 0  END) as '8',
-            sum(case when month(NgayKetThuc)=9 then 1 else 0  END) as '9',
-            sum(case when month(NgayKetThuc)=10 then 1 else 0  END) as '10',
-            sum(case when month(NgayKetThuc)=11 then 1 else 0  END) as '11',
-            sum(case when month(NgayKetThuc)=12 then 1 else 0  END) as '12',
-            count(tb_sinhvien.MaSinhVien) as Tong
-            ")
-        )->where('TinhTrangSinhVien', 'not like', "%Đang học%")->first()->toArray();
-        // var_dump(Tb_sinhvien::where('TinhTrangSinhVien', 'not like', "%Đang học%")->first()->toArray());
+        ->filter($request)->get()->toArray();
+        $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
+        $Learning=[];
+        $Learning['Tong']=0;
+        foreach ($student as $key=>$value) {
+            $time=Carbon::parse($value['NgayQuanLy']);
+            for($i=0;$i<count($Month);$i++) {
+                $month=$Month[$i];
+                if($time->month < $month)
+                {
+                    $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
+                }else{
+                    $Learning["$month"]=0;
+                }
+            }
+            $Learning['Tong']+=1;     
+        }
+        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->get()->toArray();
+        $Out=[];
+        $Out['Tong']=0;
+        foreach ($student as $key=>$value) {
+            $time=Carbon::parse($value['NgayQuanLy']);
+            for($i=0;$i<count($Month);$i++) {
+                $month=$Month[$i];
+                if($time->month == $month)
+                {
+                    $Out["$month"] = isset($Out["$month"])?($Out["$month"]+1):1; 
+                }else{
+                    $Out["$month"]=0;
+                }
+            }
+            $Out['Tong']+=1;     
+        }
         $chart=[];
         if($Learning['Tong']!=0 || $Out['Tong']!=0)
         {
-        foreach ($Learning as $key => $value) {
-            if($key!='Tong')
-            {
-            $chart[]=[$value, $Out[$key]?$Out[$key]:0];
+            foreach ($Learning as $key => $value) {
+                if($key!='Tong')
+                {
+                $chart[]=[$value, $Out[$key]?$Out[$key]:0];
+                }
             }
-        }
+            
         }
         return [$Learning['Tong'], $Out['Tong'], $chart];
     }
