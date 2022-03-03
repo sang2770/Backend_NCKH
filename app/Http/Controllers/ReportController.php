@@ -33,11 +33,12 @@ class ReportController extends Controller
                 if($time->month < $month)
                 {
                     $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
-                    $Learning['Tong']+=1;     
                 }else{
                     $Learning["$month"]=0;
                 }
             }
+            $Learning['Tong']+=1;     
+
         }
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->get()->toArray();
         $Out=[];
