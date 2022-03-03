@@ -85,6 +85,7 @@ class ReportController extends Controller
         }
        try {
         $result=$this->LogicFluctuations($request);
+        var_dump($result);
         return response()->json([
             'status'=>"Success",
             'data'=>[
