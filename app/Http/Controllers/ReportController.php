@@ -490,8 +490,8 @@ class ReportController extends Controller
         if($request->Khoas){
             $Learning = $Learning->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
-
         $Learning = $Learning->first()->toArray();
+        
         $chart=[];
         if($Learning['Tong']!=0)
         {
