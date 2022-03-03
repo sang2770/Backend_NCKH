@@ -375,8 +375,7 @@ class ReportController extends Controller
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
         ->filter($request);
-        $Learning=$student->select(
-            DB::raw("
+        $Learning=$student->selectRaw("
             sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
             sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
             sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
@@ -390,7 +389,7 @@ class ReportController extends Controller
             sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
             sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
             count(Tb_giay_dc_truong.MaGiayDC_Truong) as Tong
-            ")
+            "
         )->where('TinhTrangSinhVien', 'like', "%Đã tốt nghiệp%");
 
         if($request->Khoas){
