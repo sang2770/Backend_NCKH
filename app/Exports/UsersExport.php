@@ -19,27 +19,27 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'MaSinhVien',
-            'HoTen',
-            'NgaySinh',
-            'NoiSinh',
-            'GioiTinh',
-            'DanToc',
-            'TonGiao',
-            'QuocTich',
-            'DiaChiBaoTin',
-            'SDT',
+            'Mã sinh viên',
+            'Họ và tên',
+            'Ngày sinh',
+            'Nơi sinh',
+            'Giới tính',
+            'Dân tộc',
+            'Tôn giáo',
+            'Quốc tịch',
+            'Địa chỉ báo tin',
+            'Số điện thoại',
             'Email',
-            'HoKhauTinh',
-            'HoKhauHuyen',
-            'HoKhauXaPhuong',
-            'TinhTrangSinhVien',
-            'HeDaoTao',
-            'TenKhoa',
-            'TenLop',
-            'SoCMTND',
-            'NgayCapCMTND',
-            'NoiCapCMTND'
+            'Hộ khẩu tỉnh',
+            'Hộ khẩu huyện',
+            'Hộ khẩu xã phường',
+            'Tình trạng sinh viên',
+            'Hệ đào tạo',
+            'Tên khoa',
+            'Tên lớp',
+            'Số CMTND',
+            'Ngày cấp CMTND',
+            'Nơi cấp CMTND'
         ];
     }
     /**
