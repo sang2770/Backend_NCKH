@@ -33,27 +33,28 @@ class ReportController extends Controller
                 if($time->month < $month)
                 {
                     $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
+                    $Learning['Tong']+=1;     
                 }else{
                     $Learning["$month"]=0;
                 }
             }
-            $Learning['Tong']+=1;     
         }
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->get()->toArray();
         $Out=[];
         $Out['Tong']=0;
         foreach ($student as $key=>$value) {
-            $time=Carbon::parse($value['NgayQuanLy']);
+            $time=Carbon::parse($value['NgayKetThuc']);
             for($i=0;$i<count($Month);$i++) {
                 $month=$Month[$i];
                 if($time->month == $month)
                 {
                     $Out["$month"] = isset($Out["$month"])?($Out["$month"]+1):1; 
+                    $Out['Tong']+=1;     
+
                 }else{
                     $Out["$month"]=0;
                 }
             }
-            $Out['Tong']+=1;     
         }
         $chart=[];
         if($Learning['Tong']!=0 || $Out['Tong']!=0)
