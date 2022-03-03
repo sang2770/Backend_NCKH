@@ -103,7 +103,7 @@ class ReportController extends Controller
         $list = Tb_lichsu::where('Tb_LichSu.MaSinhVien', $request->MaSinhVien);
             if($list->count()==0)
             {
-               return false;
+               return null;
             }
             if($request->Ngay)
             {
