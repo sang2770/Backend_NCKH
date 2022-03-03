@@ -100,7 +100,7 @@ class ReportController extends Controller
     // Thống kê cập nhật
     private function LogicUpdateReport($request)
     {
-        $list = Tb_lichsu::where('Tb_LichSu.MaSinhVien', $request->MaSinhVien);
+        $list = DB::table('Tb_LichSu')->where('Tb_LichSu.MaSinhVien', $request->MaSinhVien);
             
             if($list->count()==0)
             {
