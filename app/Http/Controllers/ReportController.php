@@ -41,7 +41,7 @@ class ReportController extends Controller
                 }
             }
         }
-        var_dump($Learning);
+        
         $Learning['Tong']=max($Learning);
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
@@ -61,6 +61,7 @@ class ReportController extends Controller
                 }
             }
         }
+        var_dump($Out);
         $chart=[];
         if($Learning['Tong']!=0 || $Out['Tong']!=0)
         {
