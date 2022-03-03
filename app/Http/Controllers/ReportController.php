@@ -100,7 +100,7 @@ class ReportController extends Controller
     // Thống kê cập nhật
     private function LogicUpdateReport($request)
     {
-        $list = DB::table('Tb_LichSu')->where('Tb_LichSu.MaSinhVien', $request->MaSinhVien);
+        $list = Tb_lichsu::where('Tb_LichSu.MaSinhVien', $request->MaSinhVien);
             
             if($list->count()==0)
             {
@@ -161,6 +161,7 @@ class ReportController extends Controller
             $limit = $request->query('limit');
             $page = $request->query('page');
             $list=$this->LogicUpdateReport($request);
+            var_dump($list);
             $list=$list->paginate($limit, [
                     '*'
             ], 'page', $page)->toArray();
