@@ -20,7 +20,27 @@ class ReportController extends Controller
     //Thống kê biến động
     private function LogicFluctuations($request)
     {
-        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request);
+        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
+        ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
+        ->filter($request);
+        // $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
+        // $Learning=[];
+        // $Learning['Tong']=0;
+        // foreach ($student as $key=>$value) {
+        //     $time=Carbon::parse($value['NgayQuanLy']);
+        //     for($i=0;$i<count($Month);$i++) {
+        //         var_dump($i);
+        //         // if($time->month <= $Month[$i])
+        //         // {
+        //         //     $Learning[''.$Month[$i]]=$Learning[''.$Month[$i]]?$Learning[''.$Month[$i]]+1:1;
+        //         //     var_dump(''.$Month[$i]);
+        //         // }else{
+        //         //     break;
+        //         // }
+        //     }
+        //     $Learning['Tong']+=1;     
+        // }
+        // var_dump($Learning);
         $Learning=$student->select(
             DB::raw("
             sum(case when month(NgayQuanLy)<=1 then 1 else 0  END) as '1',
@@ -40,7 +60,7 @@ class ReportController extends Controller
         )->where('TinhTrangSinhVien', 'like', "%Đang học%")->first()->toArray();
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request);
         $Out=$student->select(
-            DB::raw("
+            $student->raw("
             sum(case when month(NgayKetThuc)=1 then 1 else 0  END) as '1',
             sum(case when month(NgayKetThuc)=2 then 1 else 0  END) as '2',
             sum(case when month(NgayKetThuc)=3 then 1 else 0  END) as '3',
