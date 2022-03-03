@@ -101,10 +101,9 @@ class ReportController extends Controller
     private function LogicUpdateReport($request)
     {
         $list = Tb_lichsu::where('Tb_LichSu.MaSinhVien', $request->MaSinhVien);
-        var_dump($list->count());
             if($list->count()==0)
             {
-               return response()->json(['status' => "Failed", 'Err_Message' =>"Not found!"]);
+               return false;
             }
             if($request->Ngay)
             {
@@ -161,6 +160,11 @@ class ReportController extends Controller
             $limit = $request->query('limit');
             $page = $request->query('page');
             $list=$this->LogicUpdateReport($request);
+            if(!$list)
+            {
+                return response()->json(['status' => "Failed", 'Err_Message' =>"Not found!"]);
+
+            }
             $list=$list->paginate($limit, [
                     '*'
             ], 'page', $page)->toArray();
