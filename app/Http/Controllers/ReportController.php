@@ -30,17 +30,21 @@ class ReportController extends Controller
             $time=Carbon::parse($value['NgayQuanLy']);
             for($i=0;$i<count($Month);$i++) {
                 $month=$Month[$i];
-                if($time->month < $month)
+                if($time->month <= $month  && !$value["NgayKetThuc"] 
+                || $value["NgayKetThuc"] && Carbon::parse($value['NgayKetThuc'])->month >= $month)
                 {
                     $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
-                }else{
+                }
+                else
+                {
                     $Learning["$month"]=0;
                 }
             }
-            $Learning['Tong']+=1;     
-
         }
-        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->get()->toArray();
+        $Learning['Tong']=max($Learning);
+        $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
+        ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
+        ->filter($request)->where('TinhTrangSinhVien', 'not like', "%Đang học%")->get()->toArray();
         $Out=[];
         $Out['Tong']=0;
         foreach ($student as $key=>$value) {
@@ -51,7 +55,6 @@ class ReportController extends Controller
                 {
                     $Out["$month"] = isset($Out["$month"])?($Out["$month"]+1):1; 
                     $Out['Tong']+=1;     
-
                 }else{
                     $Out["$month"]=0;
                 }
@@ -211,15 +214,21 @@ class ReportController extends Controller
                 $Err =$Err->whereMonth('ThoiGian', $request->Thang);
 
             }
-            $HistoryCount=$Err->select(DB::raw("
-            sum(case when TrangThai=N'Success' then 1 else 0  END) as 'Total_Success',
-            sum(case when TrangThai=N'Failed' then 1 else 0  END) as 'Total_Failed'
-            "
-            ))->first()->toArray();
-            
+            $HistoryCount=$Err->get(['TrangThai'])->toArray();
+            $Total_Success=0;
+            $Total_Failed=0;
+            foreach ($HistoryCount as $key => $value) {
+                if($value['TrangThai']=="Success")
+                {
+                    $Total_Success+=1;
+                }else if($value['TrangThai']=="Failed")
+                {
+                    $Total_Failed+=1;
+                }
+            }
             $History=Tb_Err_importStudent::join('tb_tk_quanly', 'tb_tk_quanly.MaTK', '=', 'tb_ErrImportStudent.MaTK')
             ->select('TenDangNhap', 'NoiDung', 'ThoiGian', 'TrangThai');
-            return [$HistoryCount, $History];
+            return [[$Total_Success, $Total_Failed], $History];
     }
     public function ExportImport(Request $request)
     {
@@ -240,8 +249,8 @@ class ReportController extends Controller
             return response()->json([
                 'status'=>"Success",
                 'data'=>[
-                    "Total_Success"=>$ResultLogic[0]["Total_Success"],
-                    "Total_Failed"=>$ResultLogic[0]["Total_Failed"],
+                    "Total_Success"=>$ResultLogic[0][0],
+                    "Total_Failed"=>$ResultLogic[0][1],
                     "Details"=>$History['data']
                 ],'pagination' => [
                     "page" => $History['current_page'],
@@ -348,9 +357,9 @@ class ReportController extends Controller
             'NamTk'=>$request->Nam,
             'ThangTK'=>$request->Thang?"Tháng ".$request->Thang:"",
             'NgayTK'=>$request->Ngay?"Ngày ".$request->Ngay:"",
-            "Total_Update"=>($HistoryCount['Total_Success']+$HistoryCount['Total_Failed']),
-            "Total_Success"=>$HistoryCount['Total_Success'],
-            "Total_Failed"=>$HistoryCount['Total_Failed'],  
+            "Total_Update"=>($HistoryCount[0]+$HistoryCount[1]),
+            "Total_Success"=>$HistoryCount[0],
+            "Total_Failed"=>$HistoryCount[1],  
         ];
         $templateProcessor->cloneBlock('block_name', 0, true, false, [$Export]);
         $Details=[];
@@ -375,7 +384,8 @@ class ReportController extends Controller
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
         ->filter($request);
-        $Learning=$student->selectRaw("
+        $Learning=$student->select(
+            DB::raw("
             sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
             sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
             sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
@@ -389,7 +399,7 @@ class ReportController extends Controller
             sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
             sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
             count(Tb_giay_dc_truong.MaGiayDC_Truong) as Tong
-            "
+            ")
         )->where('TinhTrangSinhVien', 'like', "%Đã tốt nghiệp%");
 
         if($request->Khoas){
