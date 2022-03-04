@@ -22,7 +22,7 @@ class ReportController extends Controller
     {
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
-        ->filter($request)->get()->toArray();
+        ->filter($request)->where('TinhTrangSinhVien', 'like', "%Đang học%")->get()->toArray();;
         $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
         $Learning=[];
         $Learning['Tong']=0;
@@ -30,14 +30,9 @@ class ReportController extends Controller
             $time=Carbon::parse($value['NgayQuanLy']);
             for($i=0;$i<count($Month);$i++) {
                 $month=$Month[$i];
-                if($time->month <= $month  && !$value["NgayKetThuc"] 
-                || $value["NgayKetThuc"] && Carbon::parse($value['NgayKetThuc'])->month >= $month && $time->month <= $month)
+                if($time->month <= $month)
                 {
                     $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
-                }
-                else
-                {
-                    $Learning["$month"]=0;
                 }
             }
         }
