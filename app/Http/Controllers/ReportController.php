@@ -28,11 +28,10 @@ class ReportController extends Controller
         $Learning['Tong']=0;
         foreach ($student as $key=>$value) {
             $time=Carbon::parse($value['NgayQuanLy']);
-            var_dump($time->day);
             for($i=0;$i<count($Month);$i++) {
                 $month=$Month[$i];
                 if($time->month <= $month  && !$value["NgayKetThuc"] 
-                || $value["NgayKetThuc"] && Carbon::parse($value['NgayKetThuc'])->month >= $month)
+                || $value["NgayKetThuc"] && Carbon::parse($value['NgayKetThuc'])->month >= $month && $time->month <= $month)
                 {
                     $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
                 }
