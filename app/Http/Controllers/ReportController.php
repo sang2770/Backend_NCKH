@@ -28,6 +28,7 @@ class ReportController extends Controller
         $Learning['Tong']=0;
         foreach ($student as $key=>$value) {
             $time=Carbon::parse($value['NgayQuanLy']);
+            var_dump($time->month);
             for($i=0;$i<count($Month);$i++) {
                 $month=$Month[$i];
                 if($time->month <= $month  && !$value["NgayKetThuc"] 
