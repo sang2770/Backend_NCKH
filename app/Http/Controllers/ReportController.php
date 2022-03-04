@@ -383,71 +383,74 @@ class ReportController extends Controller
         }
     }
     
-    ///thong ke tinh trang cap phat giay gioi thieu di chuyen tu truong
+    ///thong ke tinh trang cap phat giay gioi thieu di chuyen tu truong'
     private function CreateReportMove($request)
     {
         $student=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->filter($request);
-        $Learning=$student->select(
-            DB::raw("
-            sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
-            sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
-            sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
-            sum(case when month(NgayCap)=4 then 1 else 0  END) as '4',
-            sum(case when month(NgayCap)=5 then 1 else 0  END) as '5',
-            sum(case when month(NgayCap)=6 then 1 else 0  END) as '6',
-            sum(case when month(NgayCap)=7 then 1 else 0  END) as '7',
-            sum(case when month(NgayCap)=8 then 1 else 0  END) as '8',
-            sum(case when month(NgayCap)=9 then 1 else 0  END) as '9',
-            sum(case when month(NgayCap)=10 then 1 else 0  END) as '10',
-            sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
-            sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
-            count(Tb_giay_dc_truong.MaGiayDC_Truong) as Tong
-            ")
-        )->where('TinhTrangSinhVien', 'like', "%Đã tốt nghiệp%");
+        ->filter($request)->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã tốt nghiệp%");
 
         if($request->Khoas){
-            $Learning = $Learning->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
 
-        $Learning = $Learning->first()->toArray();
+        $student = $student->get()->toArray();
+
+        $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
+        $Learning=[];
+        $Learning['Tong']=0;
+        foreach ($student as $key=>$value) {
+            $time=Carbon::parse($value['NgayCap']);
+            for($i=0;$i<count($Month);$i++) {
+                $month=$Month[$i];
+                if($time->month == $month)
+                {
+                    $Learning["$month"] = isset($Learning["$month"]) ? ($Learning["$month"]+1) : 1; 
+                }
+                else
+                {
+                    $Learning["$month"]=0;
+                }
+            }
+        }
+        
+        $Learning['Tong']=max($Learning);
+
         $studentOut=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->filter($request);
-        $Out=$studentOut->select(
-            DB::raw("
-            sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
-            sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
-            sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
-            sum(case when month(NgayCap)=4 then 1 else 0  END) as '4',
-            sum(case when month(NgayCap)=5 then 1 else 0  END) as '5',
-            sum(case when month(NgayCap)=6 then 1 else 0  END) as '6',
-            sum(case when month(NgayCap)=7 then 1 else 0  END) as '7',
-            sum(case when month(NgayCap)=8 then 1 else 0  END) as '8',
-            sum(case when month(NgayCap)=9 then 1 else 0  END) as '9',
-            sum(case when month(NgayCap)=10 then 1 else 0  END) as '10',
-            sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
-            sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
-            count(Tb_giay_dc_truong.MaGiayDC_Truong) as Tong
-            ")
-        )->where('TinhTrangSinhVien', 'like', "%Đã thôi học%");
+        ->filter($request)->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã thôi học%");
         
         if($request->Khoas){
-            $Out = $Out->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $studentOut = $studentOut->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
 
-        $Out = $Out->first()->toArray();
+        $studentOut = $studentOut->get()->toArray();
 
+        $Out=[];
+        $Out['Tong']=0;
+        foreach ($studentOut as $key=>$value) {
+            $time=Carbon::parse($value['NgayCap']);
+            for($i=0;$i<count($Month);$i++) {
+                $month=$Month[$i];
+                if($time->month == $month)
+                {
+                    $Out["$month"] = isset($Out["$month"])?($Out["$month"]+1):1; 
+                    $Out['Tong']+=1;     
+                }else{
+                    $Out["$month"]=0;
+                }
+            }
+        }
+        
         $chart=[];
         if($Learning['Tong']!=0 || $Out['Tong']!=0)
         {
             foreach ($Learning as $key => $value) {
                 if($key!='Tong')
                 {
-                $chart[]=[$value, $Out[$key]?$Out[$key]:0];
+                $chart[]=[$value, isset($Out[$key])?$Out[$key]:0];
                 }
             }
         }
@@ -484,30 +487,33 @@ class ReportController extends Controller
         $student=Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->filter($request);
-        $Learning=$student->select(
-            DB::raw("
-            sum(case when month(NgayCap)=1 then 1 else 0  END) as '1',
-            sum(case when month(NgayCap)=2 then 1 else 0  END) as '2',
-            sum(case when month(NgayCap)=3 then 1 else 0  END) as '3',
-            sum(case when month(NgayCap)=4 then 1 else 0  END) as '4',
-            sum(case when month(NgayCap)=5 then 1 else 0  END) as '5',
-            sum(case when month(NgayCap)=6 then 1 else 0  END) as '6',
-            sum(case when month(NgayCap)=7 then 1 else 0  END) as '7',
-            sum(case when month(NgayCap)=8 then 1 else 0  END) as '8',
-            sum(case when month(NgayCap)=9 then 1 else 0  END) as '9',
-            sum(case when month(NgayCap)=10 then 1 else 0  END) as '10',
-            sum(case when month(NgayCap)=11 then 1 else 0  END) as '11',
-            sum(case when month(NgayCap)=12 then 1 else 0  END) as '12',
-            count(Tb_giay_xn_truong.MaGiayXN_Truong) as Tong
-            ")
-        )->where('Tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
-        
+        ->filter($request)->where('Tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
+
         if($request->Khoas){
-            $Learning = $Learning->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
-        $Learning = $Learning->first()->toArray();
+        $student = $student->get()->toArray();
         
+        $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
+        $Learning=[];
+        $Learning['Tong']=0;
+        foreach ($student as $key=>$value) {
+            $time=Carbon::parse($value['NgayCap']);
+            for($i=0;$i<count($Month);$i++) {
+                $month=$Month[$i];
+                if($time->month == $month)
+                {
+                    $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
+                }
+                else
+                {
+                    $Learning["$month"]=0;
+                }
+            }
+        }
+        
+        $Learning['Tong']=max($Learning);
+
         $chart=[];
         if($Learning['Tong']!=0)
         {
@@ -619,7 +625,7 @@ class ReportController extends Controller
             'NgayTK'=>$request->Ngay ? "Ngày ".$request->Ngay : "",
             'Khoas'=>$request->Khoas ? "\n- Khóa: ".$request->Khoas : "",
             "Total_Learning"=>$request->Thang ? $result[2][(int)$request->Thang - 1][0] : $result[0],
-            "Total_Out"=>$request->Thang ? $result[2][(int)$request->Thang - 1][1] : $result[1],
+            "Total_Out"=>$request->Thang ? $result[2][(int)$request->Thang - 1][0] : $result[1],
         ];
         if($result[2]){
             foreach ($result[2] as $key=> $value) {
@@ -635,7 +641,7 @@ class ReportController extends Controller
         }
 
         $templateProcessor->cloneBlock('block_name', 0, true, false, [$Export]);
-        $filename = "ReportConfirm";
+        $filename = "ReportMove";
         $templateProcessor->saveAs($filename . '.docx');
         return response()->download($filename . '.docx')->deleteFileAfterSend(true);
         } catch (Exception $e) {
