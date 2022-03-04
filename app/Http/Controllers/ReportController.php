@@ -22,27 +22,19 @@ class ReportController extends Controller
     {
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
-        ->filter($request)->get()->toArray();
-        $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
+        ->filter($request)->where('TinhTrangSinhVien', 'like', "%Đang học%")->get()->toArray();;
         $Learning=[];
         $Learning['Tong']=0;
         foreach ($student as $key=>$value) {
             $time=Carbon::parse($value['NgayQuanLy']);
-            for($i=0;$i<count($Month);$i++) {
-                $month=$Month[$i];
-                if($time->month <= $month  && !$value["NgayKetThuc"] 
-                || $value["NgayKetThuc"] && Carbon::parse($value['NgayKetThuc'])->month >= $month)
+            for($i=1;$i<=12;$i++) {
+                if($time->month <= $i)
                 {
-                    $Learning["$month"] = isset($Learning["$month"])?($Learning["$month"]+1):1; 
-                }
-                else
-                {
-                    $Learning["$month"]=0;
+                    $Learning["$i"] = isset($Learning["$i"])?($Learning["$i"]+1):1; 
                 }
             }
         }
-        
-        $Learning['Tong']=max($Learning);
+        $Learning['Tong']=count($student);
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
         ->filter($request)->where('TinhTrangSinhVien', 'not like', "%Đang học%")->get()->toArray();
@@ -50,29 +42,26 @@ class ReportController extends Controller
         $Out['Tong']=0;
         foreach ($student as $key=>$value) {
             $time=Carbon::parse($value['NgayKetThuc']);
-            for($i=0;$i<count($Month);$i++) {
-                $month=$Month[$i];
-                if($time->month == $month)
+            for($i=1;$i<=12;$i++) {
+                if($time->month == $i)
                 {
-                    $Out["$month"] = isset($Out["$month"])?($Out["$month"]+1):1; 
+                    $Out["$i"] = isset($Out["$i"])?($Out["$i"]+1):1; 
                     $Out['Tong']+=1;     
-                }else{
-                    $Out["$month"]=0;
                 }
             }
         }
         
         $chart=[];
-        if($Learning['Tong']!=0 || $Out['Tong']!=0)
+        // Biến trừ
+        $count=0;
+        for($i=1;$i<=12;$i++)
         {
-            foreach ($Learning as $key => $value) {
-                if($key!='Tong')
-                {
-                $chart[]=[$value, isset($Out[$key])?$Out[$key]:0];
-                }
-            }
-            
-        }
+            $LearnItem=isset($Learning[$i])?$Learning[$i]:0;
+            $OutItem=isset($Out[$i])?$Out[$i]:0;
+            $chart[]=[$LearnItem-$count,$OutItem ];
+            $count+=$OutItem;
+
+        }       
         return [$Learning['Tong'], $Out['Tong'], $chart];
     }
 
