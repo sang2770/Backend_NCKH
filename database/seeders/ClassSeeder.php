@@ -38,5 +38,11 @@ class ClassSeeder extends Seeder
             'Khoas' => 'K62',
             'MaKhoa' => '2'
         ]);
+        Tb_lop::insert([
+            'MaLop' => '5',
+            'TenLop' => 'CK2',
+            'Khoas' => 'K62',
+            'MaKhoa' => '2'
+        ]);
     }
 }

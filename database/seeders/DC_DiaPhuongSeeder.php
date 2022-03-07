@@ -44,6 +44,35 @@ class DC_DiaPhuongSeeder extends Seeder
             'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
             'MaGiayDK' => '3',
         ]);
-
+        Tb_giay_dc_diaphuong::insert([
+            'SoGioiThieu' => '45', 
+            'NgayCap' => '2020-04-02', 
+            'NgayHH' => '2020-05-02',
+            'NoiOHienTai' => 'Hà Nội',
+            'NoiChuyenDen' => 'DH GTVT',
+            'LyDo' => 'Trúng tuyển đại học cao đẳng',
+            'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
+            'MaGiayDK' => '4',
+        ]);
+        Tb_giay_dc_diaphuong::insert([
+            'SoGioiThieu' => '50', 
+            'NgayCap' => '2020-04-02', 
+            'NgayHH' => '2020-05-02',
+            'NoiOHienTai' => 'Hà Nội',
+            'NoiChuyenDen' => 'DH GTVT',
+            'LyDo' => 'Trúng tuyển đại học cao đẳng',
+            'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
+            'MaGiayDK' => '5',
+        ]);
+        Tb_giay_dc_diaphuong::insert([
+            'SoGioiThieu' => '56', 
+            'NgayCap' => '2020-04-02', 
+            'NgayHH' => '2020-05-02',
+            'NoiOHienTai' => 'Hà Nội',
+            'NoiChuyenDen' => 'DH GTVT',
+            'LyDo' => 'Trúng tuyển đại học cao đẳng',
+            'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
+            'MaGiayDK' => '6',
+        ]);
     }
 }
