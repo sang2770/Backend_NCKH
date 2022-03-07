@@ -375,6 +375,8 @@ class ReportController extends Controller
     ///thong ke tinh trang cap phat giay gioi thieu di chuyen tu truong'
     private function CreateReportMove($request)
     {
+        $DateNow = Carbon::now()->toDateString();
+
         $student=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
@@ -382,6 +384,9 @@ class ReportController extends Controller
 
         if($request->NgayCap){
             $student = $student->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
+        }
+        if(!$request->NgayCap){
+            $student = $student->whereYear('Tb_giay_dc_truong.NgayCap', '=', $DateNow);
         }
         if($request->Khoas){
             $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
@@ -416,6 +421,9 @@ class ReportController extends Controller
 
         if($request->NgayCap){
             $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
+        }
+        if(!$request->NgayCap){
+            $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $DateNow);
         }
         if($request->Khoas){
             $studentOut = $studentOut->where('Tb_lop.Khoas', '=', $request->Khoas);
@@ -479,6 +487,8 @@ class ReportController extends Controller
     //thong ke tinh trang cap phat giay xac nhan nvqs
     private function CreateReportConfirm($request)
     {
+        $DateNow = Carbon::now()->toDateString();
+
         $student=Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
@@ -486,6 +496,9 @@ class ReportController extends Controller
 
         if($request->NgayCap){
             $student = $student->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
+        }
+        if(!$request->NgayCap){
+            $student = $student->whereYear('Tb_giay_xn_truong.NgayCap', '=', $DateNow);
         }
         if($request->Khoas){
             $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
