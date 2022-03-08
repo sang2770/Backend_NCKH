@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Helper\Helper;
 use App\Models\Tb_lop;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_trangthai;
@@ -40,12 +41,19 @@ class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, Ski
             $this->Err[] = $error;
             return null;
         }
+        if($row['so_quyet_dinh'] && !Helper::CheckDate($row['ngay_quyet_dinh']))
+        {
+            $error = ['err' => "Ngày quyết định không đúng định dạng", "row" => $this->rowNum];
+            $this->Err[] = $error;
+            return null;
+        }
         Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update([
             'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
         ]);
+        
         if(!Str::contains(str::upper($row['tinh_trang_sinh_vien']), Str::upper("Đang học")))
             {
-                Tb_trangthai::Create(['MaSinhVien'=>$row["ma_sinh_vien"], "NgayQuyetDinh"=>date('Y-m-d'), "SoQuyetDinh"=>$row['so_quyet_dinh']]);
+                Tb_trangthai::Create(['MaSinhVien'=>$row["ma_sinh_vien"], "NgayQuyetDinh"=>$row['ngay_quyet_dinh'], "SoQuyetDinh"=>$row['so_quyet_dinh']]);
                 Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>date('Y-m-d')]);
             }else{
                 Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>null]);     

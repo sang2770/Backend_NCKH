@@ -32,7 +32,7 @@ class GiayCNDKSeeder extends Seeder
             'NoiDangKy'         => 'Thanh Hóa',
             'DiaChiThuongTru'   => 'Vĩnh Lộc, Thanh Hóa',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '191204225'
+            'MaSinhVien'        => '211200553'
         ]);
         Tb_giay_cn_dangky::insert([
             'MaGiayDK'          => '3',
@@ -41,7 +41,7 @@ class GiayCNDKSeeder extends Seeder
             'NoiDangKy'         => 'Cầu Giấy',
             'DiaChiThuongTru'   => 'Cầu Giấy, Hà Nội',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '191204226'
+            'MaSinhVien'        => '211200574'
         ]);
         Tb_giay_cn_dangky::insert([
             'MaGiayDK'          => '4',
@@ -50,7 +50,7 @@ class GiayCNDKSeeder extends Seeder
             'NoiDangKy'         => 'Hải Phòng',
             'DiaChiThuongTru'   => 'Hải Phòng',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '191204227'
+            'MaSinhVien'        => '211200829'
         ]);
         Tb_giay_cn_dangky::insert([
             'MaGiayDK'          => '5',
@@ -59,7 +59,7 @@ class GiayCNDKSeeder extends Seeder
             'NoiDangKy'         => 'Nam Định',
             'DiaChiThuongTru'   => 'Hải Hậu, Nam Định',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '191204228'
+            'MaSinhVien'        => '211200865'
         ]);
         Tb_giay_cn_dangky::insert([
             'MaGiayDK'          => '6',
@@ -68,7 +68,7 @@ class GiayCNDKSeeder extends Seeder
             'NoiDangKy'         => 'Hà Nội',
             'DiaChiThuongTru'   => 'Hà Nội',
             'NgayNop'           => '2022-10-05',
-            'MaSinhVien'        => '191204229'
+            'MaSinhVien'        => '211200890'
         ]);
     }
 }

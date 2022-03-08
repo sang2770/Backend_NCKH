@@ -22,21 +22,21 @@ class YeuCauSeeder extends Seeder
             'LanXinCap'     => '1'
         ]);
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204228',
+            'MaSinhVien' => '211200553',
             'NgayYeuCau' => '2021-10-10',
             'NgayXuLy' => '2021-10-12',
             'TrangThaiXuLy' => 'Đã xử lý',
             'LanXinCap'     => '1'
         ]);
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204226',
+            'MaSinhVien' => '211200574',
             'NgayYeuCau' => '2022-02-10',
             'NgayXuLy' => '2022-02-12',
             'TrangThaiXuLy' => 'Đã xử lý',
             'LanXinCap'     => '1'
         ]);
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204227',
+            'MaSinhVien' => '211200829',
             'NgayYeuCau' => '2022-01-10',
             'NgayXuLy' => '2022-01-12',
             'TrangThaiXuLy' => 'Đã xử lý',
@@ -50,7 +50,7 @@ class YeuCauSeeder extends Seeder
             'LanXinCap'     => '2'
         ]);
         Tb_yeucau::insert([
-            'MaSinhVien' => '191204225',
+            'MaSinhVien' => '211200865',
             'NgayYeuCau' => '2022-10-10',
             'NgayXuLy' => '2022-10-12',
             'TrangThaiXuLy' => 'Chờ xử lý',

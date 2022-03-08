@@ -223,7 +223,11 @@ class StudentManagementController extends Controller
             {
                 return response()->json(['status' => "Failed", 'Err_Message' => "Số quyết định là bắt buộc"]);
             }
-            
+
+            if($request->SoQuyetDinh && !Helper::CheckDate($request->NgayQuyetDinh))
+            {
+                return response()->json(['status' => "Failed", 'Err_Message' => "Ngày quyết định không đúng định dạng"]);
+            }
             unset($validated['_method']);
             $user = Tb_sinhvien::find($id);
             if(!Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Đang học")))
@@ -242,11 +246,13 @@ class StudentManagementController extends Controller
             }
             DB::transaction(function () use ($validated, $id, $Admin, $NoiDung, $request) { // Start the transaction
                 unset($validated['SoQuyetDinh']);
+                unset($validated['NgayQuyetDinh']);
+
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
                 if(!Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Đang học")))
                 {
                     Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>date('Y-m-d')]);
-                    Tb_trangthai::Create(['MaSinhVien'=>$id, "NgayQuyetDinh"=>date('Y-m-d'), "SoQuyetDinh"=>$request->SoQuyetDinh]);
+                    Tb_trangthai::Create(['MaSinhVien'=>$id, "NgayQuyetDinh"=>$request->NgayQuyetDinh, "SoQuyetDinh"=>$request->SoQuyetDinh]);
                 }else{
                     Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>null]);     
                 }
@@ -262,6 +268,7 @@ class StudentManagementController extends Controller
                 ])->first();
             return response()->json(['status' => "Success", 'data' => $user]);
         } catch (Exception $e) {
+            // var_dump($e->getMessage());
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!']);
         }
     }
