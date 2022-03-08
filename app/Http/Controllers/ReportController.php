@@ -375,17 +375,25 @@ class ReportController extends Controller
     ///thong ke tinh trang cap phat giay gioi thieu di chuyen tu truong'
     private function CreateReportMove($request)
     {
+        $DateNow = Carbon::now()->toDateString();
+
         $student=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->filter($request)->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã tốt nghiệp%");
+        ->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã tốt nghiệp%");
 
+        if($request->NgayCap){
+            $student = $student->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
+        }
+        if(!$request->NgayCap){
+            $student = $student->whereYear('Tb_giay_dc_truong.NgayCap', '=', $DateNow);
+        }
         if($request->Khoas){
             $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
 
         $student = $student->get()->toArray();
-
+        // var_dump($student);
         $Month=array(1,2,3,4,5,6,7,8,9,10,11,12);
         $Learning=[];
         $Learning['Tong']=0;
@@ -409,8 +417,14 @@ class ReportController extends Controller
         $studentOut=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->filter($request)->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã thôi học%");
-        
+        ->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã thôi học%");
+
+        if($request->NgayCap){
+            $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
+        }
+        if(!$request->NgayCap){
+            $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $DateNow);
+        }
         if($request->Khoas){
             $studentOut = $studentOut->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
@@ -473,11 +487,19 @@ class ReportController extends Controller
     //thong ke tinh trang cap phat giay xac nhan nvqs
     private function CreateReportConfirm($request)
     {
+        $DateNow = Carbon::now()->toDateString();
+
         $student=Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->filter($request)->where('Tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
+        ->where('Tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
 
+        if($request->NgayCap){
+            $student = $student->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
+        }
+        if(!$request->NgayCap){
+            $student = $student->whereYear('Tb_giay_xn_truong.NgayCap', '=', $DateNow);
+        }
         if($request->Khoas){
             $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
@@ -614,7 +636,7 @@ class ReportController extends Controller
             'NgayTK'=>$request->Ngay ? "Ngày ".$request->Ngay : "",
             'Khoas'=>$request->Khoas ? "\n- Khóa: ".$request->Khoas : "",
             "Total_Learning"=>$request->Thang ? $result[2][(int)$request->Thang - 1][0] : $result[0],
-            "Total_Out"=>$request->Thang ? $result[2][(int)$request->Thang - 1][0] : $result[1],
+            "Total_Out"=>$request->Thang ? $result[2][(int)$request->Thang - 1][1] : $result[1],
         ];
         if($result[2]){
             foreach ($result[2] as $key=> $value) {
