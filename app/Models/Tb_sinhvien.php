@@ -69,7 +69,7 @@ class Tb_sinhvien extends Authenticatable
     }
     public function filterTinhtrangsinhvien($query, $value)
     {
-        return $query->where('TinhTrangSinhVien', $value);
+        return $query->where('TinhTrangSinhVien',"like", '%' . $value . '%');
     }
     public function filterTrangThaiXuLy($query, $value)
     {

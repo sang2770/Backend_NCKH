@@ -37,7 +37,7 @@ class StudentManagementController extends Controller
         $page = $request->query('page');
         // Loc
         try {
-            $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->where('TinhTrangSinhVien', "like", "%Đang học%")
+            $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
                 ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->paginate($limit, [
                     'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                     'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
@@ -247,7 +247,6 @@ class StudentManagementController extends Controller
             DB::transaction(function () use ($validated, $id, $Admin, $NoiDung, $request) { // Start the transaction
                 unset($validated['SoQuyetDinh']);
                 unset($validated['NgayQuyetDinh']);
-
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
                 if(!Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Đang học")))
                 {
