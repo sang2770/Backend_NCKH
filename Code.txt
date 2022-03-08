@@ -21,3 +21,6 @@ Multi model
 
 $ heroku git:remote -a testnvqs
 https://stackoverflow.com/questions/52851208/laravel-passport-multiple-authentication-using-guards
+
+git commit -am "Test"
+git push heroku master

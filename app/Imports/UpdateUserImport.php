@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Tb_lop;
 use App\Models\Tb_sinhvien;
+use App\Models\Tb_trangthai;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -32,11 +33,19 @@ class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, Ski
             $this->Err[] = $error;
             return null;
         }
+        $user = Tb_sinhvien::find($row['ma_sinh_vien']);
+        if(!Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Đang học")))
+        {
+            $error = ['err' => "Sinh viên hiện tại không còn quản lý", "row" => $this->rowNum];
+            $this->Err[] = $error;
+            return null;
+        }
         Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update([
             'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
         ]);
         if(!Str::contains(str::upper($row['tinh_trang_sinh_vien']), Str::upper("Đang học")))
             {
+                Tb_trangthai::Create(['MaSinhVien'=>$row["ma_sinh_vien"], "NgayQuyetDinh"=>date('Y-m-d'), "SoQuyetDinh"=>$row['so_quyet_dinh']]);
                 Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>date('Y-m-d')]);
             }else{
                 Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>null]);     
@@ -49,7 +58,7 @@ class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, Ski
             "*.ma_sinh_vien" => "required",
             '*.ho_ten' => "required",
             "*.tinh_trang_sinh_vien" => "required",
-            "*.ten_lop" => "required"
+            "*.ten_lop" => "required",
         ];
     }
     public function customValidationMessages()

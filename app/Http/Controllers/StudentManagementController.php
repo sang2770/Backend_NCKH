@@ -16,6 +16,7 @@ use App\Models\Tb_lichsu;
 use App\Models\Tb_lop;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_tk_sinhvien;
+use App\Models\Tb_trangthai;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -36,7 +37,7 @@ class StudentManagementController extends Controller
         $page = $request->query('page');
         // Loc
         try {
-            $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
+            $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')->where('TinhTrangSinhVien', "like", "%Đang học%")
                 ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->filter($request)->paginate($limit, [
                     'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                     'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
@@ -98,12 +99,15 @@ class StudentManagementController extends Controller
             return response()->json(['status' => "Failed", 'Err_Message' => 'Bạn chưa chọn file']);
         }
         $import = new UsersImport();
+        DB::beginTransaction();
         $import->import($request->file);
         $Admin = $request->user()->MaTK;
         if ($import->failures()->count() == 0 && count($import->Err) == 0) {
+            DB::commit();
             Tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
             return response()->json(['status' => "Success"]);
         } else {
+            Db::rollBack();
             $errors = [];
             foreach ($import->failures() as $value) {
                 if (Arr::get($errors, $value->row())) {
@@ -213,10 +217,19 @@ class StudentManagementController extends Controller
                 $validated = Arr::except($request->input(), ["TenLop"]);
                 $validated['MaLop'] = $MaLop;
             } else {
-                return response()->json(['status' => "Failed", 'Err_Message' => "MaLop không tồn tại"]);
+                return response()->json(['status' => "Failed", 'Err_Message' => "Mã lớp không tồn tại"]);
             }
+            if(Str::upper($request->TinhTrangSinhVien)!="ĐANG HỌC" && $request->SoQuyetDinh ==null)
+            {
+                return response()->json(['status' => "Failed", 'Err_Message' => "Số quyết định là bắt buộc"]);
+            }
+            
             unset($validated['_method']);
             $user = Tb_sinhvien::find($id);
+            if(!Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Đang học")))
+            {
+                return response()->json(['status' => "Failed", 'Err_Message' => "Sinh viên này đã không còn quản lý"]);
+            }
             if (!$user) {
                 return response()->json(['status' => "Failed"]);
             }
@@ -227,11 +240,13 @@ class StudentManagementController extends Controller
                     $NoiDung .= $key . ":" . $value . ";";
                 }
             }
-            DB::transaction(function () use ($validated, $id, $Admin, $NoiDung) { // Start the transaction
+            DB::transaction(function () use ($validated, $id, $Admin, $NoiDung, $request) { // Start the transaction
+                unset($validated['SoQuyetDinh']);
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
                 if(!Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Đang học")))
                 {
                     Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>date('Y-m-d')]);
+                    Tb_trangthai::Create(['MaSinhVien'=>$id, "NgayQuyetDinh"=>date('Y-m-d'), "SoQuyetDinh"=>$request->SoQuyetDinh]);
                 }else{
                     Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>null]);     
                 }
@@ -264,11 +279,14 @@ class StudentManagementController extends Controller
         }
         $Admin = $request->user()->MaTK;
         $import = new UpdateUserImport();
+        DB::beginTransaction();
         $import->import($request->file);
         if ($import->failures()->count() == 0 && count($import->Err) == 0) {
             Tb_Err_importStudent::create(['NoiDung'=>"Sửa trạng thái sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
+            DB::commit();
             return response()->json(['status' => "Success"]);
         } else {
+            DB::rollBack();
             $errors = [];
             foreach ($import->failures() as $value) {
                 if (Arr::get($errors, $value->row())) {
