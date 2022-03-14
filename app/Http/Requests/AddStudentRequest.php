@@ -47,7 +47,7 @@ class AddStudentRequest extends FormRequest
             "HoKhauHuyen" => "required",
             "HoKhauXaPhuong" => "required",
             "TenLop" => "required",
-            "SoCMTND" => "required",
+            "SoCMTND" => "required|unique:Tb_sinhvien",
             "NgayCapCMTND" => "required",
             "NoiCapCMTND" => "required",
         ];
@@ -58,7 +58,7 @@ class AddStudentRequest extends FormRequest
             'Email.email' => 'Email Không đúng định dạng',
             'SoDienThoai.digits' => 'Số điện thoại không đúng định dạng',
             'MaSinhVien.unique' => 'Mã sinh viên phải là duy nhất',
-
+            'SoCMTND.unique'=>"Số CMTND là duy nhất"
         ];
     }
     protected function failedValidation(ValidationValidator $validator)

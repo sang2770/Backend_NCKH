@@ -117,7 +117,19 @@ class StudentController extends Controller
             return response()->json(['status' => "Not Found!"]);
         }
     }
+    public function getTotalNotifications(Request $request)
+    {
+        try {
+            $noti = Tb_sinhvien::join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
+            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')->count();
+        return response()->json(['status'=>"Success", "count"=>$noti]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed"]);
 
+        }
+            
+    }
     //danh sach tieu de thong bao
     public function notification(Request $request)
     {
