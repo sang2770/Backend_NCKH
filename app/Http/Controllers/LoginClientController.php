@@ -31,7 +31,9 @@ class LoginClientController extends Controller
         $input = $request->only('MaSinhVien', 'password');
         if (auth()->guard('user')->attempt($input)) {
             config(['auth.guards.api.provider' => 'user']);
-            $user = Tb_tk_sinhvien::find(auth()->guard('user')->user()->MaTKSV);
+            $user = Tb_tk_sinhvien::find(auth()->guard('user')->user()->MaTKSV)
+            ->join('Tb_sinhvien', 'Tb_sinhvien.MaSinhVien', '=', 'Tb_tk_sinhvien.MaSinhVien')
+            ->get(["HoTen","Tb_sinhvien.MaSinhVien", "MaTKSV"])->first();
             $token = $user->createToken('authToken', ['user'])->accessToken;
             $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => $user];
             return response()->json($result);
