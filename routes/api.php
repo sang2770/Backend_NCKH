@@ -105,7 +105,6 @@ Route::prefix('export-report')->middleware(['auth:admin-api', 'scopes:admin'])->
         Route::get('report-confirm-mili', [ReportController::class, 'ReportConfirmMilitary']);
         Route::get('export-file-confirm-mili', [ReportController::class, 'ExportFileConfirm']);
         Route::get('export-file-move-mili', [ReportController::class, 'ExportFileMove']);
-
     }
 );
 // nghia vu quan su

@@ -21,7 +21,7 @@ class ForgotPassWord extends Controller
             $passwordReset = PasswordReset::updateOrCreate([
                 'email' => $user->TenDangNhap,
             ], [
-                'token' => Str::random(60),
+                'token' => rand(10000, 99999),
             ]);
             if ($passwordReset) {
                 $user->notify(new ResetPasswordRequest($passwordReset->token));
