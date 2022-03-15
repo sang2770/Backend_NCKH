@@ -488,7 +488,8 @@ class ReportController extends Controller
     //thong ke tinh trang cap phat giay xac nhan nvqs
     private function CreateReportConfirm($request)
     {
-        $DateNow = Carbon::now()->toDateString();
+        $DateNow = Carbon::now()->format('Y');
+
 
         $student=Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
