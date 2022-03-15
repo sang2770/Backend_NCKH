@@ -375,7 +375,7 @@ class ReportController extends Controller
     ///thong ke tinh trang cap phat giay gioi thieu di chuyen tu truong'
     private function CreateReportMove($request)
     {
-        $DateNow = Carbon::now()->toDateString();
+        $DateNow = Carbon::now()->format('Y');
 
         $student=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
