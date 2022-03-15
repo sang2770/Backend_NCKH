@@ -93,7 +93,7 @@ Xuất báo cáo
 |--------------------------------------------------------------------------
 
 */
-Route::prefix('export-report')->group(
+Route::prefix('export-report')->middleware(['auth:admin-api', 'scopes:admin'])->group(
     function () {
         Route::get('student-fluctuations', [ReportController::class, 'ExportFluctuations']);
         Route::get('student-update', [ReportController::class, 'ExportUpdate']);

@@ -462,6 +462,7 @@ class ReportController extends Controller
 
     public function ReportMoveMilitary(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'Nam' => 'required',
         ]);
