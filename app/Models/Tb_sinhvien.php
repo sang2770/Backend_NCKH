@@ -61,7 +61,7 @@ class Tb_sinhvien extends Authenticatable
     }
     public function filterKhoa($query, $value)
     {
-        return $query->where('TenKhoa', 'LIKE', '%' . $value . '%');
+        return $query->where('TenKhoa',$value );
     }
     public function filterKhoas($query, $value)
     {
@@ -74,6 +74,21 @@ class Tb_sinhvien extends Authenticatable
     public function filterTrangThaiXuLy($query, $value)
     {
         return $query->where('TrangThaiXuLy', $value);
+    }
+    
+    public function filterDangKy($query, $value)
+    {
+        $Giay=Tb_giay_cn_dangky::select("MaSinhVien")->get()->toArray();
+        if(Str::upper($value)==Str::upper("Đã nộp"))
+        {
+            return $query->whereIn('MaSinhVien', $Giay);
+
+        }else if(Str::upper($value)==Str::upper("Chưa nộp"))
+        {
+            return $query->whereNotIn('MaSinhVien', $Giay);;
+        }else{
+            return $query;
+        }
     }
     public function routeNotificationForMail($notification)
     {

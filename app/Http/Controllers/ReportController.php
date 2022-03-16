@@ -21,8 +21,9 @@ class ReportController extends Controller
     private function LogicFluctuations($request)
     {
         $student=Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
+        ->where('TinhTrangSinhVien', 'like', "%Đang học%")
         ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')
-        ->filter($request)->where('TinhTrangSinhVien', 'like', "%Đang học%")->get()->toArray();;
+        ->filter($request)->get()->toArray();
         $Learning=[];
         $Learning['Tong']=0;
         foreach ($student as $key=>$value) {
@@ -58,7 +59,7 @@ class ReportController extends Controller
         {
             $LearnItem=isset($Learning[$i])?$Learning[$i]:0;
             $OutItem=isset($Out[$i])?$Out[$i]:0;
-            $chart[]=[$LearnItem-$count,$OutItem ];
+            $chart[]=[$LearnItem-$count<0?0:$LearnItem-$count,$OutItem ];
             $count+=$OutItem;
 
         }       
