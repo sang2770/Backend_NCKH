@@ -10,6 +10,7 @@ use Exception;
 use App\Http\Requests\RegisterMilitaryRequest;
 use App\Http\Requests\UpdateRegister;
 use App\Http\Requests\UpdateRegisterRequest;
+use App\Models\Tb_giay_dc_diaphuong;
 use App\Models\Tb_sinhvien;
 use Illuminate\Support\Facades\Validator;
 
@@ -42,7 +43,7 @@ class RegisterMilitaryController extends Controller
         }
     }
 
-    public function create($Input){
+    public function createRegister($Input){
         try {
             $date = date_create($Input['NgayDangKy']);
             $NgayDK = date_format($date, 'Y-m-d H:i:s');
@@ -63,14 +64,53 @@ class RegisterMilitaryController extends Controller
         }
     }
 
+    public function createMoveLocal($Input){
+        $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
+        $count = Tb_giay_dc_diaphuong::select('MaGiayDK')->where('Tb_giay_dc_diaphuong.MaGiayDK', '=', $MagiayDK[0]['MaGiayDK'])->count();
+
+        if($count>0){
+            return null;
+        }
+        else{
+            try {
+                $LyDo = "Trúng tuyển đại học, cao đẳng";
+
+                $date = date_create($Input['NgayCap']);
+                $NgayCap = date_format($date, 'Y-m-d H:i:s');
+
+                $date2 = date_create($Input['NgayHH']);
+                $NgayHH = date_format($date2, 'Y-m-d H:i:s');
+                
+                return [
+                    'SoGioiThieu'          => $Input['SoGioiThieu'],
+                    'NgayCap'              => $NgayCap,
+                    'NgayHH'               => $NgayHH,
+                    'NoiOHienTai'          => $Input['NoiOHienTai'],
+                    'NoiChuyenDen'         => $Input['NoiChuyenDen'],
+                    'LyDo'                 => $LyDo,
+                    'BanChiHuy'            => $Input['BanChiHuy'],
+                    'MaGiayDK'             => $MagiayDK[0]['MaGiayDK'],
+                ];
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+    }
+
     //thêm từng giấy cn dky
     public function Store(RegisterMilitaryRequest $request)
     {
-        $validated = $request->validated();
+        $Register = $request->validated();
+        $MoveLocal = $request->validated();
+
         try {
-            $validated = $this->create($request->all());
-            Tb_giay_cn_dangky::insert($validated);
-            return response()->json(['status' => "Success", 'data' => ["ThongTinDangKy" => $validated]]);
+            $Register = $this->createRegister($request->all());
+            Tb_giay_cn_dangky::insert($Register);
+
+            $MoveLocal = $this->createMoveLocal($request->all());
+
+            Tb_giay_dc_diaphuong::insert($MoveLocal);
+            return response()->json(['status' => "Success", 'data' => ["ThongTinDangKy" => $Register]]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
@@ -260,6 +300,39 @@ class RegisterMilitaryController extends Controller
         }
 
         $info = $info->orderBy('MaGiayDC_DP', 'DESC')->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
+        return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
+            "page" => $info['current_page'],
+            "first_page_url"    => $info['first_page_url'],
+            "next_page_url"     => $info['next_page_url'],
+            "TotalPage"         => $info['last_page']
+        ]]);
+    }
+
+    /// loc ra thong tin sinh vien da co giay cn dky nvqs
+    public function FilterStudentRegister(Request $request)
+    {
+        $limit = $request->query('limit');
+        $page = $request->query('page');
+        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
+            ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
+            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_cn_dangky.NgayNop');
+
+        if ($request->MaSinhVien) {
+            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+        }
+        if ($request->TenLop) {
+            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+        }
+        if ($request->TenKhoa) {
+            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+        }
+        if ($request->Khoas) {
+            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+        }
+
+        $info = $info->orderBy('NgayNop', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
             "page" => $info['current_page'],
             "first_page_url"    => $info['first_page_url'],

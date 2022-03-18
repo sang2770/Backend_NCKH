@@ -6,6 +6,7 @@ use App\Http\Controllers\RequestManagementController;
 use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\RegisterMilitaryController;
 use App\Http\Controllers\ConfirmMilitaryController;
+use App\Http\Controllers\ConfirmMilitaryController2;
 use App\Http\Controllers\ForgotPassWord;
 use App\Http\Controllers\LoginClientController;
 use App\Http\Controllers\MoveMilitaryController;
@@ -125,6 +126,8 @@ Route::group([
     Route::get('filter-info-confirm', [RegisterMilitaryController::class, 'FilterConfirm']); //loc thong tin giay xac nhan tu truong
     Route::get('filter-info-move', [RegisterMilitaryController::class, 'FilterMove']); //loc thong tin giay di chuyen nvqs tu truong
     Route::get('filter-info-move-local', [RegisterMilitaryController::class, 'FilterMoveLocal']);
+    Route::get('filter-info-student-registerMili', [RegisterMilitaryController::class, 'FilterMoveLocal']); //loc thong tin sv da nop giay cn dangky nvqs
+
 });
 /*
 |--------------------------------------------------------------------------
@@ -135,7 +138,9 @@ Route::group([
     'prefix' => 'confirm-military-management',
     'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
-    Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho 1 sinh vien
+    Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho sinh vien theo yeu cau sv
+    Route::get('confirm-military-off', [ConfirmMilitaryController2::class, 'Confirm']); //cap giay xac nhan truc tiep cho sinh vien 
+
 });
 // 3. giay di chuyen tu truong
 Route::group([

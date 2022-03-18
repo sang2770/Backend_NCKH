@@ -75,7 +75,7 @@ class MoveMilitaryLocalController extends Controller
         }
     }
 
-    //thêm từng giấy dc dia phuong 
+    //thêm từng giấy dc dia phuong
     public function Store(MoveMilitaryLocalRequest $request){
         $validated = $request->validated();
         try {

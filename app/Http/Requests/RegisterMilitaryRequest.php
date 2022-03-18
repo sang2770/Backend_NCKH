@@ -36,6 +36,13 @@ class RegisterMilitaryRequest extends FormRequest
             'NoiDangKy'         => "required",
             'DiaChiThuongTru'   => "required",
             'NgayNop'           => "required",
+            'SoGioiThieu'       => "required",
+            'NgayCap'           => "required",
+            'NgayHH'            => "required",
+            'NoiOHienTai'       => "required",
+            'NoiChuyenDen'      => "required",
+            'BanChiHuy'         => "required",
+            'MaGiayDK'          => "unique:Tb_giay_dc_diaphuong"
         ];
     }
 
