@@ -92,23 +92,49 @@ class MoveMilitaryLocalController extends Controller
         }
     }
 
+
     //update
-    public function edit($id){
-        $edit = Tb_giay_dc_diaphuong::where('MaGiayDC_DP', $id)->first();
+    public function edit($id)
+    {
+        $edit = Tb_giay_cn_dangky::where('MaSinhVien', $id)->first();
         return $edit;
     }
 
-    public function Update(UpdateMoveLocalRequest $request, $id){
+    public function editMove($id)
+    {
+        $edit = Tb_giay_dc_diaphuong::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaGiayDK', '=', 'Tb_giay_dc_diaphuong.MaGiayDK')
+        ->where('Tb_giay_cn_dangky.MaSinhVien', $id)->first();
+        return $edit;
+    }
+
+    public function Update(UpdateMoveLocalRequest $request, $id)
+    {
         $request->validated();
-        if(Tb_giay_dc_diaphuong::where('MaGiayDC_DP', $id)->exists()){
+        if (Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists() && 
+            Tb_giay_dc_diaphuong::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaGiayDK', '=', 'Tb_giay_dc_diaphuong.MaGiayDK')
+            ->where('Tb_giay_cn_dangky.MaSinhVien', $id)->exists()) {
             $task = $this->edit($id);
-            $input = $request->only('SoGioiThieu', 'NgayCap', 'NgayHH', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
+            $input = $request->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop');
             $task->fill($input)->save();
+
+            $taskMove = $this->editMove($id);
+            $inputMove = $request->only('SoGioiThieu', 'NgayCap', 'NgayHH', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
+            $taskMove->fill($inputMove)->save();
+
             return response()->json(['status' => "Success updated"]);
-        }
-        else{
+        } else {
             return response()->json(['status' => "Not Found!"]);
         }
+
+        // if(){
+        //     $task = $this->editMove($id);
+        //     $input = $request->only('SoGioiThieu', 'NgayCap', 'NgayHH', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
+        //     $task->fill($input)->save();
+        //     return response()->json(['status' => "Success updated"]);
+        // }
+        // else{
+        //     return response()->json(['status' => "Not Found!"]);
+        // }
     }
     //show lần cấp của từng sinh viên
     public function show(Request $request, $id){

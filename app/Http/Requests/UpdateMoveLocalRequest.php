@@ -28,12 +28,17 @@ class UpdateMoveLocalRequest extends FormRequest
     public function rules()
     {
         return [
-            'SoGioiThieu'   => "required",
-            'NgayCap'       => "required",
-            'NgayHH'        => "required",
-            'NoiOHienTai'   => "required",
-            'NoiChuyenDen'  => "required",
-            'BanChiHuy'     => "required",
+            'SoDangKy'          => "required",
+            'NgayDangKy'        => "required",
+            'NoiDangKy'         => "required",
+            'DiaChiThuongTru'   => "required",
+            'NgayNop'           => "required",
+            'SoGioiThieu'       => "required",
+            'NgayCap'           => "required",
+            'NgayHH'            => "required",
+            'NoiOHienTai'       => "required",
+            'NoiChuyenDen'      => "required",
+            'BanChiHuy'         => "required",
         ];
     }
     protected function failedValidation(ValidationValidator $validator)
