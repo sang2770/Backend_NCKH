@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    // thay doi thong tin ca nhan
     public function changeProfile(Request $request)
     {
        $validator=Validator::make($request->all(),[
@@ -65,7 +66,7 @@ class StudentController extends Controller
             return response()->json(['status' => "Not Found!!!"]);
         }
     }
-
+    // tao moi
     public function create($Input)
     {
         try {

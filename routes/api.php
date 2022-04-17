@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CanBoController;
 use App\Http\Controllers\FileManagementController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RequestManagementController;
@@ -176,4 +177,21 @@ Route::group([
     Route::delete('delete-notification-file/{id}', [NotificationController::class, 'DeleteFile']); //xoa file thong bao
     Route::put('update-filename/{id}/{filename}', [NotificationController::class, 'UpdateName']); //update filename sau khi uploadfile
 
+});
+
+/*
+|--------------------------------------------------------------------------
+| Quản lý Can bo chỉ huy truong
+|--------------------------------------------------------------------------
+
+*/
+
+Route::group([
+    'prefix' => 'commander-management',
+    'middleware' => ['auth:admin-api', 'scopes:admin']
+], function () {
+    Route::get('GetListCommander', [CanBoController::class, 'index']); //lay ra danh sach theo trang thai
+    Route::post('CreateCommander', [CanBoController::class, 'store']); // Tao mới
+    Route::put('UpdateCommander', [CanBoController::class, 'update']); //Sửa
+    Route::delete('DeleteCommander/{id}', [CanBoController::class, 'destroy']); //Xóa
 });
