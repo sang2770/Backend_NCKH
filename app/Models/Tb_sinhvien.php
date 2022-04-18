@@ -45,7 +45,10 @@ class Tb_sinhvien extends Authenticatable
     const UPDATED_AT = 'updated_date';
     public function filterNam($query, $value)
     {
-        return $query->whereYear('NgayQuanLy', $value)->orWhereYear('NgayKetThuc', $value);
+        
+        return $query->whereYear('NgayQuanLy', $value)
+                    ->orWhereYear('NgayKetThuc', $value);
+                    
     }
     public function filterMasinhvien($query, $value)
     {
