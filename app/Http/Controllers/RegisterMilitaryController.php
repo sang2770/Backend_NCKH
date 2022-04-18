@@ -305,7 +305,7 @@ class RegisterMilitaryController extends Controller
                 ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã thôi học');
         });
 
-        $info = $info->orderBy('NgayQuyetDinh', 'DESC')->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
+        $info = $info->orderBy('NgayQuyetDinh', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
             "page" => $info['current_page'],
             "first_page_url"    => $info['first_page_url'],
