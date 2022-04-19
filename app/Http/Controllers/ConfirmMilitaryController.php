@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tb_canbo;
 use App\Models\Tb_giay_xn_truong;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_yeucau;
@@ -58,14 +59,17 @@ class ConfirmMilitaryController extends Controller
 
         $count = $confirm->count();
         $confirm = $confirm->get();
+
+        $NgayCap = Carbon::now()->toDateString();
+        $NgayCap =  explode("-", $NgayCap);
+        $Ngay = $NgayCap[2];
+        $Thang = $NgayCap[1];
+        $Nam = $NgayCap[0];
+
+        $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)->where('TrangThai', '=', 'Đang hoạt động')->get();
+
         if ($count != 0) {
             for ($i = 0; $i < $count; $i++) {
-
-            $NgayCap = Carbon::now()->toDateString();
-            $NgayCap =  explode("-", $NgayCap);
-            $Ngay = $NgayCap[2];
-            $Thang = $NgayCap[1];
-            $Nam = $NgayCap[0];
 
             if($Thang < 8){
                 $NamHoc = ($Nam -1 ) . " - " . $Nam ;
@@ -97,6 +101,7 @@ class ConfirmMilitaryController extends Controller
                 'Ngay'      => $Ngay,
                 'Thang'     => $Thang,
                 'Nam'       => $Nam,
+                'ChiHuyTruong' => $canbo[$i]["HoVaTen"],
                 'i'         => $i + 1
                 );
 

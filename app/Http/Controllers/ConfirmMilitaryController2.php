@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tb_canbo;
 use App\Models\Tb_giay_xn_truong;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_yeucau;
@@ -81,14 +82,17 @@ class ConfirmMilitaryController2 extends Controller
 
         $count = $confirm->count();
         $confirm = $confirm->get();
+
+        $NgayCap = Carbon::now()->toDateString();
+        $NgayCap =  explode("-", $NgayCap);
+        $Ngay = $NgayCap[2];
+        $Thang = $NgayCap[1];
+        $Nam = $NgayCap[0];
+
+        $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)->where('TrangThai', '=', 'Đang hoạt động')->get();
+
         if ($count != 0) {
             for ($i = 0; $i < $count; $i++) {
-
-            $NgayCap = Carbon::now()->toDateString();
-            $NgayCap =  explode("-", $NgayCap);
-            $Ngay = $NgayCap[2];
-            $Thang = $NgayCap[1];
-            $Nam = $NgayCap[0];
 
             if($Thang < 8){
                 $NamHoc = ($Nam -1 ) . " - " . $Nam ;
@@ -103,7 +107,8 @@ class ConfirmMilitaryController2 extends Controller
                 'MaYeuCau'=> $confirm[$i]['MaYeuCau']
             ]);
 
-            Tb_yeucau::where('MaYeuCau', '=', $confirm[$i]['MaYeuCau']) ->update(['TrangThaiXuLy' => 'Đã cấp']);
+            Tb_yeucau::where('MaYeuCau', '=', $confirm[$i]['MaYeuCau'])->update(['TrangThaiXuLy' => 'Đã cấp']);
+
 
             $NgaySinh = explode("-", $confirm[$i]["NgaySinh"]);
             $NgaySinh = $NgaySinh[2][0].$NgaySinh[2][1] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
@@ -120,6 +125,7 @@ class ConfirmMilitaryController2 extends Controller
                 'Ngay'      => $Ngay,
                 'Thang'     => $Thang,
                 'Nam'       => $Nam,
+                'ChiHuyTruong' => $canbo[$i]["HoVaTen"],
                 'i'         => $i + 1
                 );
 

@@ -148,6 +148,8 @@ Route::group([
     'middleware' => ['auth:admin-api', 'scopes:admin'],
 ], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
+    Route::get('move-military-detail/{id}', [MoveMilitaryController::class, 'show']); //show lần cấp của từng sinh viên
+    
 });
 
 // 4. giay di chuyen tu dia phuong

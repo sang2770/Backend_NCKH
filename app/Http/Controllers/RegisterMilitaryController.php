@@ -267,11 +267,9 @@ class RegisterMilitaryController extends Controller
         $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
             ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
             ->join('Tb_trangthai', 'Tb_trangthai.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->leftJoin('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->leftJoin('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
             'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_sinhvien.TinhTrangSinhVien', 
-            'Tb_trangthai.SoQuyetDinh', 'Tb_trangthai.NgayQuyetDinh', 'Tb_giay_dc_truong.NgayCap');
+            'Tb_trangthai.SoQuyetDinh', 'Tb_trangthai.NgayQuyetDinh');
 
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
@@ -288,18 +286,7 @@ class RegisterMilitaryController extends Controller
         if ($request->TinhTrangSinhVien) {
             $info = $info->where('Tb_sinhvien.TinhTrangSinhVien', '=', $request->TinhTrangSinhVien);
         }
-        if($request->NgayCap == 0){
-            $info = $info->where('Tb_giay_dc_truong.NgayCap', '=', null);
-        }
-        if($request->NgayCap == 1){
-            $info = $info->where('Tb_giay_dc_truong.NgayCap', '<>', null);
-        }
-        if($request->NgayCap == 2){
-            $info = $info->where(function ($query) {
-                $query->where('Tb_giay_dc_truong.NgayCap', '=', null)
-                    ->orWhere('Tb_giay_dc_truong.NgayCap', '<>', null);
-            });
-        }
+        
         $info = $info->where(function ($query) {
             $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
                 ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã thôi học');
@@ -313,7 +300,6 @@ class RegisterMilitaryController extends Controller
             "TotalPage"         => $info['last_page']
         ]]);
     }
-    
 
     /// loc ra thong tin sinh vien da co giay cn dky nvqs
     public function FilterStudentRegister(Request $request)
