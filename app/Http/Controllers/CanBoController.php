@@ -47,7 +47,8 @@ class CanBoController extends Controller
         $validator=Validator::make($request->all(), [
             'HoVaTen'=>"required",
             "ChucVu"=>"required",
-            "ThoiGianBatDau"=>"required"
+            "ThoiGianBatDau"=>"required",
+            "ThoiGianKetThuc"=>"required"
         ]);
         if ($validator->fails()) {
             // Bad Request
@@ -59,7 +60,7 @@ class CanBoController extends Controller
             Tb_canbo::create($user);
             return response()->json(['status' => "Success", 'data'=> $validator->validated()]);
         } catch (Exception $e) {
-            return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu không hợp lệ']);
+            return response()->json(['status' => "Failed", 'Err_Message' => 'Có lỗi vui lòng thử lại! Hoặc liên hệ bộ phận kĩ thuậtg']);
         }
     }
 
@@ -77,7 +78,8 @@ class CanBoController extends Controller
             'MaCanBo'=>"required",
             'HoVaTen'=>"required",
             "ChucVu"=>"required",
-            "ThoiGianBatDau"=>"required"
+            "ThoiGianBatDau"=>"required",
+            "ThoiGianKetThuc"=>"required"
         ]);
         if ($validator->fails()) {
             // Bad Request
@@ -106,11 +108,10 @@ class CanBoController extends Controller
     public function destroy($id)
     {
         $canbo=Tb_canbo::find($id);
-        $Date=Carbon::now()->toDateString();
         if($canbo)
         {
 
-            $canbo->update(['TrangThai' => 'Nghỉ hưu', "ThoiGianKetThuc"=>$Date]);
+            $canbo->update(['TrangThai' => 'Nghỉ hưu']);
             return response()->json(["status"=>"Success"]);
         }
         else{

@@ -20,7 +20,5 @@ class Tb_canbo extends Model
     ];
     
     protected $primaryKey = 'MaCanBo';
-    public $timestamps = true;
-    const CREATED_AT = "ThoiGianBatDau";
-    const UPDATED_AT = null;
+    public $timestamps = false;
 }
