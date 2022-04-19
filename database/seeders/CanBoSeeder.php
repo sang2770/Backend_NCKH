@@ -19,7 +19,7 @@ class CanBoSeeder extends Seeder
             'HoVaTen'=>"Nguyễn Duy Việt",
             'TrangThai'=>"Đang hoạt động",
             'ChucVu'=>"Chỉ huy trưởng",
-            'ThoiGianKetThuc'=>null,
+            'ThoiGianKetThuc'=>'2022-1-1',
             'ThoiGianBatDau'=>"2019-1-1"
         ]);
     }
