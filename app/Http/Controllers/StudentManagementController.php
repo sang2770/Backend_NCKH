@@ -171,7 +171,9 @@ class StudentManagementController extends Controller
             'HoKhauXaPhuong' => 'Hộ khẩu xã/phường',
             'TinhTrangSinhVien' => 'Tình trạng sinh viên',
             'HeDaoTao' => 'Hệ đào tạo',
-            'TenLop' => 'Tên lớp'
+            'TenLop' => 'Tên lớp',
+            'NgayQuyetDinh'=>"Ngày quyết định",
+            "SoQuyetDinh"=>"Số quyết định"
         ];
         try {
             $list = Tb_lichsu::where('tb_lichsu.MaSinhVien', $id)
