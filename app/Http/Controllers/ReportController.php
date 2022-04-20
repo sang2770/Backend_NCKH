@@ -146,7 +146,9 @@ class ReportController extends Controller
             'HoKhauXaPhuong' => 'Hộ khẩu xã/phường',
             'TinhTrangSinhVien' => 'Tình trạng sinh viên',
             'HeDaoTao' => 'Hệ đào tạo',
-            'TenLop' => 'Tên lớp'
+            'TenLop' => 'Tên lớp',
+            'NgayQuyetDinh'=>"Ngày quyết định",
+            "SoQuyetDinh"=>"Số quyết định"
         ];
         try {
             $limit = $request->query('limit');
@@ -222,7 +224,7 @@ class ReportController extends Controller
                     $Total_Failed+=1;
                 }
             }
-            $History=Tb_Err_importStudent::join('Tb_tk_quanly', 'Tb_tk_quanly.MaTK', '=', 'tb_ErrImportStudent.MaTK')
+            $History=$Err->join('Tb_tk_quanly', 'Tb_tk_quanly.MaTK', '=', 'tb_ErrImportStudent.MaTK')
             ->select('TenDangNhap', 'NoiDung', 'ThoiGian', 'TrangThai');
             return [[$Total_Success, $Total_Failed], $History];
     }
