@@ -69,8 +69,11 @@ class MoveMilitaryController extends Controller
             }elseif($countMove > 0){
                 $countMove += 1;
             }
-            $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)->where('TrangThai', '=', 'Đang hoạt động')->get();
-
+            $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)
+            ->where('TrangThai', '=', 'Đang hoạt động')
+            ->where('ChucVu', '=', 'Chỉ huy trưởng')
+            ->get();
+            
             if($count!=0){
                 for($i = 0; $i<$count; $i++){
                     

@@ -37,7 +37,7 @@ class ConfirmMilitaryController2 extends Controller
         $countYC = $req->count();
         $req = $req->get();
 
-        if ($countYC != 0) {
+        if ($countYC > 0) {
             for ($i = 0; $i < $countYC; $i++) {
                 Tb_yeucau::insert([
                     'MaSinhVien' => $req[$i]["MaSinhVien"],
@@ -89,7 +89,10 @@ class ConfirmMilitaryController2 extends Controller
         $Thang = $NgayCap[1];
         $Nam = $NgayCap[0];
 
-        $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)->where('TrangThai', '=', 'Đang hoạt động')->get();
+        $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)
+        ->where('TrangThai', '=', 'Đang hoạt động')
+        ->where('ChucVu', '=', 'Chỉ huy trưởng')
+        ->get();
 
         if ($count != 0) {
             for ($i = 0; $i < $count; $i++) {
@@ -125,7 +128,7 @@ class ConfirmMilitaryController2 extends Controller
                 'Ngay'      => $Ngay,
                 'Thang'     => $Thang,
                 'Nam'       => $Nam,
-                'ChiHuyTruong' => $canbo[$i]["HoVaTen"],
+                'ChiHuyTruong' => $canbo[0]["HoVaTen"],
                 'i'         => $i + 1
                 );
 
@@ -138,5 +141,12 @@ class ConfirmMilitaryController2 extends Controller
         } else {
             return response()->json(['status' => 'Not Found!']);
         }
+    }
+
+    public function Show($id){
+        $info = Tb_sinhvien::select('Tb_sinhvien.HoTen')
+                            ->where('Tb_sinhvien.MaSinhVien', '=', $id)->get();
+
+        return response()->json(['status' => "Success", 'data' => $info[0]["HoTen"]]);
     }
 }

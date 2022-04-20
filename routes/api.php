@@ -140,7 +140,7 @@ Route::group([
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho sinh vien theo yeu cau sv
     Route::get('confirm-military-off', [ConfirmMilitaryController2::class, 'Confirm']); //cap giay xac nhan truc tiep cho sinh vien 
-
+    Route::get('confirm-military-info/{id}', [ConfirmMilitaryController2::class, 'Show']); //lay ho ten sinh vien 
 });
 // 3. giay di chuyen tu truong
 Route::group([
