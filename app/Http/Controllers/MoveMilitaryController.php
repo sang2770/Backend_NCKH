@@ -62,8 +62,13 @@ class MoveMilitaryController extends Controller
             // $NgayHH = $Now->addDays(10)->toDateString();
             // $NgayHH =  explode("-", $NgayHH);
 
-            $countMove = Tb_giay_dc_truong::count();
+            $countMove = Tb_giay_dc_truong::WhereYear('NgayCap', '=', explode("-", $NgayCap[0]))->count();
             
+            if($countMove == 0){
+                $countMove = 1;
+            }elseif($countMove > 0){
+                $countMove += 1;
+            }
             $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)->where('TrangThai', '=', 'Đang hoạt động')->get();
 
             if($count!=0){
