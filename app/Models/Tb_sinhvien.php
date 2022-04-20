@@ -78,6 +78,15 @@ class Tb_sinhvien extends Authenticatable
     {
         return $query->where('TrangThaiXuLy', $value);
     }
+    public function filterNgaySinh($query, $value)
+    {
+        $date=explode("-", $value);
+        if(count($date)<3)
+        {
+            return $query;
+        }
+        return $query->where('NgaySinh', date($value));
+    }
     
     public function filterDangKy($query, $value)
     {
