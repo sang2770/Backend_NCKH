@@ -115,7 +115,7 @@ class ConfirmMilitaryController2 extends Controller
 
             $array1 = array(
                 'HoTen'     => $confirm[$i]["HoTen"], 
-                'NgaySinh'  => $confirm[$i]["NgaySinh"],
+                'NgaySinh'  => $NgaySinh,
                 'MaSinhVien'=> $confirm[$i]["MaSinhVien"],
                 'TenLop'    => $confirm[$i]["TenLop"],
                 'TenKhoa'   => $confirm[$i]["TenKhoa"],

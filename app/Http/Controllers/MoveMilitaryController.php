@@ -80,7 +80,7 @@ class MoveMilitaryController extends Controller
                     Tb_giay_dc_truong::insert([
                         'SoGioiThieuDC' => $countMove,
                         'NgayCap'       => Carbon::now()->toDateString(), 
-                        'NgayHH'        => Carbon::now()->addDays(10)->toDateString(),
+                        'NgayHH'        => $request->NamHH . '-' . $request->ThangHH . '-' . $request->NgayHH,
                         'NoiChuyenVe'   => $move[$i]["BanChiHuy"],
                         'NoiOHienTai'   => $move[$i]["NoiOHienTai"],
                         'LyDo'          => $move[$i]["TinhTrangSinhVien"],
