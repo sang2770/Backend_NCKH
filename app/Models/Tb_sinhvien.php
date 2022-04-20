@@ -93,11 +93,11 @@ class Tb_sinhvien extends Authenticatable
         $Giay=Tb_giay_cn_dangky::select("MaSinhVien")->get()->toArray();
         if(Str::upper($value)==Str::upper("Đã nộp"))
         {
-            return $query->whereIn('MaSinhVien', $Giay);
+            return $query->whereIn('Tb_sinhvien.MaSinhVien', $Giay);
 
         }else if(Str::upper($value)==Str::upper("Chưa nộp"))
         {
-            return $query->whereNotIn('MaSinhVien', $Giay);;
+            return $query->whereNotIn('Tb_sinhvien.MaSinhVien', $Giay);;
         }else{
             return $query;
         }
