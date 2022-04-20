@@ -62,8 +62,13 @@ class MoveMilitaryController extends Controller
             // $NgayHH = $Now->addDays(10)->toDateString();
             // $NgayHH =  explode("-", $NgayHH);
 
-            $countMove = Tb_giay_dc_truong::count();
+            $countMove = Tb_giay_dc_truong::WhereYear('NgayCap', '=', $NgayCap[0])->count();
             
+            if($countMove == 0){
+                $countMove = 1;
+            }elseif($countMove > 0){
+                $countMove += 1;
+            }
             $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)->where('TrangThai', '=', 'Đang hoạt động')->get();
 
             if($count!=0){
@@ -80,7 +85,7 @@ class MoveMilitaryController extends Controller
                     Tb_giay_dc_truong::insert([
                         'SoGioiThieuDC' => $countMove,
                         'NgayCap'       => Carbon::now()->toDateString(), 
-                        'NgayHH'        => Carbon::now()->addDays(10)->toDateString(),
+                        'NgayHH'        => $request->NamHH . '-' . $request->ThangHH . '-' . $request->NgayHH,
                         'NoiChuyenVe'   => $move[$i]["BanChiHuy"],
                         'NoiOHienTai'   => $move[$i]["NoiOHienTai"],
                         'LyDo'          => $move[$i]["TinhTrangSinhVien"],

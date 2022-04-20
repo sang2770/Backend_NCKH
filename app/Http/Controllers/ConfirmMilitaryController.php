@@ -9,8 +9,6 @@ use App\Models\Tb_yeucau;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 class ConfirmMilitaryController extends Controller
 {
@@ -91,7 +89,7 @@ class ConfirmMilitaryController extends Controller
 
             $array1 = array(
                 'HoTen'     => $confirm[$i]["HoTen"], 
-                'NgaySinh'  => $confirm[$i]["NgaySinh"],
+                'NgaySinh'  => $NgaySinh,
                 'MaSinhVien'=> $confirm[$i]["MaSinhVien"],
                 'TenLop'    => $confirm[$i]["TenLop"],
                 'TenKhoa'   => $confirm[$i]["TenKhoa"],
