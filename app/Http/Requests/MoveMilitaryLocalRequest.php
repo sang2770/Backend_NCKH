@@ -30,7 +30,6 @@ class MoveMilitaryLocalRequest extends FormRequest
         return [
             'SoGioiThieu'   => "required",
             'NgayCap'       => "required",
-            'NgayHH'        => "required",
             'NoiOHienTai'   => "required",
             'NoiChuyenDen'  => "required",
             'BanChiHuy'     => "required",

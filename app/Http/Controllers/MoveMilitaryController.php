@@ -82,7 +82,6 @@ class MoveMilitaryController extends Controller
                     
                     //Ngay Dang ky
                     $NgayDangKy = explode("-", $move[$i]["NgayDangKy"]);
-                    $namDK = $NgayDangKy[0];
                     $NgayDangKy = $NgayDangKy[2][0].$NgayDangKy[2][1] . '/' . $NgayDangKy[1] . '/' . $NgayDangKy[0];
                     
                     Tb_giay_dc_truong::insert([
@@ -113,7 +112,6 @@ class MoveMilitaryController extends Controller
                         'NgayHH'           => $request->NgayHH,
                         'ThangHH'          => $request->ThangHH,
                         'NamHH'            => $request->NamHH,
-                        'namDK'            => $namDK,
                         'ChiHuyTruong'     => $canbo[0]["HoVaTen"],
                         'i'                => $i + 1,
                         );

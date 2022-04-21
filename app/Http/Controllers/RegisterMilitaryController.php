@@ -78,13 +78,9 @@ class RegisterMilitaryController extends Controller
                 $date = date_create($Input['NgayCap']);
                 $NgayCap = date_format($date, 'Y-m-d H:i:s');
 
-                $date2 = date_create($Input['NgayHH']);
-                $NgayHH = date_format($date2, 'Y-m-d H:i:s');
-                
                 return [
                     'SoGioiThieu'          => $Input['SoGioiThieu'],
                     'NgayCap'              => $NgayCap,
-                    'NgayHH'               => $NgayHH,
                     'NoiOHienTai'          => $Input['NoiOHienTai'],
                     'NoiChuyenDen'         => $Input['NoiChuyenDen'],
                     'LyDo'                 => $LyDo,
@@ -159,7 +155,6 @@ class RegisterMilitaryController extends Controller
                 'Tb_giay_dc_diaphuong.SoGioiThieu',
                 'Tb_giay_dc_diaphuong.BanChiHuy',
                 'Tb_giay_dc_diaphuong.NgayCap',
-                'Tb_giay_dc_diaphuong.NgayHH',
                 'Tb_giay_dc_diaphuong.NoiOHienTai',
                 'Tb_giay_dc_diaphuong.NoiChuyenDen'
             );
@@ -195,7 +190,7 @@ class RegisterMilitaryController extends Controller
                             ->join('Tb_giay_dc_diaphuong', 'Tb_giay_cn_dangky.MaGiayDK', '=' , 'Tb_giay_dc_diaphuong.MaGiayDK')
                             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_lop.TenLop', 
                             'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_dc_diaphuong.MaGiayDC_DP', 'Tb_giay_dc_diaphuong.SoGioiThieu', 'Tb_giay_dc_diaphuong.BanChiHuy',
-                            'Tb_giay_dc_diaphuong.NgayCap', 'Tb_giay_dc_diaphuong.NgayHH', 'Tb_giay_dc_diaphuong.NoiOHienTai', 'Tb_giay_dc_diaphuong.NoiChuyenDen');
+                            'Tb_giay_dc_diaphuong.NgayCap', 'Tb_giay_dc_diaphuong.NoiOHienTai', 'Tb_giay_dc_diaphuong.NoiChuyenDen');
 
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);

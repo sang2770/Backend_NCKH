@@ -17,7 +17,6 @@ class CreateTbGiayDcDiaphuongTable extends Migration
             $table->increments('MaGiayDC_DP');
             $table->string('SoGioiThieu', 20);
             $table->date('NgayCap');
-            $table->date('NgayHH');
             $table->string('NoiOHienTai', 150);
             $table->string('NoiChuyenDen', 150);
             $table->string('LyDo', 100);
