@@ -49,6 +49,7 @@ class ConfirmMilitaryController2 extends Controller
                 
             }
         }
+
         ///
         $array = array();
         $templateProcessor = new TemplateProcessor('TemplateMilitary/ConfirmMilitaryTemplate.docx');
@@ -112,7 +113,6 @@ class ConfirmMilitaryController2 extends Controller
 
             $NgaySinh = explode("-", $confirm[$i]["NgaySinh"]);
             $NgaySinh = $NgaySinh[2][0].$NgaySinh[2][1] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
-
             $array1 = array(
                 'HoTen'     => $confirm[$i]["HoTen"], 
                 'NgaySinh'  => $NgaySinh,
@@ -131,6 +131,7 @@ class ConfirmMilitaryController2 extends Controller
 
                 $array[] = $array1;
             }
+
             $templateProcessor->cloneBlock('block_name', 0, true, false, $array);
             $filename = "DanhSachGiayXN";
             $templateProcessor->saveAs($filename . '.docx');
