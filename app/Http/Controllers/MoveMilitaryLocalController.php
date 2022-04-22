@@ -56,13 +56,9 @@ class MoveMilitaryLocalController extends Controller
                 $date = date_create($Input['NgayCap']);
                 $NgayCap = date_format($date, 'Y-m-d H:i:s');
 
-                $date2 = date_create($Input['NgayHH']);
-                $NgayHH = date_format($date2, 'Y-m-d H:i:s');
-                
                 return [
                     'SoGioiThieu'          => $Input['SoGioiThieu'],
                     'NgayCap'              => $NgayCap,
-                    'NgayHH'               => $NgayHH,
                     'NoiOHienTai'          => $Input['NoiOHienTai'],
                     'NoiChuyenDen'         => $Input['NoiChuyenDen'],
                     'LyDo'                 => $LyDo,
@@ -118,7 +114,7 @@ class MoveMilitaryLocalController extends Controller
             $task->fill($input)->save();
 
             $taskMove = $this->editMove($id);
-            $inputMove = $request->only('SoGioiThieu', 'NgayCap', 'NgayHH', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
+            $inputMove = $request->only('SoGioiThieu', 'NgayCap', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
             $taskMove->fill($inputMove)->save();
 
             return response()->json(['status' => "Success updated"]);

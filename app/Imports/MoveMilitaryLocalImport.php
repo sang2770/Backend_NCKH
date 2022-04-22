@@ -40,7 +40,6 @@ class MoveMilitaryLocalImport implements ToModel, WithHeadingRow, WithChunkReadi
             return new Tb_giay_dc_diaphuong([
                 'SoGioiThieu'   => $row['so_gioi_thieu'], 
                 'NgayCap'       => Date::excelToDateTimeObject($row['ngay_cap'])->format('Y-m-d'), 
-                'NgayHH'        => Date::excelToDateTimeObject($row['ngay_het_han'])->format('Y-m-d'),
                 'NoiOHienTai'   => $row['noi_o_hien_tai'],
                 'NoiChuyenDen'  => $row['noi_chuyen_den'],
                 'LyDo'          => $row['ly_do'],
@@ -54,7 +53,6 @@ class MoveMilitaryLocalImport implements ToModel, WithHeadingRow, WithChunkReadi
         return [
             "*.so_gioi_thieu"   => "required",
             '*.ngay_cap'        => "required",
-            "*.ngay_het_han"    => "required",
             "*.noi_o_hien_tai"  => "required",
             "*.noi_chuyen_den"  => "required",
             "*.ly_do"           => "required",

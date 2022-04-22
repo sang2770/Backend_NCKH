@@ -35,7 +35,6 @@ class UpdateMoveLocalRequest extends FormRequest
             'NgayNop'           => "required",
             'SoGioiThieu'       => "required",
             'NgayCap'           => "required",
-            'NgayHH'            => "required",
             'NoiOHienTai'       => "required",
             'NoiChuyenDen'      => "required",
             'BanChiHuy'         => "required",
