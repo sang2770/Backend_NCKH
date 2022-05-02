@@ -31,7 +31,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
     public $Err = [];
     public function model(array $row)
     {
-        if (empty($row['tt'])) {
+        if (empty($row['stt'])) {
             return null;
         }
         ++$this->rowNum;
@@ -58,13 +58,13 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
                 'DiaChiBaoTin' => $row['dia_chi_khi_bao_tin'],
                 'SDT' => $row['so_dien_thoai'],
                 'Email' => $row['email'],
-                'HoKhauTinh' => $row['ho_khau_tinhtp'],
-                'HoKhauHuyen' => $row['ho_khau_quanhuyen'],
-                'HoKhauXaPhuong' => $row['ho_khau_xaphuong'],
+                'HoKhauTinh' => $row['ho_khau_tinh_tp'],
+                'HoKhauHuyen' => $row['ho_khau_quan_huyen'],
+                'HoKhauXaPhuong' => $row['ho_khau_xa_phuong'],
                 'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
                 'HeDaoTao' => $row['he_dao_tao'],
                 'MaLop' => $MaLop,
-                'SoCMTND' => $row['chung_minh_nhan_dan'],
+                'SoCMTND' => $row['so_cmnd'],
                 'NgayCapCMTND' => $row['ngay_cap_cmnd'],
                 'NoiCapCMTND' => $row['noi_cap_cmnd'],
 
@@ -81,7 +81,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             '*.ho_ten' => "required",
             "*.ngay_sinh" => "required",
             "*.noi_sinh" => "required",
-            "*.email" => "required|email",
+            // "*.email" => "required|email",
             "*.gioi_tinh" => "required",
             "*.ton_giao" => "required",
             "*.quoc_tich" => "required",
@@ -90,11 +90,11 @@ class UsersImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmp
             "*.dia_chi_khi_bao_tin" => "required",
             "*.he_dao_tao" => "required",
             "*.tinh_trang_sinh_vien" => "required",
-            "*.ho_khau_tinhtp" => "required",
-            "*.ho_khau_quanhuyen" => "required",
-            "*.ho_khau_xaphuong" => "required",
+            "*.ho_khau_tinh_tp" => "required",
+            "*.ho_khau_quan_huyen" => "required",
+            "*.ho_khau_xa_phuong" => "required",
             "*.ten_lop" => "required",
-            "*.chung_minh_nhan_dan" => "required|unique:Tb_sinhvien,SoCMTND",
+            "*.so_cmnd" => "required|unique:Tb_sinhvien,SoCMTND",
             "*.ngay_cap_cmnd" => "required",
             "*.noi_cap_cmnd" => "required",
         ];

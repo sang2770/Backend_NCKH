@@ -36,7 +36,8 @@ class LoginController extends Controller
     // Đăng xuất
     public function Logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        $request->user()->currentAccessToken()->delete();
+ 
         return response()->json(['status' => 'Success']);
     }
     public function change(Request $request)

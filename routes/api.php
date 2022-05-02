@@ -30,14 +30,14 @@ Route::group([
     Route::post('forget-password', [ForgotPassWord::class, "Forgot"]);
     Route::post('reset-password', [ForgotPassWord::class, "Reset"]);
 
-    // Route::post('signup', [LoginController::class, 'signup']);
+    Route::post('signup', [LoginController::class, 'signup']);
     Route::group([
         'middleware' => ['auth:admin-api', 'scopes:admin']
     ], function () {
         Route::delete('logout', [LoginController::class, 'logout']);
         Route::post('ChangePassword', [LoginController::class, 'change']);
         Route::get('me', [LoginController::class, 'user']);
-        Route::post('signup', [LoginController::class, 'signup']);
+        // Route::post('signup', [LoginController::class, 'signup']);
     });
 });
 /*
