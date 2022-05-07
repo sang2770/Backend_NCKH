@@ -53,6 +53,7 @@ class Helper
         if (count($NgaySinh) < 2 || count($NgaySinh) > 3) {
             return false;
         }
+        // var_dump($NgaySinh);
         $day = $NgaySinh[2];
         $month = $NgaySinh[1];
         $year = $NgaySinh[0];
