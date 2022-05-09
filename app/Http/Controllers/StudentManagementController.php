@@ -226,8 +226,9 @@ class StudentManagementController extends Controller
         try {
             // Get Ma Lop
             $TenLop = $request->TenLop;
-            if ($TenLop) {
-                $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
+            $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
+
+            if ($MaLop) {
                 $request->MaLop = $MaLop;
                 $validated = Arr::except($request->input(), ["TenLop"]);
                 $validated['MaLop'] = $MaLop;
@@ -245,7 +246,8 @@ class StudentManagementController extends Controller
             }
             unset($validated['_method']);
             $user = Tb_sinhvien::find($id);
-            if(!Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Đang học")))
+            if(Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Đã tốt nghiệp")) 
+            || Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Thôi học")))
             {
                 return response()->json(['status' => "Failed", 'Err_Message' => "Sinh viên này đã không còn quản lý"]);
             }
@@ -255,7 +257,7 @@ class StudentManagementController extends Controller
             $Admin = $request->user()->MaTK;
             $NoiDung = "";
             foreach ($validated as $key => $value) {
-                if (trim($value) != trim($user[$key])) {
+                if (trim($value) != trim($user[$key]) || $key=="TenLop" && $request->MaLop !=$request->MaLop) {
                     $NoiDung .= $key . ":" . $value . ";";
                 }
             }
@@ -263,7 +265,8 @@ class StudentManagementController extends Controller
                 unset($validated['SoQuyetDinh']);
                 unset($validated['NgayQuyetDinh']);
                 Tb_sinhvien::where('MaSinhVien', $id)->update($validated);
-                if(!Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Đang học")))
+                if(Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Đã tốt nghiệp")) 
+                || Str::contains(str::upper($validated["TinhTrangSinhVien"]), Str::upper("Thôi học")))
                 {
                     Tb_sinhvien::where('MaSinhVien', $id)->update(["NgayKetThuc"=>date('Y-m-d')]);
                     Tb_trangthai::Create(['MaSinhVien'=>$id, "NgayQuyetDinh"=>$request->NgayQuyetDinh, "SoQuyetDinh"=>$request->SoQuyetDinh]);
@@ -282,7 +285,7 @@ class StudentManagementController extends Controller
                 ])->first();
             return response()->json(['status' => "Success", 'data' => $user]);
         } catch (Exception $e) {
-            // var_dump($e->getMessage());
+            var_dump($e->getMessage());
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!']);
         }
     }
