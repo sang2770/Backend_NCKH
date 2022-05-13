@@ -6,6 +6,7 @@ use App\Models\Tb_canbo;
 use App\Models\Tb_giay_cn_dangky;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_giay_dc_truong;
+use App\Models\Tb_trangthai;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
@@ -43,6 +44,12 @@ class MoveMilitaryController extends Controller
             }
             if($request->TinhTrangSinhVien){
                 $move = $move->where('Tb_sinhvien.TinhTrangSinhVien', '=', $request->TinhTrangSinhVien);
+            }
+            if ($request->NgayQuyetDinh) {
+                $move = $move->whereYear('Tb_trangthai.NgayQuyetDinh', '=', $request->NgayQuyetDinh);
+            }
+            if ($request->SoQuyetDinh) {
+                $move = $move->where('Tb_trangthai.SoQuyetDinh', '=', $request->SoQuyetDinh);
             }
 
             $move = $move->where(function ($query) {
@@ -146,5 +153,14 @@ class MoveMilitaryController extends Controller
             "next_page_url"     => $info['next_page_url'],
             "TotalPage"         => $info['last_page']
         ]]);
+    }
+
+    public function list(){
+        try {
+            $lst = Tb_trangthai::distinct()->pluck("SoQuyetDinh");
+            return response()->json(['status' => "Success", 'data' => $lst]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Requests\RegisterMilitaryRequest;
 use App\Http\Requests\UpdateRegister;
 use App\Http\Requests\UpdateRegisterRequest;
 use App\Models\Tb_giay_dc_diaphuong;
+use App\Models\Tb_giay_xn_truong;
 use App\Models\Tb_sinhvien;
 use Illuminate\Support\Facades\Validator;
 
@@ -171,6 +172,10 @@ class RegisterMilitaryController extends Controller
         if ($request->Khoas) {
             $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
+        if($request->NgayNop){
+            $info = $info->whereYear('Tb_giay_cn_dangky.NgayNop', '=', $request->NgayNop);
+        }
+
         $info = $info->orderBy('NgayNop', 'DESC')->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
             "page" => $info['current_page'],
@@ -281,10 +286,16 @@ class RegisterMilitaryController extends Controller
         if ($request->TinhTrangSinhVien) {
             $info = $info->where('Tb_sinhvien.TinhTrangSinhVien', '=', $request->TinhTrangSinhVien);
         }
-        
+        if ($request->NgayQuyetDinh) {
+            $info = $info->whereYear('Tb_trangthai.NgayQuyetDinh', '=', $request->NgayQuyetDinh);
+        }
+        if ($request->SoQuyetDinh) {
+            $info = $info->where('Tb_trangthai.SoQuyetDinh', '=', $request->SoQuyetDinh);
+        }
+
         $info = $info->where(function ($query) {
             $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
-                ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã thôi học');
+                ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Thôi học');
         });
 
         $info = $info->orderBy('NgayQuyetDinh', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -304,8 +315,11 @@ class RegisterMilitaryController extends Controller
         $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
             ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
             ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->leftJoin('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->leftJoin('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
-            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_cn_dangky.NgayNop');
+            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_cn_dangky.NgayNop', 
+            'Tb_giay_xn_truong.NgayCap');
 
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
@@ -319,8 +333,11 @@ class RegisterMilitaryController extends Controller
         if ($request->Khoas) {
             $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
         }
+        if ($request->NgayCap) {
+            $info = $info->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
+        }
 
-        $info = $info->orderBy('NgayNop', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
+        $info = $info->orderBy('MaGiayDK', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
             "page" => $info['current_page'],
             "first_page_url"    => $info['first_page_url'],

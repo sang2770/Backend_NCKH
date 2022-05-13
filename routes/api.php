@@ -117,7 +117,7 @@ giay chung nhan dang ky nvqs
 */
 Route::group([
     'prefix' => 'register-military-management',
-    'middleware' => ['auth:admin-api', 'scopes:admin']
+    //'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']); //them moi
@@ -126,7 +126,7 @@ Route::group([
     Route::get('filter-info-confirm', [RegisterMilitaryController::class, 'FilterConfirm']); //loc thong tin giay xac nhan tu truong
     Route::get('filter-info-move', [RegisterMilitaryController::class, 'FilterMove']); //loc thong tin giay di chuyen nvqs tu truong
     Route::get('filter-info-move-local', [RegisterMilitaryController::class, 'FilterMoveLocal']);
-    Route::get('filter-info-student-registerMili', [RegisterMilitaryController::class, 'FilterMoveLocal']); //loc thong tin sv da nop giay cn dangky nvqs
+    Route::get('filter-info-student-registerMili', [RegisterMilitaryController::class, 'FilterStudentRegister']); //loc thong tin sv da nop giay cn dangky nvqs
 
 });
 /*
@@ -136,11 +136,12 @@ Route::group([
 */
 Route::group([
     'prefix' => 'confirm-military-management',
-    'middleware' => ['auth:admin-api', 'scopes:admin']
+    //'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho sinh vien theo yeu cau sv
     Route::get('confirm-military-off', [ConfirmMilitaryController2::class, 'Confirm']); //cap giay xac nhan truc tiep cho sinh vien 
     Route::get('confirm-military-info/{id}', [ConfirmMilitaryController2::class, 'Show']); //lay ho ten sinh vien 
+
 });
 // 3. giay di chuyen tu truong
 Route::group([
@@ -149,6 +150,7 @@ Route::group([
 ], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
     Route::get('move-military-detail/{id}', [MoveMilitaryController::class, 'show']); //show lần cấp của từng sinh viên
+    Route::get('list-decision-number', [MoveMilitaryController::class, 'list']); //danh sach cac so quyet dinh
     
 });
 
