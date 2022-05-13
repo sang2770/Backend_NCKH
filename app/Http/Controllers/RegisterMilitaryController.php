@@ -308,7 +308,7 @@ class RegisterMilitaryController extends Controller
         ]]);
     }
 
-    /// loc ra thong tin sinh vien da co giay cn dky nvqs
+    /// loc ra thong tin sinh vien da co giay cn dky nvqs kèm số lần đã cấp giấy xác nhận
     public function FilterStudentRegister(Request $request)
     {
         $limit = $request->query('limit');
@@ -338,7 +338,7 @@ class RegisterMilitaryController extends Controller
         if ($request->NgayCap) {
             $info = $info->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
         }
-        $info = $info->paginate($limit, ["*"], 'page', $page)->toArray();
+        $info = $info->orderBy('MaGiayDK', 'DESC')->distinct()->paginate($limit, ["*"], 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info['data'], 'pagination' => [
             "page" => $info['current_page'],
             "limit" => $limit,
