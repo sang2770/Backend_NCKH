@@ -268,9 +268,13 @@ class RegisterMilitaryController extends Controller
         $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
             ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
             ->join('Tb_trangthai', 'Tb_trangthai.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->leftJoin('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+            ->leftJoin('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
             'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_sinhvien.TinhTrangSinhVien', 
-            'Tb_trangthai.SoQuyetDinh', 'Tb_trangthai.NgayQuyetDinh');
+            'Tb_trangthai.SoQuyetDinh', 'Tb_trangthai.NgayQuyetDinh'
+             , DB::raw('count(Tb_giay_dc_truong.MaGiayDC_Truong) as total'))
+             ->groupBy('Tb_sinhvien.MaSinhVien');
 
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
