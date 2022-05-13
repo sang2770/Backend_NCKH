@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateRegisterRequest;
 use App\Models\Tb_giay_dc_diaphuong;
 use App\Models\Tb_giay_xn_truong;
 use App\Models\Tb_sinhvien;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterMilitaryController extends Controller
@@ -312,15 +313,16 @@ class RegisterMilitaryController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+        $info =DB::table("Tb_sinhvien")->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
             ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
             ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
             ->leftJoin('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
             ->leftJoin('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
             'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_cn_dangky.NgayNop', 
-            'Tb_giay_xn_truong.NgayCap');
-
+            'Tb_giay_xn_truong.NgayCap', "Tb_giay_xn_truong.MaGiayXN_Truong"
+             , DB::raw('count(Tb_giay_xn_truong.MaGiayXN_Truong) as total'))
+             ->groupBy('Tb_sinhvien.MaSinhVien');
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
@@ -336,13 +338,11 @@ class RegisterMilitaryController extends Controller
         if ($request->NgayCap) {
             $info = $info->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
         }
-
-        $info = $info->orderBy('MaGiayDK', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
-        return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
+        $info = $info->paginate($limit, ["*"], 'page', $page)->toArray();
+        return response()->json(['status' => "Success", 'data' => $info['data'], 'pagination' => [
             "page" => $info['current_page'],
-            "first_page_url"    => $info['first_page_url'],
-            "next_page_url"     => $info['next_page_url'],
-            "TotalPage"         => $info['last_page']
+            "limit" => $limit,
+            "TotalPage" => $info['last_page']
         ]]);
     }
 }
