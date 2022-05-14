@@ -83,12 +83,13 @@ class StudentManagementController extends Controller
                 return response()->json(['status' => "Failed", 'Err_Message' => "MaLop không tồn tại"]);
             }
             $request->MaLop = $MaLop;
-            $TaiKhoan = Helper::CreateUsers($request->safe()->only(["MaSinhVien", "NgaySinh"]));
+
             $validated = $request->safe()->except(['TenLop']);
             $validated['MaLop'] = $MaLop;
             if (!Helper::CheckDate($request->NgaySinh) || !Helper::CheckDate($request->NgayCapCMTND)) {
                 return response()->json(['status' => "Failed", 'Err_Message' => "Định dạng ngày tháng là y-m-d hoặc y/m/d"]);
             }
+            $TaiKhoan = Helper::CreateUsers($request->safe()->only(["MaSinhVien", "NgaySinh"]));
             // Begin trans
             DB::transaction(function () use ($validated, $TaiKhoan) { // Start the transaction
                 Tb_sinhvien::create($validated);

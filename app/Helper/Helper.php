@@ -33,9 +33,10 @@ class Helper
             // $name = self::FormatText($name);
             $NgaySinh =  explode("/", $Input['NgaySinh']);
             if (count($NgaySinh) == 1) {
-                $NgaySinh =  explode("-", $NgaySinh[0]);
+                $NgaySinh =  explode("-",$Input['NgaySinh']);
             }
             $NgaySinh = $NgaySinh[2] . "/" . $NgaySinh[1] . "/" . $NgaySinh[0];
+            // var_dump($NgaySinh);
             return [
                 'MatKhau' => Hash::make($NgaySinh),
                 'MaSinhVien' => $Input["MaSinhVien"],
