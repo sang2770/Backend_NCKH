@@ -136,7 +136,7 @@ Route::group([
 */
 Route::group([
     'prefix' => 'confirm-military-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin']
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('confirm-military', [ConfirmMilitaryController::class, 'Confirm']); //cap giay xac nhan cho sinh vien theo yeu cau sv
     Route::get('confirm-military-off', [ConfirmMilitaryController2::class, 'Confirm']); //cap giay xac nhan truc tiep cho sinh vien 

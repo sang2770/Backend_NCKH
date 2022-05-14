@@ -69,7 +69,7 @@ class ConfirmMilitaryController extends Controller
         ->where('ChucVu', '=', 'Chỉ huy trưởng')
         ->get();
 
-        if ($count != 0) {
+        if ($count != 0 && $canbo->count() != 0) {
             for ($i = 0; $i < $count; $i++) {
 
             if($Thang < 8){
