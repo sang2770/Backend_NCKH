@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestStudentRequest;
+use App\Models\Tb_giay_cn_dangky;
 use App\Models\Tb_sinhvien;
 use App\Models\Tb_yeucau;
 use Illuminate\Http\Request;
@@ -89,9 +90,14 @@ class StudentController extends Controller
     {
         $req = $request->validated();
         try {
-            $req = $this->create($request->all());
-            Tb_yeucau::insert($req);
-            return response()->json(['status' => "Success", 'data' => $req]);
+            $count = Tb_giay_cn_dangky::where('MaSinhVien', $request->MaSinhVien)->count();
+            if($count != 0){
+                $req = $this->create($request->all());
+                Tb_yeucau::insert($req);
+                return response()->json(['status' => "Success", 'data' => $req]);
+            }else{
+                return response()->json(['status' => "Failed"]);
+            }
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
         }
