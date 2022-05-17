@@ -102,6 +102,21 @@ class Tb_sinhvien extends Authenticatable
             return $query;
         }
     }
+    public function filterXacNhan($query, $value)
+    {
+        $Giay=Tb_giay_dc_diaphuong::select("MaSinhVien")->get()->toArray();
+        if(Str::upper($value)==Str::upper("Đã nộp"))
+        {
+            return $query->whereIn('Tb_sinhvien.MaSinhVien', $Giay);
+
+        }else if(Str::upper($value)==Str::upper("Chưa nộp"))
+        {
+            return $query->whereNotIn('Tb_sinhvien.MaSinhVien', $Giay);;
+        }else{
+            return $query;
+        }
+    }
+    
     public function routeNotificationForMail($notification)
     {
         return $this->Email;

@@ -297,28 +297,33 @@ class StudentManagementController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required',
+            'Khoa'=>'required',
+            'SoQuyetDinh'=>"required",
+            "NgayQuyetDinh"=>"required",
+            'TinhTrangSinhVien'=>'required'
         ]);
         if ($validator->fails()) {
             // Bad Request
             return response()->json(['status' => "Failed", 'Err_Message' => 'Bạn chưa chọn file']);
         }
         $Admin = $request->user()->MaTK;
-        $import = new UpdateUserImport();
-        DB::beginTransaction();
+        $import = new UpdateUserImport($request);
+        // DB::beginTransaction();
         $import->import($request->file);
-        if ($import->failures()->count() == 0 && count($import->Err) == 0) {
+        if ($import->errors()->count() == 0 && count($import->Err) == 0) {
             Tb_Err_importStudent::create(['NoiDung'=>"Sửa trạng thái sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
-            DB::commit();
+            // DB::commit();
             return response()->json(['status' => "Success"]);
         } else {
-            DB::rollBack();
+            // DB::rollBack();
             $errors = [];
-            foreach ($import->failures() as $value) {
-                if (Arr::get($errors, $value->row())) {
-                    $errors[$value->row()] = $errors[$value->row()] . ',' . implode(", ", $value->errors());
-                } else {
-                    $errors[$value->row()] = implode(", ", $value->errors());
-                }
+            foreach ($import->errors() as $value) {
+                var_dump($value);
+                // if (Arr::get($errors, $value->row())) {
+                //     $errors[$value->row()] = $errors[$value->row()] . ',' . implode(", ", $value->errors());
+                // } else {
+                //     $errors[$value->row()] = implode(", ", $value->errors());
+                // }
             }
             foreach ($import->Err as $value) {
 

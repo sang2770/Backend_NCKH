@@ -12,48 +12,60 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+
 use Maatwebsite\Excel\Concerns\ToModel;
 
-class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation, SkipsOnFailure
+class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, SkipsEmptyRows, WithValidation, SkipsOnError
 {
-    use Importable, SkipsFailures;
+    use Importable, SkipsErrors;
     public $Err = [];
     protected $rowNum = 1;
+    public $request;
+    function __construct($request) {
+        $this->request = $request;
+      }
     public function model(array $row)
     {
         if (empty($row['tt'])) {
             return null;
         }
         ++$this->rowNum;
-        $TenLop = $row['ten_lop'];
-        $MaLop = Tb_lop::where('TenLop', $TenLop)->value('MaLop');
-        if (!$MaLop) {
-            $error = ['err' => "Không tồn tại Tên lớp!", "row" => $this->rowNum];
+        $user = Tb_sinhvien::find($row['ma_sinh_vien']);
+        if(!$user)
+        {
+            $error = ['err' => "Sinh viên này không quản lý hoặc nhập sai!", "row" => $this->rowNum];
             $this->Err[] = $error;
             return null;
         }
-        $user = Tb_sinhvien::find($row['ma_sinh_vien']);
+        $check =Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
+        ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')->where("TenKhoa", "like", '%'.$this->request["Khoa"].'%')->exists();
+        if (!$check) {
+            $error = ['err' => "Sinh viên này không thuộc khoa đã chọn!", "row" => $this->rowNum];
+            $this->Err[] = $error;
+            return null;
+        }
+        
         if(!Str::contains(str::upper($user->TinhTrangSinhVien), Str::upper("Đang học")))
         {
             $error = ['err' => "Sinh viên hiện tại không còn quản lý", "row" => $this->rowNum];
             $this->Err[] = $error;
             return null;
         }
-        if($row['so_quyet_dinh'] && !Helper::CheckDate($row['ngay_quyet_dinh']))
+        if($this->request['SoQuyetDinh'] && !Helper::CheckDate($this->request['NgayQuyetDinh']))
         {
             $error = ['err' => "Ngày quyết định không đúng định dạng", "row" => $this->rowNum];
             $this->Err[] = $error;
             return null;
         }
         Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update([
-            'TinhTrangSinhVien' => $row['tinh_trang_sinh_vien'],
+            'TinhTrangSinhVien' => $this->request["TinhTrangSinhVien"],
         ]);
         
-        if(!Str::contains(str::upper($row['tinh_trang_sinh_vien']), Str::upper("Đang học")))
+        if(!Str::contains(str::upper($this->request["TinhTrangSinhVien"]), Str::upper("Đang học")))
             {
-                Tb_trangthai::Create(['MaSinhVien'=>$row["ma_sinh_vien"], "NgayQuyetDinh"=>$row['ngay_quyet_dinh'], "SoQuyetDinh"=>$row['so_quyet_dinh']]);
+                Tb_trangthai::Create(['MaSinhVien'=>$row["ma_sinh_vien"], "NgayQuyetDinh"=>$this->request['NgayQuyetDinh'], "SoQuyetDinh"=>$this->request['SoQuyetDinh']]);
                 Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>date('Y-m-d')]);
             }else{
                 Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->update(["NgayKetThuc"=>null]);     
@@ -64,23 +76,20 @@ class UpdateUserImport implements ToModel, WithHeadingRow, WithChunkReading, Ski
     {
         return [
             "*.ma_sinh_vien" => "required",
-            '*.ho_ten' => "required",
-            "*.tinh_trang_sinh_vien" => "required",
-            "*.ten_lop" => "required",
         ];
     }
     public function customValidationMessages()
     {
-        return [
-            
+        return [  
             'ma_sinh_vien.required' => 'Cột mã sinh viên là bắt buộc',
-            'ho_ten.required' => 'Cột họ tên là bắt buộc',
-            'tinh_trang_sinh_vien.required'=>'Cột tình trạng sinh viên là bắt buộc là bắt buộc'
-
         ];
     }
     public function chunkSize(): int
     {
         return 500;
+    }
+    public function onError(\Throwable $e)
+    {
+        // Handle the exception how you'd like.
     }
 }
