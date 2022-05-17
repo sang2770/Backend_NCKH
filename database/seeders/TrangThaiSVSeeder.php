@@ -17,7 +17,7 @@ class TrangThaiSVSeeder extends Seeder
         Tb_trangthai::insert([
             'SoQuyetDinh'       => "40/QD",
             'NgayQuyetDinh'     => "2021-01-01",
-            'MaSinhVien'        => "191204226",
+            'MaSinhVien'        => "191204229",
         ]);
         Tb_trangthai::insert([
             'SoQuyetDinh'       => "50/QD",
@@ -32,7 +32,7 @@ class TrangThaiSVSeeder extends Seeder
         Tb_trangthai::insert([
             'SoQuyetDinh'       => "55/QD",
             'NgayQuyetDinh'     => "2022-01-05",
-            'MaSinhVien'        => "191204229",
+            'MaSinhVien'        => "191204226",
         ]);
     }
 }

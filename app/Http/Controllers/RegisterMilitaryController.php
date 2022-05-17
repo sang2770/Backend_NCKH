@@ -67,31 +67,23 @@ class RegisterMilitaryController extends Controller
     }
 
     public function createMoveLocal($Input){
-        $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
-        $count = Tb_giay_dc_diaphuong::select('MaGiayDK')->where('Tb_giay_dc_diaphuong.MaGiayDK', '=', $MagiayDK[0]['MaGiayDK'])->count();
+        try {
+            $LyDo = "Trúng tuyển đại học, cao đẳng";
 
-        if($count>0){
-            return null;
-        }
-        else{
-            try {
-                $LyDo = "Trúng tuyển đại học, cao đẳng";
+            $date = date_create($Input['NgayCap']);
+            $NgayCap = date_format($date, 'Y-m-d H:i:s');
 
-                $date = date_create($Input['NgayCap']);
-                $NgayCap = date_format($date, 'Y-m-d H:i:s');
-
-                return [
-                    'SoGioiThieu'          => $Input['SoGioiThieu'],
-                    'NgayCap'              => $NgayCap,
-                    'NoiOHienTai'          => $Input['NoiOHienTai'],
-                    'NoiChuyenDen'         => $Input['NoiChuyenDen'],
-                    'LyDo'                 => $LyDo,
-                    'BanChiHuy'            => $Input['BanChiHuy'],
-                    'MaGiayDK'             => $MagiayDK[0]['MaGiayDK'],
-                ];
-            } catch (\Throwable $th) {
-                throw $th;
-            }
+            return [
+                'SoGioiThieu'          => $Input['SoGioiThieu'],
+                'NgayCap'              => $NgayCap,
+                'NoiOHienTai'          => $Input['NoiOHienTai'],
+                'NoiChuyenDen'         => $Input['NoiChuyenDen'],
+                'LyDo'                 => $LyDo,
+                'BanChiHuy'            => $Input['BanChiHuy'],
+                'MaSinhVien'           => $Input['MaSinhVien'],
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
@@ -99,15 +91,11 @@ class RegisterMilitaryController extends Controller
     public function Store(RegisterMilitaryRequest $request)
     {
         $Register = $request->validated();
-        $MoveLocal = $request->validated();
 
         try {
             $Register = $this->createRegister($request->all());
             Tb_giay_cn_dangky::insert($Register);
 
-            $MoveLocal = $this->createMoveLocal($request->all());
-
-            Tb_giay_dc_diaphuong::insert($MoveLocal);
             return response()->json(['status' => "Success", 'data' => ["ThongTinDangKy" => $Register]]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
@@ -141,7 +129,7 @@ class RegisterMilitaryController extends Controller
         $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
             ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
             ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->join('Tb_giay_dc_diaphuong', 'Tb_giay_cn_dangky.MaGiayDK', '=' , 'Tb_giay_dc_diaphuong.MaGiayDK')
+            ->join('Tb_giay_dc_diaphuong', 'Tb_sinhvien.MaSinhVien', '=' , 'Tb_giay_dc_diaphuong.MaSinhVien')
             ->select(
                 'Tb_sinhvien.HoTen',
                 'Tb_sinhvien.MaSinhVien',
@@ -193,7 +181,7 @@ class RegisterMilitaryController extends Controller
         $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
                             ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
                             ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=' , 'Tb_sinhvien.MaSinhVien')
-                            ->join('Tb_giay_dc_diaphuong', 'Tb_giay_cn_dangky.MaGiayDK', '=' , 'Tb_giay_dc_diaphuong.MaGiayDK')
+                            ->join('Tb_giay_dc_diaphuong', 'Tb_sinhvien.MaSinhVien', '=' , 'Tb_giay_dc_diaphuong.MaSinhVien')
                             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_lop.TenLop', 
                             'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_dc_diaphuong.MaGiayDC_DP', 'Tb_giay_dc_diaphuong.SoGioiThieu', 'Tb_giay_dc_diaphuong.BanChiHuy',
                             'Tb_giay_dc_diaphuong.NgayCap', 'Tb_giay_dc_diaphuong.NoiOHienTai', 'Tb_giay_dc_diaphuong.NoiChuyenDen');
@@ -276,6 +264,7 @@ class RegisterMilitaryController extends Controller
              , DB::raw('count(Tb_giay_dc_truong.MaGiayDC_Truong) as total'))
              ->groupBy('Tb_sinhvien.MaSinhVien');
 
+        // var_dump($info->get());
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
@@ -304,7 +293,7 @@ class RegisterMilitaryController extends Controller
         });
 
         $info = $info->orderBy('NgayQuyetDinh', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
-        return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
+        return response()->json(['status' => "Success", 'data' => $info['data'], 'pagination' => [
             "page" => $info['current_page'],
             "first_page_url"    => $info['first_page_url'],
             "next_page_url"     => $info['next_page_url'],

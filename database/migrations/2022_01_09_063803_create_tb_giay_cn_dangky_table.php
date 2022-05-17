@@ -15,7 +15,7 @@ class CreateTbGiayCnDangkyTable extends Migration
     {
         Schema::create('Tb_giay_cn_dangky', function (Blueprint $table) {
             $table->increments('MaGiayDK');
-            $table->string('SoDangKy', 20);
+            $table->string('SoDangKy', 20)->nullable();;
             $table->date('NgayDangKy');
             $table->string('NoiDangKy', 150);
             $table->string('DiaChiThuongTru', 150);

@@ -28,13 +28,13 @@ class MoveMilitaryLocalRequest extends FormRequest
     public function rules()
     {
         return [
-            'SoGioiThieu'   => "required",
+            // 'SoGioiThieu'   => "required",
             'NgayCap'       => "required",
             'NoiOHienTai'   => "required",
             'NoiChuyenDen'  => "required",
             'BanChiHuy'     => "required",
             'MaSinhVien'    => "required",
-            'MaGiayDK'      => "unique:Tb_giay_dc_diaphuong"
+            'MaSinhVien'      => "unique:Tb_giay_dc_diaphuong"
         ];
     }
 

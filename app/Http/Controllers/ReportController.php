@@ -425,7 +425,7 @@ class ReportController extends Controller
         ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
         ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
         ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-        ->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã thôi học%");
+        ->where('Tb_giay_dc_truong.LyDo', 'like', "%Thôi học%");
 
         if($request->NgayCap){
             $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
