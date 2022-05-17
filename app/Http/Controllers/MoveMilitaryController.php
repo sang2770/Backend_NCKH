@@ -22,7 +22,7 @@ class MoveMilitaryController extends Controller
         $array = array();
         $templateProcessor = new TemplateProcessor('TemplateMilitary/MoveMilitaryTemplate.docx');
         $move = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                ->join('Tb_giay_dc_diaphuong', 'Tb_giay_dc_diaphuong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
+                ->join('Tb_giay_dc_diaphuong', 'Tb_giay_dc_diaphuong.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
                 ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
                 ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
                 ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_sinhvien.TinhTrangSinhVien', 

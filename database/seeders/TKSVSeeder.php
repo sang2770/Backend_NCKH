@@ -17,29 +17,29 @@ class TKSVSeeder extends Seeder
     {
         Tb_tk_sinhvien::insert([
             'MatKhau' => Hash::make('1234'),
-            'MaSinhVien' => "191203366",
+            'MaSinhVien' => "191204229",
         ]);
         Tb_tk_sinhvien::insert([
             'MatKhau' =>  Hash::make('1234'),
-            'MaSinhVien' => "191204225",
-        ]);
-        Tb_tk_sinhvien::insert([
-            'MatKhau' =>  Hash::make('1234'),
-            'MaSinhVien' => "191204226",
-        ]);
-        
-        Tb_tk_sinhvien::insert([
-            'MatKhau' =>  Hash::make('1234'),
-            'MaSinhVien' => "191204227",
-        ]);
-
-        Tb_tk_sinhvien::insert([
-            'MatKhau' => Hash::make('1234'),
             'MaSinhVien' => "191204228",
         ]);
         Tb_tk_sinhvien::insert([
             'MatKhau' =>  Hash::make('1234'),
-            'MaSinhVien' => "191204229",
+            'MaSinhVien' => "191204227",
+        ]);
+        
+        Tb_tk_sinhvien::insert([
+            'MatKhau' =>  Hash::make('1234'),
+            'MaSinhVien' => "191204226",
+        ]);
+
+        Tb_tk_sinhvien::insert([
+            'MatKhau' => Hash::make('1234'),
+            'MaSinhVien' => "191204225",
+        ]);
+        Tb_tk_sinhvien::insert([
+            'MatKhau' =>  Hash::make('1234'),
+            'MaSinhVien' => "191204224",
         ]);
     }
 }

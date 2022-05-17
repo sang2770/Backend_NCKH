@@ -21,7 +21,7 @@ class DC_DiaPhuongSeeder extends Seeder
             'NoiChuyenDen' => 'DH GTVT',
             'LyDo' => 'Trúng tuyển đại học cao đẳng',
             'BanChiHuy' => 'Ban CHQS phường Ý Yên',
-            'MaGiayDK' => '1',
+            'MaSinhVien' => '191204229',
         ]);
         Tb_giay_dc_diaphuong::insert([
             'SoGioiThieu' => '56', 
@@ -30,7 +30,7 @@ class DC_DiaPhuongSeeder extends Seeder
             'NoiChuyenDen' => 'DH GTVT',
             'LyDo' => 'Trúng tuyển đại học cao đẳng',
             'BanChiHuy' => 'Ban CHQS huyện Vĩnh Lộc ',
-            'MaGiayDK' => '2',
+            'MaSinhVien' => '191204228',
         ]);
         Tb_giay_dc_diaphuong::insert([
             'SoGioiThieu' => '80', 
@@ -39,7 +39,7 @@ class DC_DiaPhuongSeeder extends Seeder
             'NoiChuyenDen' => 'DH GTVT',
             'LyDo' => 'Trúng tuyển đại học cao đẳng',
             'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
-            'MaGiayDK' => '3',
+            'MaSinhVien' => '191204227',
         ]);
         Tb_giay_dc_diaphuong::insert([
             'SoGioiThieu' => '45', 
@@ -48,7 +48,7 @@ class DC_DiaPhuongSeeder extends Seeder
             'NoiChuyenDen' => 'DH GTVT',
             'LyDo' => 'Trúng tuyển đại học cao đẳng',
             'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
-            'MaGiayDK' => '4',
+            'MaSinhVien' => '191204226',
         ]);
         Tb_giay_dc_diaphuong::insert([
             'SoGioiThieu' => '50', 
@@ -57,7 +57,7 @@ class DC_DiaPhuongSeeder extends Seeder
             'NoiChuyenDen' => 'DH GTVT',
             'LyDo' => 'Trúng tuyển đại học cao đẳng',
             'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
-            'MaGiayDK' => '5',
+            'MaSinhVien' => '191204225',
         ]);
         Tb_giay_dc_diaphuong::insert([
             'SoGioiThieu' => '56', 
@@ -66,7 +66,7 @@ class DC_DiaPhuongSeeder extends Seeder
             'NoiChuyenDen' => 'DH GTVT',
             'LyDo' => 'Trúng tuyển đại học cao đẳng',
             'BanChiHuy' => 'Ban CHQS phường Quan Hoa',
-            'MaGiayDK' => '6',
+            'MaSinhVien' => '191204224',
         ]);
     }
 }

@@ -28,12 +28,12 @@ class UpdateMoveLocalRequest extends FormRequest
     public function rules()
     {
         return [
-            'SoDangKy'          => "required",
+            // 'SoDangKy'          => "required",
             'NgayDangKy'        => "required",
             'NoiDangKy'         => "required",
             'DiaChiThuongTru'   => "required",
             'NgayNop'           => "required",
-            'SoGioiThieu'       => "required",
+            // 'SoGioiThieu'       => "required",
             'NgayCap'           => "required",
             'NoiOHienTai'       => "required",
             'NoiChuyenDen'      => "required",

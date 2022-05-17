@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Tb_giay_cn_dangky;
 use App\Models\Tb_giay_dc_diaphuong;
+use App\Models\Tb_sinhvien;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -29,14 +30,14 @@ class MoveMilitaryLocalImport implements ToModel, WithHeadingRow, WithChunkReadi
     }
     public function model(array $row)
     {
-        $madk = Tb_giay_cn_dangky::where('MaSinhVien', $row['ma_sinh_vien'])->value('MaGiayDK');
+        $madk = Tb_sinhvien::where('MaSinhVien', $row['ma_sinh_vien'])->value('MaSinhVien');
         if (!$madk) {
             $error = ['err' => ["Mã sinh viên này không tồn tại!"], "row" => $row['ma_sinh_vien']];
             $this->Err[] = $error;
             return null;
         }
-        if(Tb_giay_dc_diaphuong::where('MaGiayDK', $madk)->doesntExist() 
-        && Tb_giay_cn_dangky::where('MaGiayDK', $madk)->exists()){
+        if(Tb_giay_dc_diaphuong::where('MaSinhVien', $madk)->doesntExist() 
+        && Tb_sinhvien::where('MaSinhVien', $madk)->exists()){
             return new Tb_giay_dc_diaphuong([
                 'SoGioiThieu'   => $row['so_gioi_thieu'], 
                 'NgayCap'       => Date::excelToDateTimeObject($row['ngay_cap'])->format('Y-m-d'), 
@@ -44,7 +45,7 @@ class MoveMilitaryLocalImport implements ToModel, WithHeadingRow, WithChunkReadi
                 'NoiChuyenDen'  => $row['noi_chuyen_den'],
                 'LyDo'          => $row['ly_do'],
                 'BanChiHuy'     => $row['ban_chi_huy'],
-                'MaGiayDK'      => $madk,
+                'MaSinhVien'      => $madk,
             ]);
         }
     }

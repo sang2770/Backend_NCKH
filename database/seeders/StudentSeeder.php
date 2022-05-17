@@ -16,7 +16,7 @@ class StudentSeeder extends Seeder
     {
         
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191203366',
+            'MaSinhVien'        => '191204229',
             'HoTen'             => 'Nguyễn Văn Sang',
             'NgaySinh'          => '2001-10-26',
             'NoiSinh'           => 'Hà Nội',
@@ -41,7 +41,7 @@ class StudentSeeder extends Seeder
             'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204225',
+            'MaSinhVien'        => '191204228',
             'HoTen'             => 'Nguyễn Nam',
             'NgaySinh'          => '2001-05-21',
             'NoiSinh'           => 'Thanh Hóa',
@@ -66,7 +66,7 @@ class StudentSeeder extends Seeder
             'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204226',
+            'MaSinhVien'        => '191204227',
             'HoTen'             => 'Nguyễn Văn Hoàng',
             'NgaySinh'          => '2001-10-15',
             'NoiSinh'           => 'Hà Nội',
@@ -94,7 +94,7 @@ class StudentSeeder extends Seeder
             'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204227',
+            'MaSinhVien'        => '191204226',
             'HoTen'             => 'Phạm Thành',
             'NgaySinh'          => '2001-10-15',
             'NoiSinh'           => 'Hà Nội',
@@ -122,7 +122,7 @@ class StudentSeeder extends Seeder
             'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204228',
+            'MaSinhVien'        => '191204225',
             'HoTen'             => 'Nguyễn Hoàng Quân',
             'NgaySinh'          => '2001-10-15',
             'NoiSinh'           => 'Hà Nội',
@@ -150,7 +150,7 @@ class StudentSeeder extends Seeder
             'NgayKetThuc'  => '2023-06-25',
         ]);
         Tb_sinhvien::insert([
-            'MaSinhVien'        => '191204229',
+            'MaSinhVien'        => '191204224',
             'HoTen'             => 'Vũ Anh Quân',
             'NgaySinh'          => '2001-10-15',
             'NoiSinh'           => 'Hà Nội',

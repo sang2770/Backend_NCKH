@@ -43,31 +43,23 @@ class MoveMilitaryLocalController extends Controller
     }
 
     public function create($Input){
-        $MagiayDK = Tb_giay_cn_dangky::select('MaGiayDK')->where('Tb_giay_cn_dangky.MaSinhVien', '=', $Input['MaSinhVien'])->get();
-        $count = Tb_giay_dc_diaphuong::select('MaGiayDK')->where('Tb_giay_dc_diaphuong.MaGiayDK', '=', $MagiayDK[0]['MaGiayDK'])->count();
+        try {
+            $LyDo = "Trúng tuyển đại học, cao đẳng";
 
-        if($count>0){
-            return null;
-        }
-        else{
-            try {
-                $LyDo = "Trúng tuyển đại học, cao đẳng";
+            $date = date_create($Input['NgayCap']);
+            $NgayCap = date_format($date, 'Y-m-d H:i:s');
 
-                $date = date_create($Input['NgayCap']);
-                $NgayCap = date_format($date, 'Y-m-d H:i:s');
-
-                return [
-                    'SoGioiThieu'          => $Input['SoGioiThieu'],
-                    'NgayCap'              => $NgayCap,
-                    'NoiOHienTai'          => $Input['NoiOHienTai'],
-                    'NoiChuyenDen'         => $Input['NoiChuyenDen'],
-                    'LyDo'                 => $LyDo,
-                    'BanChiHuy'            => $Input['BanChiHuy'],
-                    'MaGiayDK'             => $MagiayDK[0]['MaGiayDK'],
-                ];
-            } catch (\Throwable $th) {
-                throw $th;
-            }
+            return [
+                'SoGioiThieu'          => $Input['SoGioiThieu'],
+                'NgayCap'              => $NgayCap,
+                'NoiOHienTai'          => $Input['NoiOHienTai'],
+                'NoiChuyenDen'         => $Input['NoiChuyenDen'],
+                'LyDo'                 => $LyDo,
+                'BanChiHuy'            => $Input['BanChiHuy'],
+                'MaSinhVien'           => $Input['MaSinhVien'],
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
@@ -76,13 +68,8 @@ class MoveMilitaryLocalController extends Controller
         $validated = $request->validated();
         try {
             $validated = $this->create($request->all());
-            if($validated == null){
-                return response()->json(['status' => "Failedd", 'Err_Message' => $request->MaSinhVien]);
-            }
-            else{
-                Tb_giay_dc_diaphuong::insert($validated);
-                return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
-            }
+            Tb_giay_dc_diaphuong::insert($validated);
+            return response()->json(['status' => "Success", 'data' => ["ThongTin" => $validated]]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $request->MaSinhVien]);
         }
@@ -98,8 +85,7 @@ class MoveMilitaryLocalController extends Controller
 
     public function editMove($id)
     {
-        $edit = Tb_giay_dc_diaphuong::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaGiayDK', '=', 'Tb_giay_dc_diaphuong.MaGiayDK')
-        ->where('Tb_giay_cn_dangky.MaSinhVien', $id)->first();
+        $edit = Tb_giay_dc_diaphuong::where('Tb_giay_dc_diaphuong.MaSinhVien', $id)->first();
         return $edit;
     }
 
@@ -107,8 +93,7 @@ class MoveMilitaryLocalController extends Controller
     {
         $request->validated();
         if (Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists() && 
-            Tb_giay_dc_diaphuong::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaGiayDK', '=', 'Tb_giay_dc_diaphuong.MaGiayDK')
-            ->where('Tb_giay_cn_dangky.MaSinhVien', $id)->exists()) {
+            Tb_giay_dc_diaphuong::where('Tb_giay_dc_diaphuong.MaSinhVien', $id)->exists()) {
             $task = $this->edit($id);
             $input = $request->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop');
             $task->fill($input)->save();
