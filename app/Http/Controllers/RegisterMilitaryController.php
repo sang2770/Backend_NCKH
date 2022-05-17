@@ -259,7 +259,7 @@ class RegisterMilitaryController extends Controller
             ->leftJoin('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
             ->leftJoin('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
             ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
-            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_sinhvien.TinhTrangSinhVien', 
+            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_sinhvien.TinhTrangSinhVien',
             'Tb_trangthai.SoQuyetDinh', 'Tb_trangthai.NgayQuyetDinh'
              , DB::raw('count(Tb_giay_dc_truong.MaGiayDC_Truong) as total'))
              ->groupBy('Tb_sinhvien.MaSinhVien');

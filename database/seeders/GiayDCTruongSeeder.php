@@ -31,7 +31,7 @@ class GiayDCTruongSeeder extends Seeder
             'NgayHH'  => "2021-06-20",
             'NoiChuyenVe'  => "Nam Định",
             'NoiOHienTai'  => "Cầu giấy, HN",
-            'LyDo'  => "Đã thôi học",
+            'LyDo'  => "Thôi học",
             'MaGiayDK' => "4",
         ]);
     }
