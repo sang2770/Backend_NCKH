@@ -36,6 +36,29 @@ class CanBoController extends Controller
             
         }
     }
+    public function Show(){
+        try {
+            $canbo=Tb_canbo::select("*")
+            ->where('TrangThai', 'Đang hoạt động')
+            ->where('ChucVu', 'Phó chỉ huy trưởng')
+            ->pluck("HoVaTen");
+            return response()->json(['status' => "Success", 'data' => $canbo]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
+
+    public function ShowCaptain(){
+        try {
+            $canbo=Tb_canbo::select("*")
+            ->where('TrangThai', 'Đang hoạt động')
+            ->where('ChucVu', 'Chỉ huy trưởng')
+            ->pluck("HoVaTen");
+            return response()->json(['status' => "Success", 'data' => $canbo]);
+        } catch (Exception $e) {
+            return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *

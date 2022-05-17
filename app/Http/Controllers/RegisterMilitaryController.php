@@ -264,7 +264,6 @@ class RegisterMilitaryController extends Controller
              , DB::raw('count(Tb_giay_dc_truong.MaGiayDC_Truong) as total'))
              ->groupBy('Tb_sinhvien.MaSinhVien');
 
-        // var_dump($info->get());
         if ($request->MaSinhVien) {
             $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
@@ -287,10 +286,10 @@ class RegisterMilitaryController extends Controller
             $info = $info->where('Tb_trangthai.SoQuyetDinh', '=', $request->SoQuyetDinh);
         }
 
-        $info = $info->where(function ($query) {
-            $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
-                ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Thôi học');
-        });
+        // $info = $info->where(function ($query) {
+        //     $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
+        //         ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Thôi học');
+        // });
 
         $info = $info->orderBy('NgayQuyetDinh', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info['data'], 'pagination' => [
