@@ -17,7 +17,7 @@ class Tb_giay_dc_diaphuong extends Model
         'NoiChuyenDen',
         'LyDo',
         'BanChiHuy',
-        'MaGiayDK',
+        'MaSinhVien',
     ];
     protected $primaryKey = 'MaGiayDC_DP';
     public $timestamps = true;

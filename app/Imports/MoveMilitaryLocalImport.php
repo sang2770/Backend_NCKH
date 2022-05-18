@@ -45,7 +45,7 @@ class MoveMilitaryLocalImport implements ToModel, WithHeadingRow, WithChunkReadi
                 'NoiChuyenDen'  => $row['noi_chuyen_den'],
                 'LyDo'          => $row['ly_do'],
                 'BanChiHuy'     => $row['ban_chi_huy'],
-                'MaSinhVien'      => $madk,
+                'MaSinhVien'    => $row['ma_sinh_vien']
             ]);
         }
     }
