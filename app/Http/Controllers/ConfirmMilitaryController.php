@@ -50,10 +50,8 @@ class ConfirmMilitaryController extends Controller
         if ($request->MaYeuCau) {
             $confirm = $confirm->where("tb_yeucau.MaYeuCau", "=", $request->MaYeuCau);
         }
-        $confirm = $confirm->where(function ($query) {
-            $query->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
-                ->orWhere('Tb_yeucau.TrangThaiXuLy', '=', 'Đã cấp');
-        });
+
+        $confirm = $confirm->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý');
 
         $count = $confirm->count();
         $confirm = $confirm->get();
