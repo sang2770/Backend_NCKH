@@ -64,12 +64,14 @@ class ConfirmMilitaryController extends Controller
         $Thang = $NgayCap[1];
         $Nam = $NgayCap[0];
 
-        $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)
-        ->where('TrangThai', '=', 'Đang hoạt động')
-        ->where('ChucVu', '=', 'Chỉ huy trưởng')
-        ->get();
+        // $canbo = Tb_canbo::select('HoVaTen')->where('ThoiGianKetThuc', '>=', $NgayCap)
+        // ->where('TrangThai', '=', 'Đang hoạt động')
+        // ->where('ChucVu', '=', 'Chỉ huy trưởng')
+        // ->get();
 
-        if ($count != 0 && $canbo->count() != 0) {
+        $canbo = Tb_canbo::select('ChucVu')->where('HoVaTen', '=', $request->HoVaTen)->get();
+
+        if ($count != 0) {
             for ($i = 0; $i < $count; $i++) {
 
             if($Thang < 8){
@@ -102,7 +104,8 @@ class ConfirmMilitaryController extends Controller
                 'Ngay'      => $Ngay,
                 'Thang'     => $Thang,
                 'Nam'       => $Nam,
-                'ChiHuyTruong' => $canbo[0]["HoVaTen"],
+                'ChiHuyTruong' => $request->HoVaTen,
+                'ChucVu'       => strtoupper($canbo[0]["ChucVu"]),
                 'i'         => $i + 1
                 );
 
