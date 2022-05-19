@@ -15,31 +15,31 @@ class MoveMilitaryController2 extends Controller
     public function Moves(Request $request){
         $array = array();
         $templateProcessor = new TemplateProcessor('TemplateMilitary/MoveMilitaryTemplate.docx');
-        $move = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                ->join('Tb_giay_dc_diaphuong', 'Tb_giay_dc_diaphuong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
-                ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-                ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-                ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_sinhvien.TinhTrangSinhVien', 
-                'Tb_giay_cn_dangky.MaGiayDK', 'Tb_giay_cn_dangky.SoDangKy', 'Tb_giay_cn_dangky.NgayDangKy', 'Tb_giay_cn_dangky.NoiDangKy',
-                'Tb_giay_dc_diaphuong.NoiOHienTai', 'Tb_giay_dc_diaphuong.BanChiHuy'
+        $move = Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+                ->join('tb_giay_dc_diaphuong', 'tb_giay_dc_diaphuong.MaGiayDK', '=', 'tb_giay_cn_dangky.MaGiayDK')
+                ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+                ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+                ->select('tb_sinhvien.HoTen', 'tb_sinhvien.MaSinhVien', 'tb_sinhvien.NgaySinh', 'tb_sinhvien.TinhTrangSinhVien', 
+                'tb_giay_cn_dangky.MaGiayDK', 'tb_giay_cn_dangky.SoDangKy', 'tb_giay_cn_dangky.NgayDangKy', 'tb_giay_cn_dangky.NoiDangKy',
+                'tb_giay_dc_diaphuong.NoiOHienTai', 'tb_giay_dc_diaphuong.BanChiHuy'
                 );
 
         if($request->MaSinhVien){
-            $move = $move->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $move = $move->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if($request->TenLop){
-            $move = $move->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $move = $move->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if($request->TenKhoa){
-            $move = $move->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $move = $move->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if($request->Khoas){
-            $move = $move->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $move = $move->where('tb_lop.Khoas', '=', $request->Khoas);
         }
 
         $move = $move->where(function ($query) {
-            $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
-                ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã thôi học');
+            $query->where('tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
+                ->orWhere('tb_sinhvien.TinhTrangSinhVien', '=', 'Đã thôi học');
         });
 
         $count = $move->count();

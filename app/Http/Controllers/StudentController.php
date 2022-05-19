@@ -53,10 +53,10 @@ class StudentController extends Controller
     public function show(Request $request, $id)
     {
         if (Tb_sinhvien::where('MaSinhVien', '=', $id)->exists()) {
-            $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-                ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
+            $info = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+                ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
                 ->where('MaSinhVien', '=', $id)
-                ->select('Tb_sinhvien.*', 'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas')->get([
+                ->select('tb_sinhvien.*', 'tb_lop.TenLop', 'tb_khoa.TenKhoa', 'tb_lop.Khoas')->get([
                     'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                     'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
                     'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
@@ -106,15 +106,15 @@ class StudentController extends Controller
     //sv xem thong tin giay chung nhan dky nvqs
     public function register(Request $request, $id)
     {
-        $info = Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->where('Tb_sinhvien.MaSinhVien', '=', $id)
+        $info = Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->where('tb_sinhvien.MaSinhVien', '=', $id)
             ->select(
-                'Tb_sinhvien.HoTen',
-                'Tb_sinhvien.NgaySinh',
-                'Tb_giay_cn_dangky.SoDangKy',
-                'Tb_giay_cn_dangky.NgayDangKy',
-                'Tb_giay_cn_dangky.NoiDangKy',
-                'Tb_giay_cn_dangky.DiaChiThuongTru'
+                'tb_sinhvien.HoTen',
+                'tb_sinhvien.NgaySinh',
+                'tb_giay_cn_dangky.SoDangKy',
+                'tb_giay_cn_dangky.NgayDangKy',
+                'tb_giay_cn_dangky.NoiDangKy',
+                'tb_giay_cn_dangky.DiaChiThuongTru'
             );
 
         if ($info->exists()) {
@@ -127,9 +127,9 @@ class StudentController extends Controller
     public function getTotalNotifications(Request $request)
     {
         try {
-            $noti = Tb_sinhvien::join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')->count();
+            $noti = Tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
+            ->join('tb_thongbaosv', 'tb_thongbaosv.MaTKSV', '=', 'tb_tk_sinhvien.MaTKSV')->count();
         return response()->json(['status'=>"Success", "count"=>$noti]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed"]);
@@ -142,11 +142,11 @@ class StudentController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $noti = Tb_sinhvien::join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')
-            ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
-            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-            ->select('Tb_thongbaochinh.TieuDeTB', 'Tb_thongbaochinh.MaThongBaoChinh', 'Tb_sinhvien.MaSinhVien');
+        $noti = Tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->join('tb_thongbaosv', 'tb_thongbaosv.MaTKSV', '=', 'tb_tk_sinhvien.MaTKSV')
+            ->join('tb_thongbaochinh', 'tb_thongbaochinh.MaThongBaoChinh', '=', 'tb_thongbaosv.MaThongBaoChinh')
+            ->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
+            ->select('tb_thongbaochinh.TieuDeTB', 'tb_thongbaochinh.MaThongBaoChinh', 'tb_sinhvien.MaSinhVien');
 
         if ($noti->exists()) {
             $noti = $noti->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -166,12 +166,12 @@ class StudentController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $noti = Tb_sinhvien::join('Tb_tk_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->join('Tb_thongbaosv', 'Tb_thongbaosv.MaTKSV', '=', 'Tb_tk_sinhvien.MaTKSV')
-            ->join('Tb_thongbaochinh', 'Tb_thongbaochinh.MaThongBaoChinh', '=', 'Tb_thongbaosv.MaThongBaoChinh')
-            ->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
-            ->where('Tb_thongbaosv.MaThongBaoChinh', '=', $request->MaThongBaoChinh)
-            ->select('Tb_thongbaochinh.TieuDeTB', 'Tb_thongbaochinh.NoiDungTB', 'Tb_thongbaochinh.FileName');
+        $noti = Tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->join('tb_thongbaosv', 'tb_thongbaosv.MaTKSV', '=', 'tb_tk_sinhvien.MaTKSV')
+            ->join('tb_thongbaochinh', 'tb_thongbaochinh.MaThongBaoChinh', '=', 'tb_thongbaosv.MaThongBaoChinh')
+            ->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
+            ->where('tb_thongbaosv.MaThongBaoChinh', '=', $request->MaThongBaoChinh)
+            ->select('tb_thongbaochinh.TieuDeTB', 'tb_thongbaochinh.NoiDungTB', 'tb_thongbaochinh.FileName');
 
         if ($noti->exists()) {
             $noti = $noti->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -202,7 +202,7 @@ class StudentController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_yeucau::where('Tb_yeucau.MaSinhVien', '=', $id)
+        $info = Tb_yeucau::where('tb_yeucau.MaSinhVien', '=', $id)
             ->select('MaYeuCau', 'MaSinhVien', 'NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
 
         if ($info->exists()) {
@@ -224,8 +224,8 @@ class StudentController extends Controller
         if (Tb_yeucau::where('MaYeuCau', $id)
             ->where('MaSinhVien', $msv)
             ->where(function ($query) {
-                $query->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
-                    ->orWhere('Tb_yeucau.TrangThaiXuLy', '=', 'Chờ xử lý');
+                $query->where('tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
+                    ->orWhere('tb_yeucau.TrangThaiXuLy', '=', 'Chờ xử lý');
             })->exists()
         ) {
             Tb_yeucau::where('MaYeuCau', $id)->delete();

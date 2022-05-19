@@ -380,23 +380,23 @@ class ReportController extends Controller
     {
         $DateNow = Carbon::now()->format('Y');
 
-        $student=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-        ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
-        ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-        ->where('Tb_giay_dc_truong.LyDo', 'like', "%Đã tốt nghiệp%");
+        $student=Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        ->join('tb_giay_dc_truong', 'tb_giay_dc_truong.MaGiayDK', '=', 'tb_giay_cn_dangky.MaGiayDK')
+        ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+        ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+        ->where('tb_giay_dc_truong.LyDo', 'like', "%Đã tốt nghiệp%");
 
         if($request->NgayCap){
-            $student = $student->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
+            $student = $student->whereYear('tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
         }
         if(!$request->NgayCap){
-            $student = $student->whereYear('Tb_giay_dc_truong.NgayCap', '=', $DateNow);
+            $student = $student->whereYear('tb_giay_dc_truong.NgayCap', '=', $DateNow);
         }
         if($request->Khoas){
-            $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $student = $student->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if($request->TenKhoa){
-            $student = $student->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $student = $student->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
 
         $student = $student->get()->toArray();
@@ -421,23 +421,23 @@ class ReportController extends Controller
         
         $Learning['Tong']=max($Learning);
 
-        $studentOut=Tb_sinhvien::join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-        ->join('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
-        ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-        ->where('Tb_giay_dc_truong.LyDo', 'like', "%Thôi học%");
+        $studentOut=Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        ->join('tb_giay_dc_truong', 'tb_giay_dc_truong.MaGiayDK', '=', 'tb_giay_cn_dangky.MaGiayDK')
+        ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+        ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+        ->where('tb_giay_dc_truong.LyDo', 'like', "%Thôi học%");
 
         if($request->NgayCap){
-            $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
+            $studentOut = $studentOut->whereYear('tb_giay_dc_truong.NgayCap', '=', $request->NgayCap);
         }
         if(!$request->NgayCap){
-            $studentOut = $studentOut->whereYear('Tb_giay_dc_truong.NgayCap', '=', $DateNow);
+            $studentOut = $studentOut->whereYear('tb_giay_dc_truong.NgayCap', '=', $DateNow);
         }
         if($request->Khoas){
-            $studentOut = $studentOut->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $studentOut = $studentOut->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if($request->TenKhoa){
-            $studentOut = $studentOut->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $studentOut = $studentOut->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
 
         $studentOut = $studentOut->get()->toArray();
@@ -500,23 +500,23 @@ class ReportController extends Controller
     private function CreateReportConfirm($request)
     {
         $DateNow = Carbon::now()->format('Y');
-        $student=Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-        ->join('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
-        ->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-        ->where('Tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
+        $student=Tb_sinhvien::join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        ->join('tb_giay_xn_truong', 'tb_giay_xn_truong.MaYeuCau', '=', 'tb_yeucau.MaYeuCau')
+        ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+        ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+        ->where('tb_yeucau.TrangThaiXuLy', 'like', "%Đã cấp%");
 
         if($request->NgayCap){
-            $student = $student->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
+            $student = $student->whereYear('tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
         }
         if(!$request->NgayCap){
-            $student = $student->whereYear('Tb_giay_xn_truong.NgayCap', '=', $DateNow);
+            $student = $student->whereYear('tb_giay_xn_truong.NgayCap', '=', $DateNow);
         }
         if($request->Khoas){
-            $student = $student->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $student = $student->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if($request->TenKhoa){
-            $student = $student->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $student = $student->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         $student = $student->get()->toArray();
         

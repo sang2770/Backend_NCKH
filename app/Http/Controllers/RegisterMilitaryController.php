@@ -126,43 +126,43 @@ class RegisterMilitaryController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-            ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->join('Tb_giay_dc_diaphuong', 'Tb_sinhvien.MaSinhVien', '=' , 'Tb_giay_dc_diaphuong.MaSinhVien')
+        $info = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+            ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+            ->join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->join('tb_giay_dc_diaphuong', 'tb_sinhvien.MaSinhVien', '=' , 'tb_giay_dc_diaphuong.MaSinhVien')
             ->select(
-                'Tb_sinhvien.HoTen',
-                'Tb_sinhvien.MaSinhVien',
-                'Tb_sinhvien.NgaySinh',
-                'Tb_lop.TenLop',
-                'Tb_khoa.TenKhoa',
-                'Tb_lop.Khoas',
-                'Tb_giay_cn_dangky.SoDangKy',
-                'Tb_giay_cn_dangky.NoiDangKy',
-                'Tb_giay_cn_dangky.DiaChiThuongTru',
-                'Tb_giay_cn_dangky.NgayDangKy',
-                'Tb_giay_cn_dangky.NgayNop',
-                'Tb_giay_dc_diaphuong.SoGioiThieu',
-                'Tb_giay_dc_diaphuong.BanChiHuy',
-                'Tb_giay_dc_diaphuong.NgayCap',
-                'Tb_giay_dc_diaphuong.NoiOHienTai',
-                'Tb_giay_dc_diaphuong.NoiChuyenDen'
+                'tb_sinhvien.HoTen',
+                'tb_sinhvien.MaSinhVien',
+                'tb_sinhvien.NgaySinh',
+                'tb_lop.TenLop',
+                'tb_khoa.TenKhoa',
+                'tb_lop.Khoas',
+                'tb_giay_cn_dangky.SoDangKy',
+                'tb_giay_cn_dangky.NoiDangKy',
+                'tb_giay_cn_dangky.DiaChiThuongTru',
+                'tb_giay_cn_dangky.NgayDangKy',
+                'tb_giay_cn_dangky.NgayNop',
+                'tb_giay_dc_diaphuong.SoGioiThieu',
+                'tb_giay_dc_diaphuong.BanChiHuy',
+                'tb_giay_dc_diaphuong.NgayCap',
+                'tb_giay_dc_diaphuong.NoiOHienTai',
+                'tb_giay_dc_diaphuong.NoiChuyenDen'
             );
 
         if ($request->MaSinhVien) {
-            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $info = $info->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $info = $info->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $info = $info->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $info = $info->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if($request->NgayNop){
-            $info = $info->whereYear('Tb_giay_cn_dangky.NgayNop', '=', $request->NgayNop);
+            $info = $info->whereYear('tb_giay_cn_dangky.NgayNop', '=', $request->NgayNop);
         }
 
         $info = $info->orderBy('NgayNop', 'DESC')->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -178,25 +178,25 @@ class RegisterMilitaryController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-                            ->join('Tb_khoa','Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-                            ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=' , 'Tb_sinhvien.MaSinhVien')
-                            ->join('Tb_giay_dc_diaphuong', 'Tb_sinhvien.MaSinhVien', '=' , 'Tb_giay_dc_diaphuong.MaSinhVien')
-                            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 'Tb_lop.TenLop', 
-                            'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_dc_diaphuong.MaGiayDC_DP', 'Tb_giay_dc_diaphuong.SoGioiThieu', 'Tb_giay_dc_diaphuong.BanChiHuy',
-                            'Tb_giay_dc_diaphuong.NgayCap', 'Tb_giay_dc_diaphuong.NoiOHienTai', 'Tb_giay_dc_diaphuong.NoiChuyenDen');
+        $info = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+                            ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+                            ->join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=' , 'tb_sinhvien.MaSinhVien')
+                            ->join('tb_giay_dc_diaphuong', 'tb_sinhvien.MaSinhVien', '=' , 'tb_giay_dc_diaphuong.MaSinhVien')
+                            ->select('tb_sinhvien.HoTen', 'tb_sinhvien.MaSinhVien', 'tb_sinhvien.NgaySinh', 'tb_lop.TenLop', 
+                            'tb_khoa.TenKhoa', 'tb_lop.Khoas', 'tb_giay_dc_diaphuong.MaGiayDC_DP', 'tb_giay_dc_diaphuong.SoGioiThieu', 'tb_giay_dc_diaphuong.BanChiHuy',
+                            'tb_giay_dc_diaphuong.NgayCap', 'tb_giay_dc_diaphuong.NoiOHienTai', 'tb_giay_dc_diaphuong.NoiChuyenDen');
 
         if ($request->MaSinhVien) {
-            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $info = $info->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $info = $info->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $info = $info->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $info = $info->where('tb_lop.Khoas', '=', $request->Khoas);
         }
 
         $info = $info->orderBy('MaGiayDC_DP', 'DESC')->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -212,31 +212,31 @@ class RegisterMilitaryController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-            ->join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
-            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_yeucau.TrangThaiXuLy', 'Tb_yeucau.MaYeuCau');
+        $info = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+            ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+            ->join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->select('tb_sinhvien.HoTen', 'tb_sinhvien.MaSinhVien', 'tb_sinhvien.NgaySinh', 
+            'tb_lop.TenLop', 'tb_khoa.TenKhoa', 'tb_lop.Khoas', 'tb_yeucau.TrangThaiXuLy', 'tb_yeucau.MaYeuCau');
 
         if ($request->MaSinhVien) {
-            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $info = $info->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $info = $info->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $info = $info->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $info = $info->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if ($request->TrangThaiXuLy) {
-            $info = $info->where('Tb_yeucau.TrangThaiXuLy', '=', $request->TrangThaiXuLy);
+            $info = $info->where('tb_yeucau.TrangThaiXuLy', '=', $request->TrangThaiXuLy);
         }
 
         $info = $info->where(function ($query) {
-            $query->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
-                ->orWhere('Tb_yeucau.TrangThaiXuLy', '=', 'Đã cấp');
+            $query->where('tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
+                ->orWhere('tb_yeucau.TrangThaiXuLy', '=', 'Đã cấp');
         });
 
         $info = $info->orderBy('MaYeuCau', 'DESC')->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -253,42 +253,42 @@ class RegisterMilitaryController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-            ->join('Tb_trangthai', 'Tb_trangthai.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->leftJoin('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->leftJoin('Tb_giay_dc_truong', 'Tb_giay_dc_truong.MaGiayDK', '=', 'Tb_giay_cn_dangky.MaGiayDK')
-            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
-            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_sinhvien.TinhTrangSinhVien',
-            'Tb_trangthai.SoQuyetDinh', 'Tb_trangthai.NgayQuyetDinh'
-             , DB::raw('count(Tb_giay_dc_truong.MaGiayDC_Truong) as total'))
-             ->groupBy('Tb_sinhvien.MaSinhVien');
+        $info = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+            ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+            ->join('tb_trangthai', 'tb_trangthai.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->leftJoin('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->leftJoin('tb_giay_dc_truong', 'tb_giay_dc_truong.MaGiayDK', '=', 'tb_giay_cn_dangky.MaGiayDK')
+            ->select('tb_sinhvien.HoTen', 'tb_sinhvien.MaSinhVien', 'tb_sinhvien.NgaySinh', 
+            'tb_lop.TenLop', 'tb_khoa.TenKhoa', 'tb_lop.Khoas', 'tb_sinhvien.TinhTrangSinhVien',
+            'tb_trangthai.SoQuyetDinh', 'tb_trangthai.NgayQuyetDinh'
+             , DB::raw('count(tb_giay_dc_truong.MaGiayDC_Truong) as total'))
+             ->groupBy('tb_sinhvien.MaSinhVien');
 
         if ($request->MaSinhVien) {
-            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $info = $info->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $info = $info->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $info = $info->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $info = $info->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if ($request->TinhTrangSinhVien) {
-            $info = $info->where('Tb_sinhvien.TinhTrangSinhVien', '=', $request->TinhTrangSinhVien);
+            $info = $info->where('tb_sinhvien.TinhTrangSinhVien', '=', $request->TinhTrangSinhVien);
         }
         if ($request->NgayQuyetDinh) {
-            $info = $info->whereYear('Tb_trangthai.NgayQuyetDinh', '=', $request->NgayQuyetDinh);
+            $info = $info->whereYear('tb_trangthai.NgayQuyetDinh', '=', $request->NgayQuyetDinh);
         }
         if ($request->SoQuyetDinh) {
-            $info = $info->where('Tb_trangthai.SoQuyetDinh', '=', $request->SoQuyetDinh);
+            $info = $info->where('tb_trangthai.SoQuyetDinh', '=', $request->SoQuyetDinh);
         }
 
         // $info = $info->where(function ($query) {
-        //     $query->where('Tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
-        //         ->orWhere('Tb_sinhvien.TinhTrangSinhVien', '=', 'Thôi học');
+        //     $query->where('tb_sinhvien.TinhTrangSinhVien', '=', 'Đã tốt nghiệp')
+        //         ->orWhere('tb_sinhvien.TinhTrangSinhVien', '=', 'Thôi học');
         // });
 
         $info = $info->orderBy('NgayQuyetDinh', 'DESC')->distinct()->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
@@ -305,30 +305,30 @@ class RegisterMilitaryController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info =DB::table("Tb_sinhvien")->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-            ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->leftJoin('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->leftJoin('Tb_giay_xn_truong', 'Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
-            ->select('Tb_sinhvien.HoTen', 'Tb_sinhvien.MaSinhVien', 'Tb_sinhvien.NgaySinh', 
-            'Tb_lop.TenLop', 'Tb_khoa.TenKhoa', 'Tb_lop.Khoas', 'Tb_giay_cn_dangky.NgayNop', 
-            'Tb_giay_xn_truong.NgayCap', "Tb_giay_xn_truong.MaGiayXN_Truong"
-             , DB::raw('count(Tb_giay_xn_truong.MaGiayXN_Truong) as total'))
-             ->groupBy('Tb_sinhvien.MaSinhVien');
+        $info =Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+            ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+            ->join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->leftJoin('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->leftJoin('tb_giay_xn_truong', 'tb_giay_xn_truong.MaYeuCau', '=', 'tb_yeucau.MaYeuCau')
+            ->select('tb_sinhvien.HoTen', 'tb_sinhvien.MaSinhVien', 'tb_sinhvien.NgaySinh', 
+            'tb_lop.TenLop', 'tb_khoa.TenKhoa', 'tb_lop.Khoas', 'tb_giay_cn_dangky.NgayNop', 
+            'tb_giay_xn_truong.NgayCap', "tb_giay_xn_truong.MaGiayXN_Truong"
+             , DB::raw('count(tb_giay_xn_truong.MaGiayXN_Truong) as total'))
+             ->groupBy('tb_sinhvien.MaSinhVien');
         if ($request->MaSinhVien) {
-            $info = $info->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $info = $info->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $info = $info->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $info = $info->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $info = $info->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $info = $info->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $info = $info->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $info = $info->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if ($request->NgayCap) {
-            $info = $info->whereYear('Tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
+            $info = $info->whereYear('tb_giay_xn_truong.NgayCap', '=', $request->NgayCap);
         }
         $info = $info->orderBy('MaGiayDK', 'DESC')->distinct()->paginate($limit, ["*"], 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info['data'], 'pagination' => [

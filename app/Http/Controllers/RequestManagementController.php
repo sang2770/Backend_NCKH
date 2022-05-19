@@ -22,14 +22,14 @@ class RequestManagementController extends Controller
             $page = $request->page;
             // $LanCap = Tb_yeucau::select('MaSinhVien', DB::raw('count(*) as LanXinCap'))
             //     ->groupBy('MaSinhVien');
-            $ListRequest = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
-                ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa')->join("Tb_yeucau", "Tb_yeucau.MaSinhVien", '=', 'Tb_sinhvien.MaSinhVien')
+            $ListRequest = Tb_sinhvien::join('tb_lop', 'tb_sinhvien.MaLop', '=', 'tb_lop.MaLop')
+                ->join('tb_khoa', 'tb_lop.MaKhoa', '=', 'tb_khoa.MaKhoa')->join("tb_yeucau", "tb_yeucau.MaSinhVien", '=', 'tb_sinhvien.MaSinhVien')
                 // ->joinSub($LanCap, "Res", function ($join) {
-                //     $join->on('Tb_sinhvien.MaSinhVien', '=', 'Res.MaSinhVien');
+                //     $join->on('tb_sinhvien.MaSinhVien', '=', 'Res.MaSinhVien');
                 // })
                 ->filter($request)
                 ->paginate($limit, [
-                    'Tb_sinhvien.MaSinhVien',
+                    'tb_sinhvien.MaSinhVien',
                     "HoTen",
                     'NgayYeuCau',
                     'LanXinCap',

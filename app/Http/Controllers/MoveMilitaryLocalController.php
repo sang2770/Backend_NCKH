@@ -85,7 +85,7 @@ class MoveMilitaryLocalController extends Controller
 
     public function editMove($id)
     {
-        $edit = Tb_giay_dc_diaphuong::where('Tb_giay_dc_diaphuong.MaSinhVien', $id)->first();
+        $edit = Tb_giay_dc_diaphuong::where('tb_giay_dc_diaphuong.MaSinhVien', $id)->first();
         return $edit;
     }
 
@@ -93,7 +93,7 @@ class MoveMilitaryLocalController extends Controller
     {
         $request->validated();
         if (Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists() && 
-            Tb_giay_dc_diaphuong::where('Tb_giay_dc_diaphuong.MaSinhVien', $id)->exists()) {
+            Tb_giay_dc_diaphuong::where('tb_giay_dc_diaphuong.MaSinhVien', $id)->exists()) {
             $task = $this->edit($id);
             $input = $request->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop');
             $task->fill($input)->save();
@@ -121,10 +121,10 @@ class MoveMilitaryLocalController extends Controller
     public function show(Request $request, $id){
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = Tb_sinhvien::join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-                            ->join('Tb_giay_xn_truong','Tb_giay_xn_truong.MaYeuCau', '=', 'Tb_yeucau.MaYeuCau')
-                            ->select('Tb_giay_xn_truong.NgayCap')
-                            ->where('Tb_sinhvien.MaSinhVien', '=', $id);
+        $info = Tb_sinhvien::join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+                            ->join('tb_giay_xn_truong','tb_giay_xn_truong.MaYeuCau', '=', 'tb_yeucau.MaYeuCau')
+                            ->select('tb_giay_xn_truong.NgayCap')
+                            ->where('tb_sinhvien.MaSinhVien', '=', $id);
 
         $info = $info->paginate($perPage = $limit, $columns = ['*'], $pageName = 'page', $page)->toArray();
         return response()->json(['status' => "Success", 'data' => $info["data"], 'pagination' => [
