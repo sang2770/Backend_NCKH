@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tb_lichsu extends Model
 {
 
-    protected $table = 'Tb_LichSu';
+    protected $table = 'tb_LichSu';
     protected $primaryKey = 'ID';
     protected $fillable = [
         'ID',

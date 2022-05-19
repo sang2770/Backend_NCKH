@@ -9,7 +9,7 @@ use App\Helper\Traits\Filterable;
 class Tb_yeucau extends Model
 {
     use Filterable;
-    protected $table = 'Tb_yeucau';
+    protected $table = 'tb_yeucau';
     protected $fillable = [
         'MaGiayXN_Truong',
         'MaSinhVien',

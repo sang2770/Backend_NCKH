@@ -16,42 +16,42 @@ class ConfirmMilitaryController extends Controller
     { 
         $array = array();
         $templateProcessor = new TemplateProcessor('TemplateMilitary/ConfirmMilitaryTemplate.docx');
-        $confirm = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-            ->join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+        $confirm = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+            ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+            ->join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->select(
-                'Tb_sinhvien.HoTen',
-                'Tb_sinhvien.MaSinhVien',
-                'Tb_sinhvien.NgaySinh',
-                'Tb_lop.TenLop',
-                'Tb_khoa.TenKhoa',
-                'Tb_lop.Khoas',
-                'Tb_sinhvien.HeDaoTao',
-                'Tb_yeucau.MaYeuCau'
+                'tb_sinhvien.HoTen',
+                'tb_sinhvien.MaSinhVien',
+                'tb_sinhvien.NgaySinh',
+                'tb_lop.TenLop',
+                'tb_khoa.TenKhoa',
+                'tb_lop.Khoas',
+                'tb_sinhvien.HeDaoTao',
+                'tb_yeucau.MaYeuCau'
             );
         if ($request->HoTen) {
             $confirm = $confirm->where('HoTen', 'LIKE', '%' . $request->HoTen . '%');
         }
         if ($request->MaSinhVien) {
-            $confirm = $confirm->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $confirm = $confirm->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $confirm = $confirm->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $confirm = $confirm->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $confirm = $confirm->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $confirm = $confirm->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $confirm = $confirm->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $confirm = $confirm->where('tb_lop.Khoas', '=', $request->Khoas);
         }
         if($request->TrangThaiXuLy){
-            $confirm = $confirm->where('Tb_yeucau.TrangThaiXuLy', '=', $request->TrangThaiXuLy);
+            $confirm = $confirm->where('tb_yeucau.TrangThaiXuLy', '=', $request->TrangThaiXuLy);
         }
         if ($request->MaYeuCau) {
             $confirm = $confirm->where("tb_yeucau.MaYeuCau", "=", $request->MaYeuCau);
         }
 
-        $confirm = $confirm->where('Tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý');
+        $confirm = $confirm->where('tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý');
 
         $count = $confirm->count();
         $confirm = $confirm->get();

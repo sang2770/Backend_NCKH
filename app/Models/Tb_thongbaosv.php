@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tb_thongbaosv extends Model
 {
-    protected $table = 'Tb_thongbaosv';
+    protected $table = 'tb_thongbaosv';
     protected $fillable = [
         'ThoiGianTB',
         'MaTKSV',

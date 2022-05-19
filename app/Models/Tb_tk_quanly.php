@@ -10,7 +10,7 @@ use Laravel\Passport\HasApiTokens;
 class Tb_tk_quanly extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    protected $table = 'Tb_tk_quanly';
+    protected $table = 'tb_tk_quanly';
     protected $primaryKey = 'MaTK';
 
     protected $fillable = [

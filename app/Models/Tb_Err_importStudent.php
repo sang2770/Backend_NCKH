@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tb_Err_importStudent extends Model
 {
     use HasFactory;
-    protected $table = 'tb_ErrImportStudent';
+    protected $table = 'tb_errimportstudent';
     protected $fillable = [
         'NoiDung',
         'ThoiGian',
