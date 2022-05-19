@@ -34,7 +34,7 @@ class MoveMilitaryLocalRequest extends FormRequest
             'NoiChuyenDen'  => "required",
             'BanChiHuy'     => "required",
             'MaSinhVien'    => "required",
-            'MaSinhVien'      => "unique:Tb_giay_dc_diaphuong"
+            'MaSinhVien'      => "unique:tb_giay_dc_diaphuong"
         ];
     }
 

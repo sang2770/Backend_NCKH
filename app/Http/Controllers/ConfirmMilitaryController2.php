@@ -23,23 +23,23 @@ class ConfirmMilitaryController2 extends Controller
         $canbo = Tb_canbo::select('ChucVu')->where('HoVaTen', '=', $request->HoVaTen)->get();
 
         ///insert yeucau
-        $req = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-        ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-        ->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+        $req = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+        ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+        ->join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
         ->select(
-            'Tb_sinhvien.MaSinhVien',
+            'tb_sinhvien.MaSinhVien',
         );
         if ($request->MaSinhVien) {
-            $req = $req->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $req = $req->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $req = $req->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $req = $req->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $req = $req->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $req = $req->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $req = $req->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $req = $req->where('tb_lop.Khoas', '=', $request->Khoas);
         }
 
         $countYC = $req->count();
@@ -61,33 +61,33 @@ class ConfirmMilitaryController2 extends Controller
         ///
         $array = array();
         $templateProcessor = new TemplateProcessor('TemplateMilitary/ConfirmMilitaryTemplate.docx');
-        $confirm = Tb_sinhvien::join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-            ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')
-            ->join('Tb_yeucau', 'Tb_yeucau.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+        $confirm = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+            ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
+            ->join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->select(
-                'Tb_sinhvien.HoTen',
-                'Tb_sinhvien.MaSinhVien',
-                'Tb_sinhvien.NgaySinh',
-                'Tb_lop.TenLop',
-                'Tb_khoa.TenKhoa',
-                'Tb_lop.Khoas',
-                'Tb_sinhvien.HeDaoTao',
-                'Tb_yeucau.MaYeuCau'
+                'tb_sinhvien.HoTen',
+                'tb_sinhvien.MaSinhVien',
+                'tb_sinhvien.NgaySinh',
+                'tb_lop.TenLop',
+                'tb_khoa.TenKhoa',
+                'tb_lop.Khoas',
+                'tb_sinhvien.HeDaoTao',
+                'tb_yeucau.MaYeuCau'
             );
         if ($request->MaSinhVien) {
-            $confirm = $confirm->where('Tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
+            $confirm = $confirm->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien);
         }
         if ($request->TenLop) {
-            $confirm = $confirm->where('Tb_lop.TenLop', '=', $request->TenLop);
+            $confirm = $confirm->where('tb_lop.TenLop', '=', $request->TenLop);
         }
         if ($request->TenKhoa) {
-            $confirm = $confirm->where('Tb_khoa.TenKhoa', '=', $request->TenKhoa);
+            $confirm = $confirm->where('tb_khoa.TenKhoa', '=', $request->TenKhoa);
         }
         if ($request->Khoas) {
-            $confirm = $confirm->where('Tb_lop.Khoas', '=', $request->Khoas);
+            $confirm = $confirm->where('tb_lop.Khoas', '=', $request->Khoas);
         }
 
-        $confirm = $confirm->where('Tb_yeucau.TrangThaiXuLy', '=', "Đã xử lý");
+        $confirm = $confirm->where('tb_yeucau.TrangThaiXuLy', '=', "Đã xử lý");
 
         $count = $confirm->count();
         $confirm = $confirm->get();
@@ -142,8 +142,8 @@ class ConfirmMilitaryController2 extends Controller
     }
 
     public function Show($id){
-        $info = Tb_sinhvien::select('Tb_sinhvien.HoTen')
-                            ->where('Tb_sinhvien.MaSinhVien', '=', $id)->get();
+        $info = Tb_sinhvien::select('tb_sinhvien.HoTen')
+                            ->where('tb_sinhvien.MaSinhVien', '=', $id)->get();
 
         return response()->json(['status' => "Success", 'data' => $info[0]["HoTen"]]);
     }

@@ -52,8 +52,8 @@ class StudentController extends Controller
     //thong tin sinh vien
     public function show(Request $request, $id)
     {
-        if (tb_sinhvien::where('MaSinhVien', '=', $id)->exists()) {
-            $info = tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+        if (Tb_sinhvien::where('MaSinhVien', '=', $id)->exists()) {
+            $info = Tb_sinhvien::join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
                 ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
                 ->where('MaSinhVien', '=', $id)
                 ->select('tb_sinhvien.*', 'tb_lop.TenLop', 'tb_khoa.TenKhoa', 'tb_lop.Khoas')->get([
@@ -106,7 +106,7 @@ class StudentController extends Controller
     //sv xem thong tin giay chung nhan dky nvqs
     public function register(Request $request, $id)
     {
-        $info = tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        $info = Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->where('tb_sinhvien.MaSinhVien', '=', $id)
             ->select(
                 'tb_sinhvien.HoTen',
@@ -127,7 +127,7 @@ class StudentController extends Controller
     public function getTotalNotifications(Request $request)
     {
         try {
-            $noti = tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            $noti = Tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
             ->join('tb_thongbaosv', 'tb_thongbaosv.MaTKSV', '=', 'tb_tk_sinhvien.MaTKSV')->count();
         return response()->json(['status'=>"Success", "count"=>$noti]);
@@ -142,7 +142,7 @@ class StudentController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $noti = tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        $noti = Tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->join('tb_thongbaosv', 'tb_thongbaosv.MaTKSV', '=', 'tb_tk_sinhvien.MaTKSV')
             ->join('tb_thongbaochinh', 'tb_thongbaochinh.MaThongBaoChinh', '=', 'tb_thongbaosv.MaThongBaoChinh')
             ->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
@@ -166,7 +166,7 @@ class StudentController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $noti = tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        $noti = Tb_sinhvien::join('tb_tk_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->join('tb_thongbaosv', 'tb_thongbaosv.MaTKSV', '=', 'tb_tk_sinhvien.MaTKSV')
             ->join('tb_thongbaochinh', 'tb_thongbaochinh.MaThongBaoChinh', '=', 'tb_thongbaosv.MaThongBaoChinh')
             ->where('tb_sinhvien.MaSinhVien', '=', $request->MaSinhVien)
@@ -202,7 +202,7 @@ class StudentController extends Controller
     {
         $limit = $request->query('limit');
         $page = $request->query('page');
-        $info = tb_yeucau::where('tb_yeucau.MaSinhVien', '=', $id)
+        $info = Tb_yeucau::where('tb_yeucau.MaSinhVien', '=', $id)
             ->select('MaYeuCau', 'MaSinhVien', 'NgayYeuCau', 'NgayXuLy', 'TrangThaiXuLy');
 
         if ($info->exists()) {

@@ -56,7 +56,7 @@ class RegisterMilitaryImport implements ToModel, WithHeadingRow, WithChunkReadin
             "*.noi_dang_ky"         => "required",
             "*.dia_chi_thuong_tru"  => "required",
             "*.ngay_nop"            => "required",
-            "*.ma_sinh_vien"        => "required|unique:Tb_giay_cn_dangky,MaSinhVien",
+            "*.ma_sinh_vien"        => "required|unique:tb_giay_cn_dangky,MaSinhVien",
         ];
     }
     

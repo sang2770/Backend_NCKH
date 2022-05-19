@@ -380,7 +380,7 @@ class ReportController extends Controller
     {
         $DateNow = Carbon::now()->format('Y');
 
-        $student=tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        $student=Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
         ->join('tb_giay_dc_truong', 'tb_giay_dc_truong.MaGiayDK', '=', 'tb_giay_cn_dangky.MaGiayDK')
         ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
         ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
@@ -421,7 +421,7 @@ class ReportController extends Controller
         
         $Learning['Tong']=max($Learning);
 
-        $studentOut=tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        $studentOut=Tb_sinhvien::join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
         ->join('tb_giay_dc_truong', 'tb_giay_dc_truong.MaGiayDK', '=', 'tb_giay_cn_dangky.MaGiayDK')
         ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
         ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
@@ -500,7 +500,7 @@ class ReportController extends Controller
     private function CreateReportConfirm($request)
     {
         $DateNow = Carbon::now()->format('Y');
-        $student=tb_sinhvien::join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+        $student=Tb_sinhvien::join('tb_yeucau', 'tb_yeucau.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
         ->join('tb_giay_xn_truong', 'tb_giay_xn_truong.MaYeuCau', '=', 'tb_yeucau.MaYeuCau')
         ->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
         ->join('tb_khoa','tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')
