@@ -104,6 +104,11 @@ class MoveMilitaryController extends Controller
                             $xaV = explode("HUYỆN", $v);
                             $countV = count($xaV);
                             $xa = "huyện";
+                            if($countV == 1){
+                                $xaV = explode("CHQS", $v);
+                                $countV = count($xaV);
+                                $xa = "";
+                            }
                         }
                     }
                 }
