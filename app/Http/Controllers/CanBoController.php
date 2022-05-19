@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tb_canbo;
+use App\Models\tb_canbo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +23,7 @@ class CanBoController extends Controller
         $limit = $request->query('limit');
         $page = $request->query('page');
         try {
-            $canbo=Tb_canbo::where('TrangThai', 'like', '%'.$TrangThai.'%')->paginate($limit, [
+            $canbo=tb_canbo::where('TrangThai', 'like', '%'.$TrangThai.'%')->paginate($limit, [
                 'MaCanBo', 'HoVaTen', 'TrangThai', 'ChucVu', 'ThoiGianBatDau', 'ThoiGianKetThuc'
             ], 'page', $page)->toArray();;
             return response()->json(['status' => "Success", 'data' => $canbo['data'], 'pagination' => [
@@ -38,7 +38,7 @@ class CanBoController extends Controller
     }
     public function Show(){
         try {
-            $canbo=Tb_canbo::select("*")
+            $canbo=tb_canbo::select("*")
             ->where('TrangThai', 'Đang hoạt động')
             ->where('ChucVu', 'Phó chỉ huy trưởng')
             ->pluck("HoVaTen");
@@ -50,7 +50,7 @@ class CanBoController extends Controller
 
     public function ShowCaptain(){
         try {
-            $canbo=Tb_canbo::select("*")
+            $canbo=tb_canbo::select("*")
             ->where('TrangThai', 'Đang hoạt động')
             ->where('ChucVu', 'Chỉ huy trưởng')
             ->pluck("HoVaTen");
@@ -80,7 +80,7 @@ class CanBoController extends Controller
         try {
             $user=$validator->validated();
             $user['TrangThai']="Đang hoạt động";
-            Tb_canbo::create($user);
+            tb_canbo::create($user);
             return response()->json(['status' => "Success", 'data'=> $validator->validated()]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => 'Có lỗi vui lòng thử lại! Hoặc liên hệ bộ phận kĩ thuậtg']);
@@ -108,7 +108,7 @@ class CanBoController extends Controller
             // Bad Request
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào không chính xác']);
         }
-        $canbo=Tb_canbo::find($request->MaCanBo);
+        $canbo=tb_canbo::find($request->MaCanBo);
         if($canbo)
         {
             $input=$request->input();
@@ -130,7 +130,7 @@ class CanBoController extends Controller
      */
     public function destroy($id)
     {
-        $canbo=Tb_canbo::find($id);
+        $canbo=tb_canbo::find($id);
         if($canbo)
         {
 

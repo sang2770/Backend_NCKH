@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
-use App\Models\Tb_tk_quanly;
+use App\Models\tb_tk_quanly;
 use App\Notifications\ResetPasswordRequest;
 use Carbon\Carbon;
 use Exception;
@@ -17,7 +17,7 @@ class ForgotPassWord extends Controller
     {
         try {
             $request->validate(['email' => "required|email"]);
-            $user = Tb_tk_quanly::where('TenDangNhap', $request->email)->firstOrFail();
+            $user = tb_tk_quanly::where('TenDangNhap', $request->email)->firstOrFail();
             $passwordReset = PasswordReset::updateOrCreate([
                 'email' => $user->TenDangNhap,
             ], [
@@ -48,7 +48,7 @@ class ForgotPassWord extends Controller
                     'Err_Message' => 'Token không hợp lệ.',
                 ], 422);
             }
-            $user = Tb_tk_quanly::where('TenDangNhap', $passwordReset->email)->firstOrFail();
+            $user = tb_tk_quanly::where('TenDangNhap', $passwordReset->email)->firstOrFail();
             $updatePasswordUser = $user->update(['MatKhau' => Hash::make($request->MatKhau)]);
             $passwordReset->delete();
 

@@ -37,15 +37,15 @@ class StudentManagementController extends Controller
         $page = $request->query('page');
         // Loc
         try {
-            $user = Tb_sinhvien::join('Tb_lop', 'Tb_sinhvien.MaLop', '=', 'Tb_lop.MaLop')
-                ->join('Tb_khoa', 'Tb_lop.MaKhoa', '=', 'Tb_khoa.MaKhoa');
+            $user = Tb_sinhvien::join('tb_lop', 'tb_sinhvien.MaLop', '=', 'tb_lop.MaLop')
+                ->join('tb_khoa', 'tb_lop.MaKhoa', '=', 'tb_khoa.MaKhoa');
             if($request->SoDangKy!=null)
             {
-                $user=$user->join('Tb_giay_cn_dangky', 'Tb_giay_cn_dangky.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
+                $user=$user->join('tb_giay_cn_dangky', 'tb_giay_cn_dangky.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
                 ->where("SoDangKy", 'like', '%'.$request->SoDangKy.'%');
             }
                 $user=$user->filter($request)->paginate($limit, [
-                    'Tb_sinhvien.MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
+                    'tb_sinhvien.MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                     'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
                     'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'
                 ], 'page', $page)->toArray();
@@ -118,7 +118,7 @@ class StudentManagementController extends Controller
         $Admin = $request->user()->MaTK;
         if ($import->failures()->count() == 0 && count($import->Err) == 0) {
             DB::commit();
-            Tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
+            tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên thành công","TrangThai"=>"Success", "MaTK"=>$Admin]);
             return response()->json(['status' => "Success"]);
         } else {
             Db::rollBack();
@@ -139,7 +139,7 @@ class StudentManagementController extends Controller
                 }
             }
             
-            Tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên có ".count($errors)." lỗi","TrangThai"=>"Failed", "MaTK"=>$Admin]);
+            tb_Err_importStudent::create(['NoiDung'=>"Thêm danh sách sinh viên có ".count($errors)." lỗi","TrangThai"=>"Failed", "MaTK"=>$Admin]);
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào sai!', 'infor' => $errors]);
         }
     }
@@ -149,8 +149,8 @@ class StudentManagementController extends Controller
     public function show($id)
     {
         try {
-            $Student = DB::table('Tb_sinhvien')->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-                ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')->where("MaSinhVien", $id)->first();
+            $Student = DB::table('tb_sinhvien')->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+                ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')->where("MaSinhVien", $id)->first();
             if ($Student) {
                 return response()->json(['status' => "Success", 'data' => $Student]);
             } else {
@@ -190,7 +190,7 @@ class StudentManagementController extends Controller
             "SoQuyetDinh"=>"Số quyết định"
         ];
         try {
-            $list = Tb_lichsu::where('tb_lichsu.MaSinhVien', $id)
+            $list = tb_lichsu::where('tb_lichsu.MaSinhVien', $id)
                 ->join('tb_tk_quanly', 'tb_tk_quanly.MaTK', '=', 'tb_lichsu.MaTK')
                 ->join('tb_sinhvien', 'tb_sinhvien.MaSinhVien', '=', 'tb_lichsu.MaSinhVien')
                 ->get(['NoiDung', 'TenDangNhap', 'ThoiGian', 'tb_lichsu.MaSinhVien']);
@@ -278,8 +278,8 @@ class StudentManagementController extends Controller
                     Tb_lichsu::create(['NoiDung' => $NoiDung, 'MaSinhVien' => $id, 'MaTK' => $Admin]);
                 }
             });
-            $user = DB::table('Tb_sinhvien')->join('Tb_lop', 'Tb_lop.MaLop', '=', 'Tb_sinhvien.MaLop')
-                ->join('Tb_khoa', 'Tb_khoa.MaKhoa', '=', 'Tb_lop.MaKhoa')->where("MaSinhVien", $id)->get([
+            $user = DB::table('tb_sinhvien')->join('tb_lop', 'tb_lop.MaLop', '=', 'tb_sinhvien.MaLop')
+                ->join('tb_khoa', 'tb_khoa.MaKhoa', '=', 'tb_lop.MaKhoa')->where("MaSinhVien", $id)->get([
                     'MaSinhVien', 'HoTen', 'NgaySinh', 'NoiSinh', 'GioiTinh', 'DanToc',
                     'TonGiao', 'QuocTich', 'DiaChiBaoTin', 'SDT', 'Email', 'HoKhauTinh', 'HoKhauHuyen',
                     'HoKhauXaPhuong', 'TinhTrangSinhVien', 'HeDaoTao', 'TenKhoa', 'TenLop', 'SoCMTND', 'NgayCapCMTND', 'NoiCapCMTND'

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
-use App\Models\Tb_sinhvien;
-use App\Models\Tb_tk_sinhvien;
+use App\Models\tb_sinhvien;
+use App\Models\tb_tk_sinhvien;
 use App\Notifications\ResetPasswordRequest;
 use Carbon\Carbon;
 use Exception;
@@ -31,9 +31,9 @@ class LoginClientController extends Controller
         $input = $request->only('MaSinhVien', 'password');
         if (auth()->guard('user')->attempt($input)) {
             config(['auth.guards.api.provider' => 'user']);
-            $user = Tb_tk_sinhvien::where("MaTKSV", "=", auth()->guard('user')->user()->MaTKSV)
-            ->join('Tb_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')
-            ->get(["HoTen","Tb_sinhvien.MaSinhVien", "MaTKSV"])->first();
+            $user = tb_tk_sinhvien::where("MaTKSV", "=", auth()->guard('user')->user()->MaTKSV)
+            ->join('tb_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
+            ->get(["HoTen","tb_sinhvien.MaSinhVien", "MaTKSV"])->first();
             // var_dump($user->toArray());
             $token = $user->createToken('authToken', ['user'])->accessToken;
             $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => $user];
@@ -77,7 +77,7 @@ class LoginClientController extends Controller
         try {
             $Id = $request->MaSinhVien;
             $New = Hash::make($request->New);
-            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
+            $user = tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
             if (!$user) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
             } elseif (!Hash::check($request->Old, $user->MatKhau)) {
@@ -85,7 +85,7 @@ class LoginClientController extends Controller
             } elseif ($request->New != $request->New_Repeat) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không trùng khớp"]);
             } else {
-                Tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);
+                tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);
                 $request->user()->token()->revoke();
                 return response()->json(['status' => 'Success']);
             }
@@ -104,7 +104,7 @@ class LoginClientController extends Controller
     {
         try {
             $request->validate(['email' => "required|email"]);
-            $user = Tb_sinhvien::where('Email', $request->email)->firstOrFail();
+            $user = tb_sinhvien::where('Email', $request->email)->firstOrFail();
             $passwordReset = PasswordReset::updateOrCreate([
                 'email' => $user->Email,
             ], [
@@ -136,7 +136,7 @@ class LoginClientController extends Controller
                     'Err_Message' => 'This password reset token is invalid.',
                 ], 422);
             };
-            $user=DB::table('Tb_tk_sinhvien')->join('Tb_sinhvien', 'Tb_tk_sinhvien.MaSinhVien', '=', 'Tb_sinhvien.MaSinhVien')->where('Email', $passwordReset->email);
+            $user=DB::table('tb_tk_sinhvien')->join('tb_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')->where('Email', $passwordReset->email);
             if($user->exists())
             {
                 $user->update(['MatKhau' => Hash::make($request->MatKhau)]);

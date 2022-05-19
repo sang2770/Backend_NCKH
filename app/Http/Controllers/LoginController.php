@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tb_tk_quanly;
+use App\Models\tb_tk_quanly;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +23,7 @@ class LoginController extends Controller
         $input = $request->only('TenDangNhap', 'password');
         if (auth()->guard('admin')->attempt($input)) {
             config(['auth.guards.api.provider' => 'admin']);
-            $user = Tb_tk_quanly::select('*')->find(auth()->guard('admin')->user()->MaTK);
+            $user = tb_tk_quanly::select('*')->find(auth()->guard('admin')->user()->MaTK);
 
             $token = $user->createToken('authToken', ['admin'])->accessToken;
             $result = ['status' => 'Success', 'Token_access' => $token, 'Token_type' => "Bearer ", 'user' => $user];
@@ -56,14 +56,14 @@ class LoginController extends Controller
         try {
             $Id = $request->MaTK;
             $New =  Hash::make($request->New);
-            $user = Tb_tk_quanly::where('MaTK', $Id)->first();
+            $user = tb_tk_quanly::where('MaTK', $Id)->first();
             // var_dump($user);
             if (!$user) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
             } elseif (!Hash::check($request->Old, $user->MatKhau)) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không chính xác!"]);
             } else {
-                Tb_tk_quanly::where("MaTK", $Id)->update(['MatKhau' => $New]);
+                tb_tk_quanly::where("MaTK", $Id)->update(['MatKhau' => $New]);
                 $request->user()->token()->revoke();
                 return response()->json(['status' => 'Success']);
             }
@@ -77,7 +77,7 @@ class LoginController extends Controller
             $Validator = Validator::make(
                 $request->input(),
                 [
-                    "TenDangNhap" => "required|email|unique:Tb_tk_quanly",
+                    "TenDangNhap" => "required|email|unique:tb_tk_quanly",
                     "MatKhau" => "required",
                     "MatKhau_repeat" => "required"
                 ],
@@ -98,7 +98,7 @@ class LoginController extends Controller
             if (strcmp($request->MatKhau, $request->MatKhau_repeat) < 0) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không khớp"]);
             }
-            $user = Tb_tk_quanly::create([
+            $user = tb_tk_quanly::create([
                 "TenDangNhap" => $request->TenDangNhap,
                 "MatKhau" => Hash::make($request->MatKhau)
             ]);
