@@ -117,7 +117,7 @@ giay chung nhan dang ky nvqs
 */
 Route::group([
     'prefix' => 'register-military-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin']
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::post('store-register-military-file', [RegisterMilitaryController::class, 'StoreFile']); ///Import bang file
     Route::post('store-register-military', [RegisterMilitaryController::class, 'Store']); //them moi
@@ -146,7 +146,7 @@ Route::group([
 // 3. giay di chuyen tu truong
 Route::group([
     'prefix' => 'move-military-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin'],
+    'middleware' => ['auth:admin-api', 'scopes:admin'],
 ], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
     Route::get('move-military-detail/{id}', [MoveMilitaryController::class, 'show']); //show lần cấp của từng sinh viên
@@ -192,7 +192,7 @@ Route::group([
 
 Route::group([
     'prefix' => 'commander-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin']
+    'middleware' => ['auth:admin-api', 'scopes:admin']
 ], function () {
     Route::get('GetListCommander', [CanBoController::class, 'index']); //lay ra danh sach theo trang thai
     Route::get('GetListCommanderName', [CanBoController::class, 'Show']); //lay ra danh sach tên chỉ huy phó
