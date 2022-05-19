@@ -30,7 +30,7 @@ class RegisterMilitaryRequest extends FormRequest
         return [
             'HoTen'             => "required",
             'NgaySinh'          => "required",
-            'MaSinhVien'        => "required|unique:Tb_giay_cn_dangky",
+            'MaSinhVien'        => "required|unique:tb_giay_cn_dangky",
             // 'SoDangKy'          => "required",
             'NgayDangKy'        => "required",
             'NoiDangKy'         => "required",
@@ -41,7 +41,7 @@ class RegisterMilitaryRequest extends FormRequest
             // 'NoiOHienTai'       => "required",
             // 'NoiChuyenDen'      => "required",
             // 'BanChiHuy'         => "required",
-            // 'MaGiayDK'          => "unique:Tb_giay_dc_diaphuong"
+            // 'MaGiayDK'          => "unique:tb_giay_dc_diaphuong"
         ];
     }
 
