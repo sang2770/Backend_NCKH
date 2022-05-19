@@ -103,7 +103,7 @@ class ConfirmMilitaryController extends Controller
                 'Thang'     => $Thang,
                 'Nam'       => $Nam,
                 'ChiHuyTruong' => $request->HoVaTen,
-                'ChucVu'       => strtoupper($canbo[0]["ChucVu"]),
+                'ChucVu'       => mb_strtoupper($canbo[0]["ChucVu"], 'UTF-8'),
                 'i'         => $i + 1
                 );
 

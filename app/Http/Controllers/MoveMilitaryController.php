@@ -85,7 +85,37 @@ class MoveMilitaryController extends Controller
 
         if($count!=0){
             for($i = 0; $i<$count; $i++){
+                $bch = ucwords(mb_strtolower(substr($move[$i]["BanChiHuy"], 0, 3), 'UTF-8')); // Ban
+                $chqs = mb_strtoupper(substr($move[$i]["BanChiHuy"], 3, 6), 'UTF-8'); // CHQS
                 
+                $v = mb_strtoupper($move[$i]["BanChiHuy"], 'UTF-8');
+                $xaV = explode("XÃ", $v);
+                $countV = count($xaV);
+                $xa = "xã";
+                if($countV == 1){
+                    $xaV = explode("PHƯỜNG", $v);
+                    $countV = count($xaV);
+                    $xa = "phường";
+                    if($countV == 1){
+                        $xaV = explode("THỊ TRẤN", $v);
+                        $countV = count($xaV);
+                        $xa = "thị trấn";
+                        if($countV == 1){
+                            $xaV = explode("HUYỆN", $v);
+                            $countV = count($xaV);
+                            $xa = "huyện";
+                        }
+                    }
+                }
+                $kq = ucwords(mb_strtolower($xaV[1], 'UTF-8')); // tên xã phường
+
+                // var_dump($countV);
+                // var_dump($xaV);
+                // var_dump($xa);
+                // var_dump($kq);
+
+                $bchqs = $bch . $chqs . $xa . $kq;
+                // var_dump($bchqs);
                 ///NgaySinh
                 $NgaySinh = explode("-", $move[$i]["NgaySinh"]);
                 
@@ -95,7 +125,7 @@ class MoveMilitaryController extends Controller
                 
                 Tb_giay_dc_truong::insert([
                     'SoGioiThieuDC' => $countMove,
-                    'NgayCap'       => Carbon::now()->toDateString(), 
+                    'NgayCap'       => Carbon::now()->toDateString(),
                     'NgayHH'        => $request->NamHH . '-' . $request->ThangHH . '-' . $request->NgayHH,
                     'NoiChuyenVe'   => $move[$i]["BanChiHuy"],
                     'NoiOHienTai'   => $move[$i]["NoiOHienTai"],
@@ -104,7 +134,7 @@ class MoveMilitaryController extends Controller
                 ]);
 
                 $array1 = array(
-                    'HoTen'            => $move[$i]["HoTen"],
+                    'HoTen'            => mb_strtoupper($move[$i]["HoTen"], 'UTF-8'),
                     'SoGioiThieuDC'    => $countMove,
                     'SoDangKy'         => $move[$i]["SoDangKy"],
                     'NoiDangKy'        => $move[$i]["NoiDangKy"],
@@ -116,13 +146,13 @@ class MoveMilitaryController extends Controller
                     'ThangSinh'        => $NgaySinh[1],
                     'NamSinh'          => $NgaySinh[0],
                     'NoiOHienTai'      => $move[$i]["NoiOHienTai"],
-                    'NoiChuyenVe'      => $move[$i]["BanChiHuy"],
+                    'NoiChuyenVe'      => $bchqs,
                     'LyDo'             => $move[$i]["TinhTrangSinhVien"],
                     'NgayHH'           => $request->NgayHH,
                     'ThangHH'          => $request->ThangHH,
                     'NamHH'            => $request->NamHH,
                     'ChiHuyTruong'     => $request->HoVaTen,
-                    'ChucVu'           => strtoupper($canbo[0]["ChucVu"]),
+                    'ChucVu'           => mb_strtoupper($canbo[0]["ChucVu"], 'UTF-8'),
                     'i'                => $i + 1,
                     );
 
@@ -131,6 +161,7 @@ class MoveMilitaryController extends Controller
             $templateProcessor->cloneBlock('block_name', 0, true, false, $array);   
             $filename = "DanhSachGiayDiChuyen";
             $templateProcessor->saveAs($filename . '.docx');
+            // return response()->json(['status'=>'Success']);
             return response()->download($filename . '.docx')->deleteFileAfterSend(true);
         }
         else{
