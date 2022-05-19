@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str;
 class CanBoController extends Controller
 {
     /**
@@ -80,6 +80,16 @@ class CanBoController extends Controller
         try {
             $user=$validator->validated();
             $user['TrangThai']="Đang hoạt động";
+            $user['HoVaTen']=Str::lower($user['HoVaTen']);
+            $HoTen= $user['HoVaTen'];
+            $HoTen=explode(" ", $HoTen);
+            $convert="";
+            foreach($HoTen as $item)
+            {
+                $convert=$convert.' '.ucfirst($item);
+            }
+            $user['HoVaTen']=$convert;
+
             tb_canbo::create($user);
             return response()->json(['status' => "Success", 'data'=> $validator->validated()]);
         } catch (Exception $e) {
