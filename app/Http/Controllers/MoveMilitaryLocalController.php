@@ -77,6 +77,45 @@ class MoveMilitaryLocalController extends Controller
 
 
     //update
+    public function createRegister($Input){
+        try {
+            $date = date_create($Input['NgayDangKy']);
+            $NgayDK = date_format($date, 'Y-m-d H:i:s');
+
+            $date2 = date_create($Input['NgayNop']);
+            $NgayNop = date_format($date2, 'Y-m-d H:i:s');
+            
+            return [
+                'SoDangKy'          => $Input['SoDangKy'],
+                'NgayDangKy'        => $NgayDK,
+                'NoiDangKy'         => $Input['NoiDangKy'],
+                'DiaChiThuongTru'   => $Input['DiaChiThuongTru'],
+                'NgayNop'           => $NgayNop,
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+    public function updateMove($Input){
+        try {
+            $LyDo = "Trúng tuyển đại học, cao đẳng";
+
+            $date = date_create($Input['NgayCap']);
+            $NgayCap = date_format($date, 'Y-m-d H:i:s');
+
+            return [
+                'SoGioiThieu'          => $Input['SoGioiThieu'],
+                'NgayCap'              => $NgayCap,
+                'NoiOHienTai'          => $Input['NoiOHienTai'],
+                'NoiChuyenDen'         => $Input['NoiChuyenDen'],
+                'LyDo'                 => $LyDo,
+                'BanChiHuy'            => $Input['BanChiHuy'],
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function edit($id)
     {
         $edit = Tb_giay_cn_dangky::where('MaSinhVien', $id)->first();
@@ -95,11 +134,11 @@ class MoveMilitaryLocalController extends Controller
         if (Tb_giay_cn_dangky::where('MaSinhVien', $id)->exists() && 
             Tb_giay_dc_diaphuong::where('tb_giay_dc_diaphuong.MaSinhVien', $id)->exists()) {
             $task = $this->edit($id);
-            $input = $request->only('SoDangKy', 'NgayDangKy', 'NoiDangKy', 'DiaChiThuongTru', 'NgayNop');
+            $input = $this->createRegister($request->all());
             $task->fill($input)->save();
 
             $taskMove = $this->editMove($id);
-            $inputMove = $request->only('SoGioiThieu', 'NgayCap', 'NoiOHienTai', 'NoiChuyenDen', 'BanChiHuy');
+            $inputMove = $this->updateMove($request->all());
             $taskMove->fill($inputMove)->save();
 
             return response()->json(['status' => "Success updated"]);
