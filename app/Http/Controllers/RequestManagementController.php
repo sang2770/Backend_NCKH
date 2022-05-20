@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tb_sinhvien;
-use App\Models\tb_yeucau;
+use App\Models\Tb_sinhvien;
+use App\Models\Tb_yeucau;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +52,7 @@ class RequestManagementController extends Controller
         $ListStudentID = json_decode($request->MSV);
         $Date = date('y-m-d H-i');
         try {
-            tb_yeucau::where('MaYeuCau', '>', 0)->update(['TrangThaiXuLy' => 'Đã xử lý', "NgayXuLy" => $Date]);
+            Tb_yeucau::where('MaYeuCau', '>', 0)->update(['TrangThaiXuLy' => 'Đã xử lý', "NgayXuLy" => $Date]);
             return response()->json(['status' => "Success"]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => $e->getMessage()]);
@@ -62,7 +62,7 @@ class RequestManagementController extends Controller
     {
         $Date = date('y-m-d H-i');
         try {
-            tb_yeucau::where('MaSinhVien', $id)->where('MaYeuCau', $request->MaYeuCau)
+            Tb_yeucau::where('MaSinhVien', $id)->where('MaYeuCau', $request->MaYeuCau)
                 ->update(['TrangThaiXuLy' => 'Đã xử lý', "NgayXuLy" => $Date]);
             return response()->json(['status' => "Success"]);
         } catch (Exception $e) {

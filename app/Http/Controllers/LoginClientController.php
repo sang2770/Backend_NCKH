@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
-use App\Models\tb_sinhvien;
-use App\Models\tb_tk_sinhvien;
+use App\Models\Tb_sinhvien;
+use App\Models\Tb_tk_sinhvien;
 use App\Notifications\ResetPasswordRequest;
 use Carbon\Carbon;
 use Exception;
@@ -31,7 +31,7 @@ class LoginClientController extends Controller
         $input = $request->only('MaSinhVien', 'password');
         if (auth()->guard('user')->attempt($input)) {
             config(['auth.guards.api.provider' => 'user']);
-            $user = tb_tk_sinhvien::where("MaTKSV", "=", auth()->guard('user')->user()->MaTKSV)
+            $user = Tb_tk_sinhvien::where("MaTKSV", "=", auth()->guard('user')->user()->MaTKSV)
             ->join('tb_sinhvien', 'tb_tk_sinhvien.MaSinhVien', '=', 'tb_sinhvien.MaSinhVien')
             ->get(["HoTen","tb_sinhvien.MaSinhVien", "MaTKSV"])->first();
             // var_dump($user->toArray());
@@ -77,7 +77,7 @@ class LoginClientController extends Controller
         try {
             $Id = $request->MaSinhVien;
             $New = Hash::make($request->New);
-            $user = tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
+            $user = Tb_tk_sinhvien::where('MaSinhVien', $Id)->first();;
             if (!$user) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Not Found"]);
             } elseif (!Hash::check($request->Old, $user->MatKhau)) {
@@ -85,7 +85,7 @@ class LoginClientController extends Controller
             } elseif ($request->New != $request->New_Repeat) {
                 return response()->json(['status' => 'Failed', 'Err_Message' => "Mật khẩu không trùng khớp"]);
             } else {
-                tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);
+                Tb_tk_sinhvien::where("MaSinhVien", $Id)->update(['MatKhau' => $New]);
                 $request->user()->token()->revoke();
                 return response()->json(['status' => 'Success']);
             }
@@ -104,7 +104,7 @@ class LoginClientController extends Controller
     {
         try {
             $request->validate(['email' => "required|email"]);
-            $user = tb_sinhvien::where('Email', $request->email)->firstOrFail();
+            $user = Tb_sinhvien::where('Email', $request->email)->firstOrFail();
             $passwordReset = PasswordReset::updateOrCreate([
                 'email' => $user->Email,
             ], [

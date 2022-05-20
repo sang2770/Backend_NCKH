@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RequestStudentRequest;
-use App\Models\tb_giay_cn_dangky;
-use App\Models\tb_sinhvien;
-use App\Models\tb_yeucau;
+use App\Models\Tb_giay_cn_dangky;
+use App\Models\Tb_sinhvien;
+use App\Models\Tb_yeucau;
 use Illuminate\Http\Request;
 use Exception;
 use Carbon\Carbon;
@@ -34,7 +34,7 @@ class StudentController extends Controller
         return response()->json(['status' => "Failed", 'Err_Message' => "Dữ liệu đầu vào sai", "info"=>$error]);
         }
         else{
-            $user=tb_sinhvien::find($request->MaSinhVien);
+            $user=Tb_sinhvien::find($request->MaSinhVien);
             if($user)
             {
                 $input=$request->input();
@@ -72,7 +72,7 @@ class StudentController extends Controller
     {
         try {
             $NgayYeuCau = Carbon::now()->toDateString();
-            $LanCap = tb_yeucau::where('MaSinhVien', $Input['MaSinhVien'])->count();
+            $LanCap = Tb_yeucau::where('MaSinhVien', $Input['MaSinhVien'])->count();
             return [
                 'MaSinhVien'        => $Input['MaSinhVien'],
                 'NgayYeuCau'        => $NgayYeuCau,
@@ -90,10 +90,10 @@ class StudentController extends Controller
     {
         $req = $request->validated();
         try {
-            $count = tb_giay_cn_dangky::where('MaSinhVien', $request->MaSinhVien)->count();
+            $count = Tb_giay_cn_dangky::where('MaSinhVien', $request->MaSinhVien)->count();
             if($count != 0){
                 $req = $this->create($request->all());
-                tb_yeucau::insert($req);
+                Tb_yeucau::insert($req);
                 return response()->json(['status' => "Success", 'data' => $req]);
             }else{
                 return response()->json(['status' => "Failed"]);
@@ -221,14 +221,14 @@ class StudentController extends Controller
     //xoa yeu cau xac nhan (chi xoa những yêu cầu chưa cấp (đã cấp thì k thể xóa yêu cầu))
     public function DestroyRequest($id, $msv)
     {
-        if (tb_yeucau::where('MaYeuCau', $id)
+        if (Tb_yeucau::where('MaYeuCau', $id)
             ->where('MaSinhVien', $msv)
             ->where(function ($query) {
                 $query->where('tb_yeucau.TrangThaiXuLy', '=', 'Đã xử lý')
                     ->orWhere('tb_yeucau.TrangThaiXuLy', '=', 'Chờ xử lý');
             })->exists()
         ) {
-            tb_yeucau::where('MaYeuCau', $id)->delete();
+            Tb_yeucau::where('MaYeuCau', $id)->delete();
             return response()->json(['status' => "Success deleted"]);
         } else {
             return response()->json(['status' => "Not Found!"]);

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tb_canbo;
+use App\Models\Tb_canbo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +23,7 @@ class CanBoController extends Controller
         $limit = $request->query('limit');
         $page = $request->query('page');
         try {
-            $canbo=tb_canbo::where('TrangThai', 'like', '%'.$TrangThai.'%')->paginate($limit, [
+            $canbo=Tb_canbo::where('TrangThai', 'like', '%'.$TrangThai.'%')->paginate($limit, [
                 'MaCanBo', 'HoVaTen', 'TrangThai', 'ChucVu', 'ThoiGianBatDau', 'ThoiGianKetThuc'
             ], 'page', $page)->toArray();;
             return response()->json(['status' => "Success", 'data' => $canbo['data'], 'pagination' => [
@@ -38,7 +38,7 @@ class CanBoController extends Controller
     }
     public function Show(){
         try {
-            $canbo=tb_canbo::select("*")
+            $canbo=Tb_canbo::select("*")
             ->where('TrangThai', 'Đang hoạt động')
             ->where('ChucVu', 'Phó chỉ huy trưởng')
             ->pluck("HoVaTen");
@@ -50,7 +50,7 @@ class CanBoController extends Controller
 
     public function ShowCaptain(){
         try {
-            $canbo=tb_canbo::select("*")
+            $canbo=Tb_canbo::select("*")
             ->where('TrangThai', 'Đang hoạt động')
             ->where('ChucVu', 'Chỉ huy trưởng')
             ->pluck("HoVaTen");
@@ -80,17 +80,17 @@ class CanBoController extends Controller
         try {
             $user=$validator->validated();
             $user['TrangThai']="Đang hoạt động";
-            $user['HoVaTen']=Str::lower($user['HoVaTen']);
-            $HoTen= $user['HoVaTen'];
-            $HoTen=explode(" ", $HoTen);
-            $convert="";
-            foreach($HoTen as $item)
-            {
-                $convert=$convert.' '.ucfirst($item);
-            }
-            $user['HoVaTen']=$convert;
+            // $user['HoVaTen']=Str::lower($user['HoVaTen']);
+            // $HoTen= $user['HoVaTen'];
+            // $HoTen=explode(" ", $HoTen);
+            // $convert="";
+            // foreach($HoTen as $item)
+            // {
+            //     $convert=$convert.' '.ucfirst($item);
+            // }
+            // $user['HoVaTen']=$convert;
 
-            tb_canbo::create($user);
+            Tb_canbo::create($user);
             return response()->json(['status' => "Success", 'data'=> $validator->validated()]);
         } catch (Exception $e) {
             return response()->json(['status' => "Failed", 'Err_Message' => 'Có lỗi vui lòng thử lại! Hoặc liên hệ bộ phận kĩ thuậtg']);
@@ -118,7 +118,7 @@ class CanBoController extends Controller
             // Bad Request
             return response()->json(['status' => "Failed", 'Err_Message' => 'Dữ liệu đầu vào không chính xác']);
         }
-        $canbo=tb_canbo::find($request->MaCanBo);
+        $canbo=Tb_canbo::find($request->MaCanBo);
         if($canbo)
         {
             $input=$request->input();
@@ -140,7 +140,7 @@ class CanBoController extends Controller
      */
     public function destroy($id)
     {
-        $canbo=tb_canbo::find($id);
+        $canbo=Tb_canbo::find($id);
         if($canbo)
         {
 

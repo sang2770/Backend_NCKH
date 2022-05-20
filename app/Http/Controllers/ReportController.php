@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\tb_Err_importStudent;
-use App\Models\tb_giay_xn_truong;
-use App\Models\tb_lichsu;
-use App\Models\tb_lop;
-use App\Models\tb_sinhvien;
+use App\Models\Tb_Err_importStudent;
+use App\Models\Tb_giay_xn_truong;
+use App\Models\Tb_lichsu;
+use App\Models\Tb_lop;
+use App\Models\Tb_sinhvien;
 use Carbon\Carbon;
 use DateTime;
 use Exception;
@@ -20,7 +20,7 @@ class ReportController extends Controller
     //Thống kê biến động
     private function LogicFluctuations($request)
     {
-        $student=tb_sinhvien::join('tb_lop', 'tb_sinhvien.MaLop', '=', 'tb_lop.MaLop')
+        $student=Tb_sinhvien::join('tb_lop', 'tb_sinhvien.MaLop', '=', 'tb_lop.MaLop')
         ->where('TinhTrangSinhVien', 'like', "%Đang học%")
         ->join('tb_khoa', 'tb_lop.MaKhoa', '=', 'tb_khoa.MaKhoa')
         ->filter($request)->get()->toArray();
@@ -36,7 +36,7 @@ class ReportController extends Controller
             }
         }
         $Learning['Tong']=count($student);
-        $student=tb_sinhvien::join('tb_lop', 'tb_sinhvien.MaLop', '=', 'tb_lop.MaLop')
+        $student=Tb_sinhvien::join('tb_lop', 'tb_sinhvien.MaLop', '=', 'tb_lop.MaLop')
         ->join('tb_khoa', 'tb_lop.MaKhoa', '=', 'tb_khoa.MaKhoa')
         ->filter($request)->where('TinhTrangSinhVien', 'not like', "%Đang học%")->get()->toArray();
         $Out=[];
@@ -92,7 +92,7 @@ class ReportController extends Controller
     // Thống kê cập nhật
     private function LogicUpdateReport($request)
     {
-        $list = tb_lichsu::where('tb_LichSu.MaSinhVien', $request->MaSinhVien);
+        $list = Tb_lichsu::where('tb_LichSu.MaSinhVien', $request->MaSinhVien);
             if($list->count()==0)
             {
                return null;
@@ -170,7 +170,7 @@ class ReportController extends Controller
                 foreach ($Fields as $value) {
                     $content = explode(":", $value);
                     if ($content[0] === "MaLop") {
-                        $Lop = tb_lop::find($content[1])->TenLop;
+                        $Lop = Tb_lop::find($content[1])->TenLop;
                         $Context["Tên lớp"] = $Lop;
                     } else {
                         $Context[$Tranfer[$content[0]]] = $content[1];
