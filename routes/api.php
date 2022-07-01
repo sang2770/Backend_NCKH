@@ -146,7 +146,7 @@ Route::group([
 // 3. giay di chuyen tu truong
 Route::group([
     'prefix' => 'move-military-management',
-    //'middleware' => ['auth:admin-api', 'scopes:admin'],
+    'middleware' => ['auth:admin-api', 'scopes:admin'],
 ], function () {
     Route::get('move-military', [MoveMilitaryController::class, 'Move']); //cap giay di chuyen cho 1 sinh vien
     Route::get('move-military-detail/{id}', [MoveMilitaryController::class, 'show']); //show lần cấp của từng sinh viên

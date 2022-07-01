@@ -31,7 +31,7 @@ Route::group([
         Route::get('register-student/{id}', [StudentController::class, 'register']); //sinh vien xem thong tin ve giay cn dky nvqs cua minh
     });
     Route::group(['prefix' => 'client/Notification'], function(){
-        Route::get('notification-count', [StudentController::class, 'getTotalNotifications']); //sinh vien xem thong tin ve giay cn dky nvqs cua minh
+        Route::get('notification-count', [StudentController::class, 'getTotalNotifications']); 
         Route::get('notification-student', [StudentController::class, 'notification']); //danh sach thong bao cua ca nhan sinh vien
         Route::get('notificationID-student', [StudentController::class, 'notificationID']); //chi tiet thong bao cua ca nhan sinh vien
         Route::get('download-file-notification/{name}', [StudentController::class, 'DownloadFile']);

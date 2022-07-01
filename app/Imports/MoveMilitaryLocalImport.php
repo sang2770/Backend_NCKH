@@ -61,7 +61,18 @@ class MoveMilitaryLocalImport implements ToModel, WithHeadingRow, WithChunkReadi
             "*.ma_sinh_vien"    => "required",
         ];
     }
-    
+    public function customValidationMessages()
+    {
+        return [
+            'so_gioi_thieu.required' => 'Số giới thiệu không được bỏ trống',
+            'ngay_cap.required' => 'Ngày cấp không được bỏ trống',
+            'noi_o_hien_tai.required' => 'Nơi ở hiện tại không được bỏ trống',
+            'noi_chuyen_den.required' => 'Nơi chuyển đến không được bỏ trống',
+            'ly_do.required' => 'Lý do không được bỏ trống',
+            'ban_chi_huy.required' => 'Ban chỉ huy không được bỏ trống',
+            'ma_sinh_vien.required' => 'Mã sinh viên không được bỏ trống',
+        ];
+    }
     public function chunkSize(): int
     {
         return 500;

@@ -37,7 +37,17 @@ class MoveMilitaryLocalRequest extends FormRequest
             'MaSinhVien'      => "unique:tb_giay_dc_diaphuong"
         ];
     }
-
+    public function messages()
+    {
+        return [
+            'NgayCap.required' => 'Ngày cấp phải là duy nhất',
+            'NoiOHienTai.required' => 'Nơi ở hiện tại phải là duy nhất',
+            'NoiChuyenDen.required' => 'Nơi chuyển về phải là duy nhất',
+            'BanChiHuy.required' => 'Ban chỉ huy phải là duy nhất',
+            'MaSinhVien.unique' => 'Mã sinh viên phải là duy nhất',
+            'MaSinhVien.required'=>'Mã sinh viên không được bỏ trống'
+        ];
+    }
     protected function failedValidation(ValidationValidator $validator)
     {
         $errors = (new ValidationException($validator))->errors();

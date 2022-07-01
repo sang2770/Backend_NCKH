@@ -44,7 +44,13 @@ class RegisterMilitaryRequest extends FormRequest
             // 'MaGiayDK'          => "unique:tb_giay_dc_diaphuong"
         ];
     }
-
+    public function messages()
+    {
+        return [
+            'MaSinhVien.unique' => 'Mã sinh viên phải là duy nhất',
+            'MaSinhVien.required'=>"Mã sinh viên không được bỏ trống"
+        ];
+    }
     protected function failedValidation(ValidationValidator $validator)
     {
         $errors = (new ValidationException($validator))->errors();

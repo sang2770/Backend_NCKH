@@ -51,7 +51,7 @@ class RegisterMilitaryImport implements ToModel, WithHeadingRow, WithChunkReadin
     public function  rules(): array
     {
         return [
-            "*.so_dang_ky"          => "required",
+            //"*.so_dang_ky"          => "required",
             '*.ngay_dang_ky'        => "required",
             "*.noi_dang_ky"         => "required",
             "*.dia_chi_thuong_tru"  => "required",
@@ -59,7 +59,17 @@ class RegisterMilitaryImport implements ToModel, WithHeadingRow, WithChunkReadin
             "*.ma_sinh_vien"        => "required|unique:tb_giay_cn_dangky,MaSinhVien",
         ];
     }
-    
+    public function customValidationMessages()
+    {
+        return [
+            'ngay_dang_ky.required' => 'Ngày đăng ký không được bỏ trống',
+            'noi_dang_ky.required' => 'Nơi đăng ký không được bỏ trống',
+            'dia_chi_thuong_tru.required' => 'Địa chỉ thường trú không được bỏ trống',
+            'ngay_nop.required' => 'Ngày nộp không được bỏ trống',
+            'ma_sinh_vien.required' => 'Mã sinh viên không được bỏ trống',
+            'ma_sinh_vien.unique' => 'Mã sinh viên phải là duy nhất',
+        ];
+    }
     public function chunkSize(): int
     {
         return 500;
